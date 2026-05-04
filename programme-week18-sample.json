@@ -1,0 +1,196 @@
+{
+  "week": 18,
+  "days": {
+    "0": {
+      "title": "Run · Tempo Intervals",
+      "blocks": [
+        {
+          "id": "b_w_warmup",
+          "type": "WARMUP",
+          "name": "Warm-up — 10 min easy + dynamic",
+          "movements": ["Leg swings", "Hip circles"],
+          "notes": ""
+        },
+        {
+          "id": "b_w_intervals",
+          "type": "INTERVALS",
+          "name": "6 × 800m @ 85% effort",
+          "config": { "workSec": 180, "restSec": 90, "rounds": 6 },
+          "movements": [],
+          "notes": "Tap finish on each rep — log split times"
+        },
+        {
+          "id": "b_w_cooldown",
+          "type": "COOLDOWN",
+          "name": "Cool-down — 10 min easy jog + stretch",
+          "movements": ["Hip flexor", "Calf stretch"]
+        }
+      ]
+    },
+    "1": {
+      "title": "Strength · Squat / Pull / Press",
+      "blocks": [
+        {
+          "id": "b_t_warmup",
+          "type": "WARMUP",
+          "name": "Mobility — 8 min",
+          "movements": ["Thoracic rotation", "Hip circles", "Band clamshells", "Glute bridges"]
+        },
+        {
+          "id": "b_t_squat",
+          "type": "STRENGTH",
+          "name": "Back Squat — 4×5 @ 65kg",
+          "config": { "sets": 4, "reps": 5, "restSec": 150, "weightKg": 65 }
+        },
+        {
+          "id": "b_t_rdl",
+          "type": "STRENGTH",
+          "name": "Romanian DL — 4×6 @ 70kg",
+          "config": { "sets": 4, "reps": 6, "restSec": 120, "weightKg": 70 }
+        },
+        {
+          "id": "b_t_pullup",
+          "type": "STRENGTH",
+          "name": "Weighted Pull-ups — 4×5 @ BW+10kg",
+          "config": { "sets": 4, "reps": 5, "restSec": 150 },
+          "notes": "Hold load — don't progress this week"
+        },
+        {
+          "id": "b_t_press",
+          "type": "STRENGTH",
+          "name": "Strict Press — 4×6 @ 37.5kg",
+          "config": { "sets": 4, "reps": 6, "restSec": 120, "weightKg": 37.5 }
+        },
+        {
+          "id": "b_t_deadbug",
+          "type": "HOLD",
+          "name": "Dead Bug — 3×8/side",
+          "config": { "seconds": 30, "sides": 2, "rounds": 3 },
+          "notes": "Core accent — control the lower back"
+        }
+      ]
+    },
+    "2": {
+      "title": "CrossFit · WOD Day",
+      "blocks": [
+        {
+          "id": "b_c_warmup",
+          "type": "WARMUP",
+          "name": "Warm-up — 800m row + dynamic",
+          "movements": []
+        },
+        {
+          "id": "b_c_skill",
+          "type": "STRENGTH",
+          "name": "DB Snatch — 4×4/arm @ 20kg",
+          "config": { "sets": 4, "reps": 4, "restSec": 90, "weightKg": 20 },
+          "notes": "Quality reps, no rush"
+        },
+        {
+          "id": "b_c_wod",
+          "type": "AMRAP",
+          "name": "AMRAP 20 — KB / WB / Step-overs / Pull-ups / Row",
+          "config": { "minutes": 20 },
+          "movements": [
+            "12 KB Swings @ 24kg",
+            "10 Wall Ball @ 9kg",
+            "8 Box Step-overs @ 10kg DB/hand",
+            "6 Strict Pull-ups (BW)",
+            "200m Row"
+          ]
+        },
+        {
+          "id": "b_c_cooldown",
+          "type": "COOLDOWN",
+          "name": "Cool-down — Thoracic + hip flexor mobility 8 min"
+        }
+      ]
+    },
+    "3": {
+      "title": "Strength · Hinge / Single-leg / Push",
+      "blocks": [
+        {
+          "id": "b_th_warmup",
+          "type": "WARMUP",
+          "name": "Mobility + single-leg balance 30s/side",
+          "movements": ["Wake up the left leg"]
+        },
+        {
+          "id": "b_th_slrdl",
+          "type": "STRENGTH",
+          "name": "Single-leg RDL — 4×8/leg @ 2×20kg KB",
+          "config": { "sets": 4, "reps": 8, "restSec": 120, "weightKg": 40 },
+          "notes": "Hinge + balance — kite carry-over"
+        },
+        {
+          "id": "b_th_bss",
+          "type": "STRENGTH",
+          "name": "Bulgarian Split Squat — 4×8/leg @ 2×15kg DB",
+          "config": { "sets": 4, "reps": 8, "restSec": 150, "weightKg": 30 },
+          "notes": "3-sec slow eccentric, extra attention left leg"
+        },
+        {
+          "id": "b_th_floorpress",
+          "type": "STRENGTH",
+          "name": "DB Floor Press — 4×8 @ 22.5kg/DB",
+          "config": { "sets": 4, "reps": 8, "restSec": 105, "weightKg": 22.5 }
+        },
+        {
+          "id": "b_th_row",
+          "type": "STRENGTH",
+          "name": "Bent-Over Row — 4×8 @ 60kg",
+          "config": { "sets": 4, "reps": 8, "restSec": 120, "weightKg": 60 }
+        },
+        {
+          "id": "b_th_copenhagen",
+          "type": "HOLD",
+          "name": "Copenhagen Plank — 3×20s/side",
+          "config": { "seconds": 20, "sides": 2, "rounds": 3 },
+          "notes": "Lateral core, kite relevant"
+        }
+      ]
+    },
+    "4": {
+      "title": "Run · Easy Aerobic",
+      "blocks": [
+        {
+          "id": "b_f_run",
+          "type": "FOR_TIME",
+          "name": "Easy Aerobic Run — 50–60 min",
+          "config": { "capMinutes": 60 },
+          "notes": "Conversational pace, HR <75%"
+        },
+        {
+          "id": "b_f_cooldown",
+          "type": "COOLDOWN",
+          "name": "Mobility — 10 min",
+          "movements": ["Hip flexors", "Glutes", "Calves"]
+        }
+      ]
+    },
+    "5": {
+      "title": "Flex / Kite",
+      "blocks": [
+        {
+          "id": "b_s_kite",
+          "type": "WARMUP",
+          "name": "If kite: go and enjoy. Otherwise mobility flow below.",
+          "movements": []
+        },
+        {
+          "id": "b_s_flow",
+          "type": "HOLD",
+          "name": "Mobility flow — 30–40 min",
+          "config": { "seconds": 90, "sides": 2, "rounds": 4 },
+          "movements": [
+            "Hip 90/90",
+            "Thoracic rotation",
+            "Pigeon pose",
+            "Shoulder CARs",
+            "Single-leg balance"
+          ]
+        }
+      ]
+    }
+  }
+}
