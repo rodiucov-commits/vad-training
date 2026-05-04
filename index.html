@@ -127,6 +127,56 @@ const isLoggedIn = () => {
 const startSession = () => localStorage.setItem(SESSION_KEY, JSON.stringify({ ts: Date.now() }));
 const endSession = () => localStorage.removeItem(SESSION_KEY);
 
+// ---------- CLOUD API ----------
+// Paste your bearer token here to enable cross-device sync via Cloudflare D1.
+// Leave both blank to fall back to pure localStorage mode (works offline / from disk).
+const API_BASE  = 'https://rodiucov.com';
+const API_TOKEN = '54cdb3d799ee3cb3bc7601b894b0e90e395f9e6894bd8d3afbec92ac719609d6';   // <-- paste your 64-char API_TOKEN here
+const cloudEnabled = () => !!(API_BASE && API_TOKEN);
+
+async function apiFetch(path, opts = {}) {
+  const r = await fetch(API_BASE + path, {
+    ...opts,
+    headers: {
+      'Authorization': `Bearer ${API_TOKEN}`,
+      'Content-Type': 'application/json',
+      ...(opts.headers || {}),
+    },
+  });
+  if (!r.ok) {
+    const txt = await r.text().catch(()=>'');
+    throw new Error(`API ${r.status}: ${txt || r.statusText}`);
+  }
+  if (r.status === 204) return null;
+  const ct = r.headers.get('content-type') || '';
+  return ct.includes('application/json') ? r.json() : r.text();
+}
+
+const cloud = {
+  health:           () => apiFetch('/api/health'),
+  snapshot:         () => apiFetch('/api/snapshot'),
+  putProgramme:     (week, days) => apiFetch('/api/programme', { method:'PUT', body: JSON.stringify({ week, days }) }),
+  deleteProgramme:  (week) => apiFetch(`/api/programme?week=${encodeURIComponent(week)}`, { method:'DELETE' }),
+  addResult:        (r) => apiFetch('/api/results', { method:'POST', body: JSON.stringify(r) }),
+  deleteResult:     (id) => apiFetch(`/api/results/${encodeURIComponent(id)}`, { method:'DELETE' }),
+  putGenerator:     (g) => apiFetch('/api/generator', { method:'PUT', body: JSON.stringify(g) }),
+  migrate:          (payload) => apiFetch('/api/migrate', { method:'POST', body: JSON.stringify(payload) }),
+};
+
+// Merge local and server results: union by id, server wins on dup, sort newest first.
+function mergeResults(localArr, serverArr) {
+  const byId = new Map();
+  for (const r of (localArr || [])) byId.set(r.id, { ...r, _origin: 'local' });
+  for (const r of (serverArr || [])) byId.set(r.id, { ...r, _origin: 'server' });
+  const merged = [...byId.values()]
+    .map(({ _origin, ...rest }) => rest)
+    .sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const localIds  = new Set((localArr  || []).map(r => r.id));
+  const serverIds = new Set((serverArr || []).map(r => r.id));
+  const localOnly = (localArr || []).filter(r => !serverIds.has(r.id));
+  return { merged, localOnly };
+}
+
 // ---------- DATA ----------
 const KEY = 'vad-training-v1';
 const seedData = () => ({
@@ -266,7 +316,7 @@ function LoginScreen({ onSuccess }) {
 }
 
 // ---------- SETTINGS BOTTOM SHEET ----------
-function SettingsModal({ onClose }) {
+function SettingsModal({ onClose, sync, forceResync, pushLocalToCloud }) {
   const [view, setView] = useState('main');
   const [oldPw, setOldPw] = useState('');
   const [newPw, setNewPw] = useState('');
@@ -328,7 +378,26 @@ function SettingsModal({ onClose }) {
                 <div><div className="font-semibold text-base">Export backup</div><div className="text-xs text-stone-500 mt-0.5">Download all data as JSON</div></div>
                 <Icons.Save size={20} className="text-stone-500"/>
               </button>
-              <div className="text-[10px] text-stone-600 text-center pt-3 uppercase tracking-[0.25em]">Vad Training · v3.0</div>
+              {sync !== 'disabled' && (
+                <>
+                  <div className="pt-2 pb-1 text-[10px] text-stone-500 uppercase tracking-wider font-bold">Cloud sync</div>
+                  <button onClick={() => { onClose(); setTimeout(forceResync, 50); }} className="w-full text-left bg-stone-900 active:bg-stone-800 border border-stone-800 rounded-2xl p-4 flex items-center justify-between tap-scale">
+                    <div>
+                      <div className="font-semibold text-base">Pull from cloud</div>
+                      <div className="text-xs text-stone-500 mt-0.5">Resync programmes &amp; results from D1</div>
+                    </div>
+                    <span className={`block w-2.5 h-2.5 rounded-full ${sync==='synced'?'bg-emerald-500':sync==='offline'?'bg-rose-500':sync==='syncing'?'bg-amber-400 animate-pulse':'bg-stone-500'}`}/>
+                  </button>
+                  <button onClick={() => { onClose(); setTimeout(pushLocalToCloud, 50); }} className="w-full text-left bg-stone-900 active:bg-stone-800 border border-stone-800 rounded-2xl p-4 flex items-center justify-between tap-scale">
+                    <div>
+                      <div className="font-semibold text-base">Push local to cloud</div>
+                      <div className="text-xs text-stone-500 mt-0.5">One-shot bulk migrate localStorage → D1</div>
+                    </div>
+                    <Icons.Save size={20} className="text-stone-500"/>
+                  </button>
+                </>
+              )}
+              <div className="text-[10px] text-stone-600 text-center pt-3 uppercase tracking-[0.25em]">Vad Training · v3.1</div>
             </>
           )}
           {view === 'change' && (
@@ -713,7 +782,7 @@ const DayCard = ({ day, dayIdx, onStartBlock, results, defaultOpen }) => {
 };
 
 // ---------- PROGRAMMING VIEW ----------
-const ProgrammingView = ({ data, setData, openTimer }) => {
+const ProgrammingView = ({ data, setData, openTimer, cloudActions }) => {
   const fileRef = useRef();
   const haptic = useHaptic();
   const week = data.selectedWeek;
@@ -737,6 +806,7 @@ const ProgrammingView = ({ data, setData, openTimer }) => {
         next.programme[targetWeek] = { ...json.days };
         next.selectedWeek = targetWeek;
         setData(next);
+        cloudActions?.programmeUploaded(targetWeek, json.days);
         const dayCount = Object.values(json.days || {}).filter(d => d?.blocks?.length > 0).length;
         haptic([10,30,10]);
         alert(`Loaded ${dayCount} day${dayCount===1?'':'s'} for week ${targetWeek}`);
@@ -751,6 +821,7 @@ const ProgrammingView = ({ data, setData, openTimer }) => {
     const next = JSON.parse(JSON.stringify(data));
     delete next.programme[week];
     setData(next);
+    cloudActions?.programmeCleared(week);
   };
 
   return (
@@ -803,11 +874,15 @@ const ProgrammingView = ({ data, setData, openTimer }) => {
 };
 
 // ---------- GENERATOR VIEW ----------
-const GeneratorView = ({ data, setData }) => {
+const GeneratorView = ({ data, setData, cloudActions }) => {
   const [copied, setCopied] = useState(false);
   const haptic = useHaptic();
   const g = data.generator;
-  const update = (patch) => setData({ ...data, generator: { ...g, ...patch } });
+  const update = (patch) => {
+    const newG = { ...g, ...patch };
+    setData({ ...data, generator: newG });
+    cloudActions?.generatorChanged(newG);
+  };
 
   const buildPrompt = () => `# Vad Training — Programme Generation Request
 
@@ -963,6 +1038,22 @@ const ProgressView = ({ data }) => {
   );
 };
 
+// ---------- SYNC INDICATOR ----------
+const SyncDot = ({ state }) => {
+  if (state === 'disabled') return null;
+  const cfg = {
+    idle:    { color: 'bg-stone-500',   pulse: false, label: 'Offline mode' },
+    syncing: { color: 'bg-amber-400',   pulse: true,  label: 'Syncing…' },
+    synced:  { color: 'bg-emerald-500', pulse: false, label: 'Synced' },
+    offline: { color: 'bg-rose-500',    pulse: true,  label: 'Cloud unreachable' },
+  }[state] || { color: 'bg-stone-500', pulse: false, label: state };
+  return (
+    <div className="flex items-center gap-1.5 mr-1" title={cfg.label} aria-label={cfg.label}>
+      <span className={`block w-2 h-2 rounded-full ${cfg.color} ${cfg.pulse ? 'animate-pulse' : ''}`}/>
+    </div>
+  );
+};
+
 // ---------- APP ----------
 function App() {
   const [authed, setAuthed] = useState(isLoggedIn());
@@ -970,8 +1061,117 @@ function App() {
   const [tab, setTab] = useState('programming');
   const [timer, setTimer] = useState(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  // Sync states: 'disabled' | 'idle' | 'syncing' | 'synced' | 'offline'
+  const [sync, setSync] = useState(cloudEnabled() ? 'idle' : 'disabled');
   const haptic = useHaptic();
   const setData = (d) => { setDataRaw(d); saveData(d); };
+
+  // Initial reconcile with server: pull snapshot, merge results, push local-only results up.
+  useEffect(() => {
+    if (!authed || !cloudEnabled()) return;
+    let cancelled = false;
+    (async () => {
+      setSync('syncing');
+      try {
+        const snap = await cloud.snapshot();
+        if (cancelled) return;
+        const local = loadData();
+        const { merged, localOnly } = mergeResults(local.results, snap.results || []);
+        const merged_data = {
+          ...local,
+          // Server programme is authoritative; local-only weeks are preserved by the spread
+          programme: { ...local.programme, ...(snap.programme || {}) },
+          results: merged,
+          generator: snap.generator || local.generator,
+        };
+        setDataRaw(merged_data);
+        saveData(merged_data);
+        // Push any local-only results to the server (fire and forget)
+        for (const r of localOnly) {
+          cloud.addResult({
+            id: r.id, blockId: r.blockId, blockName: r.blockName,
+            week: r.week, dayIdx: r.dayIdx, date: r.date, value: r.value,
+          }).catch(()=>{});
+        }
+        setSync('synced');
+      } catch (e) {
+        if (!cancelled) setSync('offline');
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [authed]);
+
+  // cloudActions: imperative pushes triggered by view-level mutations.
+  // Each one is fire-and-forget — UI already updated via setData(), API failures show in indicator.
+  const cloudActions = {
+    programmeUploaded: (week, days) => {
+      if (!cloudEnabled()) return;
+      setSync('syncing');
+      cloud.putProgramme(week, days).then(()=>setSync('synced')).catch(()=>setSync('offline'));
+    },
+    programmeCleared: (week) => {
+      if (!cloudEnabled()) return;
+      setSync('syncing');
+      cloud.deleteProgramme(week).then(()=>setSync('synced')).catch(()=>setSync('offline'));
+    },
+    resultLogged: (r) => {
+      if (!cloudEnabled()) return;
+      setSync('syncing');
+      cloud.addResult(r).then(()=>setSync('synced')).catch(()=>setSync('offline'));
+    },
+    generatorChanged: (g) => {
+      if (!cloudEnabled()) return;
+      // Debounce: only push 1s after the user stops typing
+      clearTimeout(cloudActions._gtimer);
+      cloudActions._gtimer = setTimeout(() => {
+        setSync('syncing');
+        cloud.putGenerator(g).then(()=>setSync('synced')).catch(()=>setSync('offline'));
+      }, 1000);
+    },
+  };
+
+  // Force a full resync from cloud (Settings button)
+  const forceResync = async () => {
+    if (!cloudEnabled()) { alert('Cloud sync is not configured'); return; }
+    setSync('syncing');
+    try {
+      const snap = await cloud.snapshot();
+      const local = loadData();
+      const { merged } = mergeResults(local.results, snap.results || []);
+      const merged_data = {
+        ...local,
+        programme: { ...local.programme, ...(snap.programme || {}) },
+        results: merged,
+        generator: snap.generator || local.generator,
+      };
+      setData(merged_data);
+      setSync('synced');
+      alert('Resynced from cloud.');
+    } catch (e) {
+      setSync('offline');
+      alert('Resync failed: ' + e.message);
+    }
+  };
+
+  // One-shot bulk push of localStorage to D1 (Settings button)
+  const pushLocalToCloud = async () => {
+    if (!cloudEnabled()) { alert('Cloud sync is not configured'); return; }
+    if (!confirm('Push ALL local programmes and results to the cloud? Existing cloud entries with the same week/result-id will be overwritten.')) return;
+    setSync('syncing');
+    try {
+      const local = loadData();
+      const r = await cloud.migrate({
+        programme: local.programme || {},
+        results: local.results || [],
+        generator: local.generator || null,
+      });
+      setSync('synced');
+      alert(`Pushed ${r.migrated.programmes} programmes and ${r.migrated.results} results.`);
+    } catch (e) {
+      setSync('offline');
+      alert('Push failed: ' + e.message);
+    }
+  };
 
   if (!authed) return <LoginScreen onSuccess={()=>setAuthed(true)}/>;
 
@@ -990,6 +1190,7 @@ function App() {
       value,
     };
     setData({ ...data, results: [result, ...data.results] });
+    cloudActions.resultLogged(result);
     setTimer(null);
   };
   const logout = () => { endSession(); setAuthed(false); };
@@ -1006,14 +1207,15 @@ function App() {
       <header className="flex items-center justify-between px-4 pt-3 pb-3 border-b border-stone-900 pt-safe">
         <span className="gradient-text font-extrabold text-xl tracking-tight">Vad Training</span>
         <div className="flex items-center gap-1">
+          <SyncDot state={sync}/>
           <button onClick={()=>setSettingsOpen(true)} className="p-2.5 rounded-full text-stone-400 tap-scale"><Icons.Settings size={20}/></button>
           <button onClick={logout} className="p-2.5 rounded-full text-stone-400 tap-scale"><Icons.LogOut size={20}/></button>
         </div>
       </header>
       {/* Main content with bottom padding for nav */}
       <main className="flex-1 px-4 pt-4 pb-24">
-        {tab === 'programming' && <ProgrammingView data={data} setData={setData} openTimer={openTimer}/>}
-        {tab === 'generator' && <GeneratorView data={data} setData={setData}/>}
+        {tab === 'programming' && <ProgrammingView data={data} setData={setData} openTimer={openTimer} cloudActions={cloudActions}/>}
+        {tab === 'generator' && <GeneratorView data={data} setData={setData} cloudActions={cloudActions}/>}
         {tab === 'progress' && <ProgressView data={data}/>}
       </main>
       {/* Bottom tab bar — iOS native style, fixed to bottom */}
@@ -1032,7 +1234,7 @@ function App() {
         </div>
       </nav>
       {timer && <ChronoTimer initialMode={timer.mode} initialConfig={timer.config} onClose={()=>setTimer(null)} onLog={logResult}/>}
-      {settingsOpen && <SettingsModal onClose={()=>setSettingsOpen(false)}/>}
+      {settingsOpen && <SettingsModal onClose={()=>setSettingsOpen(false)} sync={sync} forceResync={forceResync} pushLocalToCloud={pushLocalToCloud}/>}
     </div>
   );
 }
