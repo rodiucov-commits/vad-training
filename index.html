@@ -179,6 +179,9 @@ function mergeResults(localArr, serverArr) {
 
 // ---------- DATA ----------
 const KEY = 'vad-training-v1';
+const SOUND_KEY = 'vt_sound_v1';
+const getSound = () => { try { return localStorage.getItem(SOUND_KEY) !== '0'; } catch { return true; } };
+const setSoundPref = (on) => { try { localStorage.setItem(SOUND_KEY, on ? '1' : '0'); } catch {} };
 const seedData = () => ({
   programme: {},
   results: [],
@@ -206,14 +209,31 @@ const saveData = (d) => { try { localStorage.setItem(KEY, JSON.stringify(d)); } 
 // ---------- AUDIO + WAKE LOCK ----------
 function useAudio(muted) {
   const ctxRef = useRef(null);
-  const ensureCtx = () => {
-    if (!ctxRef.current) { try { ctxRef.current = new (window.AudioContext || window.webkitAudioContext)(); } catch { return null; } }
-    if (ctxRef.current?.state === 'suspended') ctxRef.current.resume();
-    return ctxRef.current;
+  const ensureCtx = async () => {
+    // Lazily create AudioContext on first call. iOS requires this to be on a user gesture,
+    // which is satisfied because every entry point (start, mode switch, tap-counter) is one.
+    if (!ctxRef.current) {
+      try { ctxRef.current = new (window.AudioContext || window.webkitAudioContext)(); }
+      catch { return null; }
+    }
+    const ctx = ctxRef.current;
+    // iOS leaves the context in 'suspended' or 'interrupted' state after sleep/background.
+    // resume() returns a promise; if we don't await it, the first beep after sleep is silent.
+    if (ctx.state !== 'running') {
+      try { await ctx.resume(); } catch {}
+    }
+    // If resume failed (Safari sometimes wedges the context), throw it away and try once more.
+    if (ctx.state !== 'running') {
+      try { ctx.close(); } catch {}
+      try { ctxRef.current = new (window.AudioContext || window.webkitAudioContext)(); }
+      catch { ctxRef.current = null; return null; }
+      try { await ctxRef.current.resume(); } catch {}
+    }
+    return ctxRef.current && ctxRef.current.state === 'running' ? ctxRef.current : null;
   };
-  const beep = (freq, dur, vol=0.3) => {
+  const beep = async (freq, dur, vol=0.3) => {
     if (muted) return;
-    const ctx = ensureCtx(); if (!ctx) return;
+    const ctx = await ensureCtx(); if (!ctx) return;
     const osc = ctx.createOscillator(); const gain = ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
     osc.frequency.value = freq; osc.type = 'sine';
@@ -225,7 +245,7 @@ function useAudio(muted) {
     tick: () => beep(820, 70, 0.18), tickWarn: () => beep(880, 110, 0.28),
     go: () => beep(1100, 260, 0.38), rest: () => beep(480, 220, 0.28),
     sideSwitch: () => beep(950, 140, 0.28),
-    done: () => { beep(820,130,0.3); setTimeout(()=>beep(1050,130,0.3),160); setTimeout(()=>beep(1350,280,0.34),320); },
+    done: async () => { await beep(820,130,0.3); setTimeout(()=>beep(1050,130,0.3),160); setTimeout(()=>beep(1350,280,0.34),320); },
     unlock: () => beep(600, 10, 0.001),
   };
 }
@@ -238,6 +258,20 @@ function useWakeLock(active) {
 }
 function useHaptic() {
   return (pattern = 10) => { try { if (navigator.vibrate) navigator.vibrate(pattern); } catch {} };
+}
+function useOrientation() {
+  const get = () => (typeof window !== 'undefined' && window.matchMedia('(orientation: landscape)').matches && window.innerHeight < 600);
+  const [land, setLand] = useState(get);
+  useEffect(() => {
+    const onChange = () => setLand(get());
+    window.addEventListener('resize', onChange);
+    window.addEventListener('orientationchange', onChange);
+    return () => {
+      window.removeEventListener('resize', onChange);
+      window.removeEventListener('orientationchange', onChange);
+    };
+  }, []);
+  return land;
 }
 const fmt = (sec) => {
   const s = Math.max(0, sec);
@@ -324,6 +358,8 @@ function SettingsModal({ onClose, sync, forceResync, pushLocalToCloud }) {
   const [msg, setMsg] = useState('');
   const [hashOut, setHashOut] = useState('');
   const [copied, setCopied] = useState(false);
+  const [soundOn, setSoundOnLocal] = useState(getSound);
+  const toggleSound = () => { const next = !soundOn; setSoundOnLocal(next); setSoundPref(next); };
 
   const change = async () => {
     setMsg('');
@@ -378,6 +414,15 @@ function SettingsModal({ onClose, sync, forceResync, pushLocalToCloud }) {
                 <div><div className="font-semibold text-base">Export backup</div><div className="text-xs text-stone-500 mt-0.5">Download all data as JSON</div></div>
                 <Icons.Save size={20} className="text-stone-500"/>
               </button>
+              <button onClick={toggleSound} className="w-full text-left bg-stone-900 active:bg-stone-800 border border-stone-800 rounded-2xl p-4 flex items-center justify-between tap-scale">
+                <div>
+                  <div className="font-semibold text-base">Timer sound</div>
+                  <div className="text-xs text-stone-500 mt-0.5">{soundOn ? 'Beeps and warnings on' : 'Silent — haptics only'}</div>
+                </div>
+                <div className={`w-11 h-7 rounded-full p-0.5 transition-colors ${soundOn ? 'bg-orange-500' : 'bg-stone-700'}`}>
+                  <div className={`w-6 h-6 rounded-full bg-white transition-transform ${soundOn ? 'translate-x-4' : ''}`}/>
+                </div>
+              </button>
               {sync !== 'disabled' && (
                 <>
                   <div className="pt-2 pb-1 text-[10px] text-stone-500 uppercase tracking-wider font-bold">Cloud sync</div>
@@ -397,7 +442,7 @@ function SettingsModal({ onClose, sync, forceResync, pushLocalToCloud }) {
                   </button>
                 </>
               )}
-              <div className="text-[10px] text-stone-600 text-center pt-3 uppercase tracking-[0.25em]">Vad Training · v3.1</div>
+              <div className="text-[10px] text-stone-600 text-center pt-3 uppercase tracking-[0.25em]">Vad Training · v3.2</div>
             </>
           )}
           {view === 'change' && (
@@ -438,9 +483,11 @@ const PRESTART_SEC = 10;
 
 function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
   const [mode, setMode] = useState(initialMode);
-  const [muted, setMuted] = useState(false);
-  const audio = useAudio(muted);
+  const [soundOn, setSoundOnState] = useState(getSound);
+  const setSoundOn = (v) => { setSoundOnState(v); setSoundPref(v); };
+  const audio = useAudio(!soundOn);
   const haptic = useHaptic();
+  const landscape = useOrientation();
 
   const [restSec, setRestSec] = useState(initialConfig.restSec ?? 150);
   const [restSets, setRestSets] = useState(initialConfig.restSets ?? 4);
@@ -462,6 +509,9 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
   const [isWork, setIsWork] = useState(true);
   const [sideIdx, setSideIdx] = useState(1);
   const [holdRoundIdx, setHoldRoundIdx] = useState(1);
+  // For STRENGTH/rest mode: 'set' = stopwatch counting up during the lift,
+  // 'rest' = countdown after user taps DONE
+  const [restPhase, setRestPhase] = useState('set');
 
   const startRef = useRef(null), pausedElapsedRef = useRef(0), lastBeepSec = useRef(-1);
   useWakeLock(phase === 'running' || phase === 'prestart');
@@ -470,10 +520,11 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
   function fullReset() {
     setPhase('idle'); setElapsed(0); setSetIdx(1); setRounds(0);
     setIntervalIdx(1); setIsWork(true); setSideIdx(1); setHoldRoundIdx(1);
+    setRestPhase('set');
     startRef.current = null; pausedElapsedRef.current = 0; lastBeepSec.current = -1;
   }
   function timerOnlyReset() {
-    setPhase('idle'); setElapsed(0);
+    setPhase('idle'); setElapsed(0); setRestPhase('set');
     startRef.current = null; pausedElapsedRef.current = 0; lastBeepSec.current = -1;
   }
 
@@ -500,7 +551,15 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
     }
     if (phase !== 'running') return;
     const cb = (rem) => { if (rem <= 3 && rem > 0) { const s = Math.ceil(rem); if (lastBeepSec.current !== s) { lastBeepSec.current = s; audio.tick(); haptic(10); } } };
-    if (mode === 'rest') { const rem = restSec - elapsed; cb(rem); if (rem <= 0) { audio.go(); haptic([20,30,20]); setPhase('done'); } }
+    if (mode === 'rest') {
+      if (restPhase === 'set') {
+        // stopwatch — no auto-finish; user taps DONE to switch to rest countdown
+      } else {
+        const rem = restSec - elapsed;
+        cb(rem);
+        if (rem <= 0) { audio.go(); haptic([20,30,20]); setPhase('done'); }
+      }
+    }
     else if (mode === 'amrap') { const rem = amrapMin*60 - elapsed; cb(rem); if (rem <= 0) { audio.done(); haptic([30,30,30,30,30]); setPhase('done'); } }
     else if (mode === 'fortime') { const rem = forTimeCapMin*60 - elapsed; cb(rem); if (rem <= 0) { audio.done(); haptic([30,30,30,30,30]); setPhase('done'); } }
     else if (mode === 'emom') {
@@ -542,10 +601,40 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
     lastBeepSec.current = -1; setElapsed(0); setPhase('running');
   };
   const pause = () => { if (phase === 'running') { haptic(10); pausedElapsedRef.current = elapsed; startRef.current = null; setPhase('paused'); } };
-  const nextSet = () => { if (setIdx < restSets) { setSetIdx(s=>s+1); timerOnlyReset(); } else fullReset(); };
+  const nextSet = () => { if (setIdx < restSets) { setSetIdx(s=>s+1); setRestPhase('set'); timerOnlyReset(); } else fullReset(); };
+  // Strength flow: tap DONE after a set → instantly switch to rest countdown without confirmation
+  const setDone = () => {
+    if (mode !== 'rest' || phase !== 'running' || restPhase !== 'set') return;
+    haptic([10,20,10]); audio.rest();
+    setRestPhase('rest');
+    startRef.current = Date.now(); pausedElapsedRef.current = 0; lastBeepSec.current = -1;
+    setElapsed(0);
+  };
 
   let big = '00:00', phaseLbl = 'READY', context = '', accent = 'text-stone-100';
-  if (mode === 'rest')      { const r = Math.max(0, restSec - elapsed); big = fmt(phase==='done'?0:r); phaseLbl = phase==='done'?'GO':phase==='running'?'RESTING':'READY'; context = `SET ${setIdx} of ${restSets}`; if (phase==='done') accent='text-lime-400'; else if (phase==='running' && r<=10) accent='text-amber-400'; }
+  if (mode === 'rest')      {
+    if (restPhase === 'set' && phase === 'running') {
+      big = fmt(elapsed);
+      phaseLbl = 'WORKING';
+      context = `SET ${setIdx} of ${restSets}`;
+      accent='text-lime-400';
+    } else if (restPhase === 'rest' && phase === 'running') {
+      const r = Math.max(0, restSec - elapsed);
+      big = fmt(r);
+      phaseLbl = 'RESTING';
+      context = `SET ${setIdx} of ${restSets}`;
+      accent = r<=10 ? 'text-amber-400' : 'text-sky-400';
+    } else if (phase === 'done') {
+      big = fmt(0);
+      phaseLbl = 'GO';
+      context = `SET ${setIdx} of ${restSets}`;
+      accent='text-lime-400';
+    } else {
+      big = fmt(0);
+      phaseLbl = 'READY';
+      context = `SET ${setIdx} of ${restSets}`;
+    }
+  }
   else if (mode === 'amrap')    { const r = Math.max(0, amrapMin*60 - elapsed); big = fmt(phase==='done'?0:r); phaseLbl = phase==='done'?'TIME':phase==='running'?'WORK':'READY'; context = `ROUNDS · ${rounds}`; if (phase==='running') accent='text-lime-400'; if (phase==='done') accent='text-red-500'; }
   else if (mode === 'fortime')  { big = fmt(elapsed); phaseLbl = phase==='done'?'DONE':phase==='running'?'WORK':'READY'; context = `CAP ${fmt(forTimeCapMin*60)}`; if (phase==='running') accent='text-lime-400'; }
   else if (mode === 'emom')     { const mr = 60 - (elapsed%60); big = fmt(phase==='running'?mr:60); phaseLbl = phase==='done'?'DONE':phase==='running'?'WORK':'READY'; context = `MIN ${intervalIdx} of ${emomRounds}`; if (phase==='running') accent='text-lime-400'; }
@@ -579,7 +668,7 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
   const onRoundTap = () => { if (phase==='running' && mode==='amrap') { setRounds(r=>r+1); audio.tick(); haptic(15); } };
   const progressPct = () => {
     if (phase === 'prestart') return Math.min(100, (elapsed/PRESTART_SEC)*100);
-    if (mode==='rest')     return Math.min(100, (elapsed/restSec)*100);
+    if (mode==='rest')     return restPhase==='rest' ? Math.min(100, (elapsed/restSec)*100) : 0;
     if (mode==='amrap')    return Math.min(100, (elapsed/(amrapMin*60))*100);
     if (mode==='fortime')  return Math.min(100, (elapsed/(forTimeCapMin*60))*100);
     if (mode==='emom')     return Math.min(100, (elapsed/(emomRounds*60))*100);
@@ -588,16 +677,16 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
     return 0;
   };
 
-  const handleLog = () => {
+  const handleLog = (closeAfter = true) => {
     if (!onLog) { onClose(); return; }
     let result = { mode };
     if (mode === 'amrap')    result = { mode, rounds, timeSec: Math.floor(elapsed) };
     else if (mode === 'fortime') result = { mode, timeSec: Math.floor(elapsed), capped: phase==='done' && elapsed >= forTimeCapMin*60 };
-    else if (mode === 'rest')    result = { mode, setsCompleted: setIdx };
+    else if (mode === 'rest')    result = { mode, setsCompleted: phase==='done' ? setIdx : Math.max(0, setIdx - (restPhase==='set'?1:0)) };
     else if (mode === 'intervals') result = { mode, repsCompleted: intervalIdx };
     else                       result = { mode, timeSec: Math.floor(elapsed) };
     haptic([10,30,10]);
-    onLog(result);
+    onLog(result, closeAfter);
   };
 
   const MODES = [
@@ -607,13 +696,14 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
 
   return (
     <div className="fixed inset-0 z-50 bg-stone-950 flex flex-col sheet-slide pt-safe pb-safe">
-      <header className="flex items-center justify-between px-4 pt-3 pb-3 border-b border-stone-900">
-        <div className="flex items-baseline gap-2 min-w-0 flex-1">
+      <header className="flex items-start justify-between px-4 pt-3 pb-3 border-b border-stone-900 gap-3">
+        <div className="flex flex-col min-w-0 flex-1 gap-0.5">
           <span className="font-digits font-extrabold text-base tracking-tight">CHRONO</span>
-          <span className="text-stone-600 text-[10px] uppercase tracking-[0.2em] truncate">{initialConfig.workoutName || 'STANDALONE'}</span>
+          {initialConfig.workoutName && (
+            <span className="text-stone-300 text-xs leading-snug font-semibold break-words">{initialConfig.workoutName}</span>
+          )}
         </div>
         <div className="flex gap-1 shrink-0">
-          <button onClick={()=>setMuted(m=>!m)} className="p-2.5 rounded-full text-stone-400 tap-scale">{muted ? <Icons.VolOff size={20}/> : <Icons.VolOn size={20}/>}</button>
           <button onClick={onClose} className="p-2.5 rounded-full text-stone-400 tap-scale"><Icons.X size={20}/></button>
         </div>
       </header>
@@ -629,48 +719,60 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
       <div className="h-[2px] bg-stone-900 relative overflow-hidden">
         <div className={`absolute inset-y-0 left-0 ${phase==='prestart'?'bg-amber-500':'bg-red-600'} transition-all duration-75`} style={{width:`${progressPct()}%`}}/>
       </div>
-      <div onClick={onRoundTap} className={`flex-1 flex flex-col items-center justify-center px-5 py-6 ${mode==='amrap'&&phase==='running'?'cursor-pointer active:bg-stone-900/50':''}`}>
-        <div className="mb-5">
-          <span className={`inline-block px-3.5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.25em] border ${
-            phase==='prestart'?'border-amber-600 text-amber-400 bg-amber-950/30 animate-pulse':
-            phase==='done'?'border-red-600 text-red-500 bg-red-950/30':
-            phase==='running'?'border-stone-700 text-stone-300 bg-stone-900/50':
-            'border-stone-800 text-stone-500'}`}>● {phaseLbl}</span>
-        </div>
-        <div className={`font-digits font-extrabold text-[5.5rem] sm:text-8xl leading-none ${accent}`}>{big}</div>
-        {mode==='amrap' && phase!=='prestart' && (
-          <div className="mt-8 flex flex-col items-center gap-2">
-            <div className="text-[10px] uppercase tracking-[0.25em] text-stone-500 font-bold">Rounds · tap screen</div>
-            <div className="flex items-center gap-3">
-              <button onClick={(e)=>{e.stopPropagation(); setRounds(r=>Math.max(0,r-1)); haptic(5);}} className="w-12 h-12 rounded-full bg-stone-900 border border-stone-800 text-stone-400 flex items-center justify-center tap-scale"><Icons.Minus size={18}/></button>
-              <div className="font-digits font-bold text-5xl tabular-nums w-24 text-center">{rounds}</div>
-              <button onClick={(e)=>{e.stopPropagation(); setRounds(r=>r+1); audio.tick(); haptic(10);}} className="w-12 h-12 rounded-full bg-stone-900 border border-stone-800 text-stone-400 flex items-center justify-center tap-scale"><Icons.Plus size={18}/></button>
-            </div>
+      <div className={`flex-1 flex ${landscape ? 'flex-row' : 'flex-col'} min-h-0`}>
+        <div onClick={onRoundTap} className={`flex-1 flex flex-col items-center justify-center px-5 ${landscape ? 'py-3' : 'py-6'} ${mode==='amrap'&&phase==='running'?'cursor-pointer active:bg-stone-900/50':''}`}>
+          <div className={landscape ? 'mb-2' : 'mb-5'}>
+            <span className={`inline-block px-3.5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.25em] border ${
+              phase==='prestart'?'border-amber-600 text-amber-400 bg-amber-950/30 animate-pulse':
+              phase==='done'?'border-red-600 text-red-500 bg-red-950/30':
+              phase==='running'?'border-stone-700 text-stone-300 bg-stone-900/50':
+              'border-stone-800 text-stone-500'}`}>● {phaseLbl}</span>
           </div>
-        )}
-        {context && (mode!=='amrap' || phase==='prestart') && (
-          <div className={`mt-6 text-xs uppercase tracking-[0.28em] font-bold ${phase==='prestart'?'text-amber-500/70':'text-stone-500'}`}>{context}</div>
-        )}
-      </div>
-      <div className="px-4 pt-4 pb-5 border-t border-stone-900 bg-stone-950">
-        <div className="flex items-stretch gap-2">
-          {phase==='prestart' ? (
-            <button onClick={skipPrestart} className="flex-1 bg-amber-500 text-stone-950 font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale"><Icons.Skip size={20}/> Skip · {Math.ceil(Math.max(0, PRESTART_SEC-elapsed))}</button>
-          ) : phase==='running' ? (
-            <button onClick={pause} className="flex-1 bg-stone-100 text-stone-950 font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale"><Icons.Pause size={20}/> Pause</button>
-          ) : phase==='done' && mode==='rest' && setIdx<restSets ? (
-            <button onClick={()=>{nextSet(); setTimeout(start,50);}} className="flex-1 bg-red-600 text-white font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale"><Icons.Skip size={20}/> Next set ({setIdx+1}/{restSets})</button>
-          ) : (
-            <button onClick={start} className="flex-1 gradient-orange text-white font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale shadow-lg shadow-orange-900/30"><Icons.Play size={20}/>{phase==='paused'?'Resume':phase==='done'?'Again':'Start'}</button>
+          <div className={`font-digits font-extrabold leading-none ${landscape ? 'text-[4.5rem]' : 'text-[5.5rem] sm:text-8xl'} ${accent}`}>{big}</div>
+          {mode==='amrap' && phase!=='prestart' && (
+            <div className={`${landscape ? 'mt-3' : 'mt-8'} flex flex-col items-center gap-2`}>
+              <div className="text-[10px] uppercase tracking-[0.25em] text-stone-500 font-bold">Rounds · tap screen</div>
+              <div className="flex items-center gap-3">
+                <button onClick={(e)=>{e.stopPropagation(); setRounds(r=>Math.max(0,r-1)); haptic(5);}} className="w-12 h-12 rounded-full bg-stone-900 border border-stone-800 text-stone-400 flex items-center justify-center tap-scale"><Icons.Minus size={18}/></button>
+                <div className={`font-digits font-bold tabular-nums w-24 text-center ${landscape ? 'text-3xl' : 'text-5xl'}`}>{rounds}</div>
+                <button onClick={(e)=>{e.stopPropagation(); setRounds(r=>r+1); audio.tick(); haptic(10);}} className="w-12 h-12 rounded-full bg-stone-900 border border-stone-800 text-stone-400 flex items-center justify-center tap-scale"><Icons.Plus size={18}/></button>
+              </div>
+            </div>
           )}
-          <button onClick={fullReset} className="w-14 h-14 bg-stone-900 border border-stone-800 text-stone-400 rounded-2xl flex items-center justify-center tap-scale"><Icons.Reset size={20}/></button>
+          {context && (mode!=='amrap' || phase==='prestart') && (
+            <div className={`${landscape ? 'mt-3' : 'mt-6'} text-xs uppercase tracking-[0.28em] font-bold ${phase==='prestart'?'text-amber-500/70':'text-stone-500'}`}>{context}</div>
+          )}
         </div>
-        {mode==='fortime' && phase==='running' && (
-          <button onClick={()=>{audio.done(); haptic([30,30,30,30,30]); setPhase('done');}} className="mt-2 w-full bg-lime-500 text-stone-950 font-bold uppercase tracking-[0.2em] text-sm h-12 rounded-2xl flex items-center justify-center gap-2 tap-scale"><Icons.Check size={18}/> Finish</button>
-        )}
-        {phase==='done' && onLog && (
-          <button onClick={handleLog} className="mt-2 w-full gradient-orange text-white font-bold uppercase tracking-[0.2em] text-sm h-12 rounded-2xl flex items-center justify-center gap-2 tap-scale"><Icons.Save size={18}/> Log result & close</button>
-        )}
+        <div className={`${landscape ? 'border-l w-[42%] max-w-xs flex flex-col justify-center' : 'border-t'} border-stone-900 bg-stone-950 px-4 ${landscape ? 'py-3' : 'pt-4 pb-5'}`}>
+          <div className={`flex ${landscape ? 'flex-col' : 'items-stretch'} gap-2`}>
+            {phase==='prestart' ? (
+              <button onClick={skipPrestart} className={`${landscape ? 'w-full' : 'flex-1'} bg-amber-500 text-stone-950 font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Skip size={20}/> Skip · {Math.ceil(Math.max(0, PRESTART_SEC-elapsed))}</button>
+            ) : phase==='running' ? (
+              <button onClick={pause} className={`${landscape ? 'w-full' : 'flex-1'} bg-stone-100 text-stone-950 font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Pause size={20}/> Pause</button>
+            ) : phase==='done' && mode==='rest' && setIdx<restSets ? (
+              <button onClick={()=>{nextSet(); setTimeout(start,50);}} className={`${landscape ? 'w-full' : 'flex-1'} bg-red-600 text-white font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Skip size={20}/> Next set ({setIdx+1}/{restSets})</button>
+            ) : (
+              <button onClick={start} className={`${landscape ? 'w-full' : 'flex-1'} gradient-orange text-white font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale shadow-lg shadow-orange-900/30`}><Icons.Play size={20}/>{phase==='paused'?'Resume':phase==='done'?'Again':'Start'}</button>
+            )}
+            <button onClick={fullReset} className={`${landscape ? 'w-full h-12' : 'w-14 h-14'} bg-stone-900 border border-stone-800 text-stone-400 rounded-2xl flex items-center justify-center tap-scale`}><Icons.Reset size={20}/></button>
+          </div>
+          {/* DONE button — strength flow: appears during the SET phase, instantly switches to rest countdown */}
+          {mode==='rest' && phase==='running' && restPhase==='set' && (
+            <button onClick={setDone} className={`mt-2 w-full bg-lime-500 text-stone-950 font-bold uppercase tracking-[0.2em] text-sm h-12 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Check size={18}/> Done · start rest</button>
+          )}
+          {/* Manual finish — for_time mode keeps its own bespoke button */}
+          {mode==='fortime' && phase==='running' && (
+            <button onClick={()=>{audio.done(); haptic([30,30,30,30,30]); setPhase('done');}} className={`mt-2 w-full bg-lime-500 text-stone-950 font-bold uppercase tracking-[0.2em] text-sm h-12 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Check size={18}/> Finish</button>
+          )}
+          {/* Log & close mid-workout — available while running on any logging mode (not for_time which has its own Finish) */}
+          {phase==='running' && onLog && mode!=='fortime' && (
+            <button onClick={()=>handleLog(true)} className={`mt-2 w-full bg-stone-800 border border-stone-700 text-stone-100 font-bold uppercase tracking-[0.2em] text-sm h-12 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Save size={18}/> Log &amp; close</button>
+          )}
+          {/* End-of-timer log button (existing flow) */}
+          {phase==='done' && onLog && (
+            <button onClick={()=>handleLog(true)} className={`mt-2 w-full gradient-orange text-white font-bold uppercase tracking-[0.2em] text-sm h-12 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Save size={18}/> Log result &amp; close</button>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -970,29 +1072,113 @@ Generate the full programme now.`;
 };
 
 // ---------- PROGRESS VIEW ----------
-const ProgressView = ({ data }) => {
-  const myResults = data.results;
-  const exercises = useMemo(() => {
-    const set = new Set();
-    myResults.forEach(r=>{ if (r.blockName) set.add(r.blockName); });
-    return ['All Exercises', ...Array.from(set)];
-  }, [myResults]);
-  const [filter, setFilter] = useState('All Exercises');
-  const filtered = filter==='All Exercises' ? myResults : myResults.filter(r=>r.blockName===filter);
-  const strongest = useMemo(() => {
-    const lifts = myResults.filter(r=>r.value?.weightKg);
-    if (!lifts.length) return null;
-    return lifts.reduce((a,b)=>(b.value.weightKg>a.value.weightKg?b:a));
-  }, [myResults]);
-  const exerciseCount = useMemo(()=>new Set(myResults.map(r=>r.blockName)).size, [myResults]);
+// Inline SVG sparkline/line chart for an exercise's progression
+const ExerciseChart = ({ results }) => {
+  // results sorted oldest → newest, plot whichever metric is most informative
+  const points = useMemo(() => {
+    return results
+      .slice()
+      .sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      .map(r => {
+        const v = r.value || {};
+        let metric = null;
+        if (v.weightKg != null) metric = { label: 'kg', value: v.weightKg };
+        else if (v.timeSec != null) metric = { label: 's', value: v.timeSec };
+        else if (v.rounds != null) metric = { label: 'rds', value: v.rounds };
+        else if (v.setsCompleted != null) metric = { label: 'sets', value: v.setsCompleted };
+        else if (v.repsCompleted != null) metric = { label: 'reps', value: v.repsCompleted };
+        return metric ? { date: r.date, ...metric } : null;
+      })
+      .filter(Boolean);
+  }, [results]);
+
+  if (points.length < 2) return (
+    <div className="text-center text-xs text-stone-600 py-3 italic">Need at least 2 sessions to see progression.</div>
+  );
+
+  const W = 320, H = 110, P = 14;
+  const xs = points.map((_,i) => i);
+  const ys = points.map(p => p.value);
+  const xMin = 0, xMax = xs.length - 1;
+  const yMin = Math.min(...ys), yMax = Math.max(...ys);
+  const yPad = (yMax - yMin) * 0.15 || 1;
+  const yLo = yMin - yPad, yHi = yMax + yPad;
+  const fx = (i) => P + (i - xMin) / Math.max(1, xMax - xMin) * (W - 2*P);
+  const fy = (v) => H - P - (v - yLo) / Math.max(0.0001, yHi - yLo) * (H - 2*P);
+
+  const path = points.map((p,i) => `${i===0?'M':'L'}${fx(i).toFixed(1)},${fy(p.value).toFixed(1)}`).join(' ');
+  const areaPath = path + ` L${fx(xMax).toFixed(1)},${H-P} L${fx(0).toFixed(1)},${H-P} Z`;
+  const last = points[points.length-1];
+  const first = points[0];
+  const delta = last.value - first.value;
+  const trend = delta > 0 ? '↑' : delta < 0 ? '↓' : '→';
+  const trendColor = delta > 0 ? 'text-emerald-400' : delta < 0 ? 'text-rose-400' : 'text-stone-400';
 
   return (
     <div>
-      {/* KPI cards — 3 cols on phone too, more compact */}
+      <div className="flex items-baseline justify-between mb-1.5">
+        <span className="text-[10px] uppercase tracking-wider text-stone-500 font-bold">Progression</span>
+        <span className={`text-xs font-digits font-bold tabular-nums ${trendColor}`}>{trend} {Math.abs(delta).toFixed(delta % 1 === 0 ? 0 : 1)}{last.label}</span>
+      </div>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgb(249 115 22)" stopOpacity="0.4"/>
+            <stop offset="100%" stopColor="rgb(249 115 22)" stopOpacity="0"/>
+          </linearGradient>
+        </defs>
+        {/* Min/max guide lines */}
+        <line x1={P} y1={fy(yMin)} x2={W-P} y2={fy(yMin)} stroke="rgb(41 37 36)" strokeDasharray="2 4"/>
+        <line x1={P} y1={fy(yMax)} x2={W-P} y2={fy(yMax)} stroke="rgb(41 37 36)" strokeDasharray="2 4"/>
+        <path d={areaPath} fill="url(#chartFill)"/>
+        <path d={path} fill="none" stroke="rgb(249 115 22)" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round"/>
+        {points.map((p,i) => (
+          <circle key={i} cx={fx(i)} cy={fy(p.value)} r={i===points.length-1 ? 3.5 : 2.5}
+                  fill={i===points.length-1 ? 'rgb(249 115 22)' : 'rgb(245 158 11)'}
+                  stroke="rgb(28 25 23)" strokeWidth="1.5"/>
+        ))}
+        <text x={P} y={fy(yMax) - 4} fill="rgb(120 113 108)" fontSize="9" fontFamily="monospace">{yMax}{last.label}</text>
+        <text x={P} y={fy(yMin) + 11} fill="rgb(120 113 108)" fontSize="9" fontFamily="monospace">{yMin}{last.label}</text>
+      </svg>
+    </div>
+  );
+};
+
+const ProgressView = ({ data }) => {
+  const myResults = data.results;
+  const [expanded, setExpanded] = useState(null);
+
+  const grouped = useMemo(() => {
+    const map = new Map();
+    for (const r of myResults) {
+      if (!r.blockName) continue;
+      if (!map.has(r.blockName)) map.set(r.blockName, []);
+      map.get(r.blockName).push(r);
+    }
+    // Each group sorted newest first; entries themselves sorted by total session count
+    return [...map.entries()]
+      .map(([name, list]) => ({
+        name,
+        results: list.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+        count: list.length,
+        last: list[0],
+      }))
+      .sort((a,b) => new Date(b.last.date).getTime() - new Date(a.last.date).getTime());
+  }, [myResults]);
+
+  const strongest = useMemo(() => {
+    const lifts = myResults.filter(r => r.value?.weightKg);
+    if (!lifts.length) return null;
+    return lifts.reduce((a,b) => (b.value.weightKg > a.value.weightKg ? b : a));
+  }, [myResults]);
+
+  return (
+    <div>
+      {/* KPI cards */}
       <div className="grid grid-cols-3 gap-2 mb-4">
         <div className="card-teal rounded-2xl p-3">
           <div className="flex items-center gap-1.5 mb-2 text-sky-400"><Icons.Activity size={14}/></div>
-          <div className="text-[10px] text-stone-400 uppercase tracking-wider mb-1 font-bold leading-tight">Lifts<br/>Logged</div>
+          <div className="text-[10px] text-stone-400 uppercase tracking-wider mb-1 font-bold leading-tight">Sessions<br/>Logged</div>
           <div className="font-digits font-extrabold text-2xl">{myResults.length}</div>
         </div>
         <div className="card-orange rounded-2xl p-3">
@@ -1003,34 +1189,64 @@ const ProgressView = ({ data }) => {
         <div className="card-purple rounded-2xl p-3">
           <div className="flex items-center gap-1.5 mb-2 text-fuchsia-400"><Icons.Weight size={14}/></div>
           <div className="text-[10px] text-stone-400 uppercase tracking-wider mb-1 font-bold leading-tight">Exercises<br/>Tracked</div>
-          <div className="font-digits font-extrabold text-2xl">{exerciseCount}</div>
+          <div className="font-digits font-extrabold text-2xl">{grouped.length}</div>
         </div>
       </div>
+
       <div className="bg-stone-900/30 border border-stone-800 rounded-2xl p-4">
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-3">
           <Icons.Bar size={16} className="text-orange-500"/>
-          <h2 className="text-base font-bold flex-1">Progression</h2>
-          <select value={filter} onChange={e=>setFilter(e.target.value)} className="bg-stone-900 border border-stone-800 rounded-xl px-2.5 py-2 text-xs text-stone-200 max-w-[140px] truncate">
-            {exercises.map(o=><option key={o}>{o}</option>)}
-          </select>
+          <h2 className="text-base font-bold flex-1">Exercises</h2>
+          <span className="text-xs text-stone-500">{grouped.length} tracked</span>
         </div>
-        {filtered.length === 0 ? (
+
+        {grouped.length === 0 ? (
           <div className="py-12 text-center">
             <Icons.Activity size={36} className="mx-auto text-stone-700 mb-3"/>
             <p className="text-stone-400 text-base font-semibold">No progress yet</p>
-            <p className="text-stone-600 text-xs mt-1">Go lift something heavy</p>
+            <p className="text-stone-600 text-xs mt-1">Log a workout to see it here</p>
           </div>
         ) : (
           <div className="space-y-1.5">
-            {filtered.slice(0,30).map(r => (
-              <div key={r.id} className="flex items-center justify-between p-3 bg-stone-950/40 rounded-xl border border-stone-800/60">
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-stone-200 text-sm truncate">{r.blockName}</div>
-                  <div className="text-[11px] text-stone-500">{new Date(r.date).toLocaleDateString()}</div>
+            {grouped.map(g => {
+              const isOpen = expanded === g.name;
+              return (
+                <div key={g.name} className="bg-stone-950/40 rounded-xl border border-stone-800/60 overflow-hidden">
+                  <button
+                    onClick={() => setExpanded(isOpen ? null : g.name)}
+                    className="w-full flex items-center justify-between p-3 tap-scale text-left">
+                    <div className="min-w-0 flex-1">
+                      <div className="font-semibold text-stone-200 text-sm truncate">{g.name}</div>
+                      <div className="text-[11px] text-stone-500 mt-0.5">
+                        {g.count} session{g.count===1?'':'s'} · last {new Date(g.last.date).toLocaleDateString()}
+                      </div>
+                    </div>
+                    <div className="font-digits font-bold text-stone-100 text-sm shrink-0 ml-2 mr-1.5">
+                      {formatResult(g.last)}
+                    </div>
+                    <div className="text-stone-500">
+                      {isOpen ? <Icons.ChevUp size={16}/> : <Icons.ChevDown size={16}/>}
+                    </div>
+                  </button>
+                  {isOpen && (
+                    <div className="px-3 pb-3 pt-1 border-t border-stone-900">
+                      <div className="py-3">
+                        <ExerciseChart results={g.results}/>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="text-[10px] uppercase tracking-wider text-stone-500 font-bold mb-1.5">All sessions</div>
+                        {g.results.map(r => (
+                          <div key={r.id} className="flex items-center justify-between py-1.5 text-xs">
+                            <span className="text-stone-400">{new Date(r.date).toLocaleDateString()}</span>
+                            <span className="font-digits font-bold text-stone-200 tabular-nums">{formatResult(r)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="font-digits font-bold text-stone-100 text-sm shrink-0 ml-2">{formatResult(r)}</div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
@@ -1180,7 +1396,7 @@ function App() {
     const t = blockToTimer(block);
     setTimer({ mode: t.mode, config: { ...t.config, workoutName: block.name }, blockId: block.id, blockName: block.name, dayIdx, week });
   };
-  const logResult = (value) => {
+  const logResult = (value, closeAfter = true) => {
     if (!timer) return;
     const result = {
       id: 'r_' + Date.now().toString(36),
@@ -1191,13 +1407,12 @@ function App() {
     };
     setData({ ...data, results: [result, ...data.results] });
     cloudActions.resultLogged(result);
-    setTimer(null);
+    if (closeAfter) setTimer(null);
   };
   const logout = () => { endSession(); setAuthed(false); };
 
   const tabs = [
     { id: 'programming', label: 'Today', icon: <Icons.Calendar size={18}/> },
-    { id: 'generator', label: 'Generate', icon: <Icons.Spark size={18}/> },
     { id: 'progress', label: 'Progress', icon: <Icons.Bar size={18}/> },
   ];
 
@@ -1215,12 +1430,11 @@ function App() {
       {/* Main content with bottom padding for nav */}
       <main className="flex-1 px-4 pt-4 pb-24">
         {tab === 'programming' && <ProgrammingView data={data} setData={setData} openTimer={openTimer} cloudActions={cloudActions}/>}
-        {tab === 'generator' && <GeneratorView data={data} setData={setData} cloudActions={cloudActions}/>}
         {tab === 'progress' && <ProgressView data={data}/>}
       </main>
       {/* Bottom tab bar — iOS native style, fixed to bottom */}
       <nav className="fixed bottom-0 inset-x-0 z-30 bg-stone-950/95 backdrop-blur-xl border-t border-stone-900 pb-safe">
-        <div className="grid grid-cols-3 gap-1 p-2 max-w-md mx-auto">
+        <div className="grid grid-cols-2 gap-1 p-2 max-w-md mx-auto">
           {tabs.map(t => {
             const active = tab === t.id;
             return (
