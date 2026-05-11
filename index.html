@@ -106,6 +106,23 @@ const Icons = {
   ChevUp: ({size}) => <I size={size}><polyline points="18 15 12 9 6 15"/></I>,
 };
 
+// ---------- PROFILES ----------
+// Two profiles share the same password and Cloudflare backend; data is fully
+// partitioned by profile id (separate localStorage buckets, ?profile= on every API call).
+const PROFILES = [
+  { id: 'vad',   name: 'Vad',   gradient: 'from-orange-500 to-red-500',     glow: 'shadow-orange-900/30' },
+  { id: 'tatka', name: 'Tatka', gradient: 'from-pink-500 to-rose-500',      glow: 'shadow-rose-900/30'   },
+];
+const PROFILE_KEY = 'vt_active_profile_v1';
+const getActiveProfile = () => {
+  const stored = localStorage.getItem(PROFILE_KEY);
+  if (stored && PROFILES.some(p => p.id === stored)) return stored;
+  return null;  // not yet picked → show profile picker after login
+};
+const setActiveProfile = (id) => localStorage.setItem(PROFILE_KEY, id);
+const clearActiveProfile = () => localStorage.removeItem(PROFILE_KEY);
+const profileMeta = (id) => PROFILES.find(p => p.id === id) || PROFILES[0];
+
 // ---------- AUTH ----------
 async function sha256(text) {
   const buf = new TextEncoder().encode(text);
@@ -134,8 +151,16 @@ const API_BASE  = 'https://rodiucov.com';
 const API_TOKEN = '54cdb3d799ee3cb3bc7601b894b0e90e395f9e6894bd8d3afbec92ac719609d6';   // <-- paste your 64-char API_TOKEN here
 const cloudEnabled = () => !!(API_BASE && API_TOKEN);
 
-async function apiFetch(path, opts = {}) {
-  const r = await fetch(API_BASE + path, {
+async function apiFetch(path, opts = {}, profile = null) {
+  // Append ?profile=<id> (or &profile=) to every authed call so server scopes
+  // reads/writes correctly. /api/health doesn't care, but the harmless extra
+  // query string doesn't break it either.
+  let url = API_BASE + path;
+  if (profile) {
+    const sep = url.includes('?') ? '&' : '?';
+    url = url + sep + 'profile=' + encodeURIComponent(profile);
+  }
+  const r = await fetch(url, {
     ...opts,
     headers: {
       'Authorization': `Bearer ${API_TOKEN}`,
@@ -152,16 +177,18 @@ async function apiFetch(path, opts = {}) {
   return ct.includes('application/json') ? r.json() : r.text();
 }
 
-const cloud = {
+// Build a cloud client bound to a specific profile. We re-create this when the
+// active profile changes so every call is automatically scoped.
+const cloudFor = (profile) => ({
   health:           () => apiFetch('/api/health'),
-  snapshot:         () => apiFetch('/api/snapshot'),
-  putProgramme:     (week, days) => apiFetch('/api/programme', { method:'PUT', body: JSON.stringify({ week, days }) }),
-  deleteProgramme:  (week) => apiFetch(`/api/programme?week=${encodeURIComponent(week)}`, { method:'DELETE' }),
-  addResult:        (r) => apiFetch('/api/results', { method:'POST', body: JSON.stringify(r) }),
-  deleteResult:     (id) => apiFetch(`/api/results/${encodeURIComponent(id)}`, { method:'DELETE' }),
-  putGenerator:     (g) => apiFetch('/api/generator', { method:'PUT', body: JSON.stringify(g) }),
-  migrate:          (payload) => apiFetch('/api/migrate', { method:'POST', body: JSON.stringify(payload) }),
-};
+  snapshot:         () => apiFetch('/api/snapshot', {}, profile),
+  putProgramme:     (week, days) => apiFetch('/api/programme', { method:'PUT', body: JSON.stringify({ week, days }) }, profile),
+  deleteProgramme:  (week) => apiFetch(`/api/programme?week=${encodeURIComponent(week)}`, { method:'DELETE' }, profile),
+  addResult:        (r) => apiFetch('/api/results', { method:'POST', body: JSON.stringify(r) }, profile),
+  deleteResult:     (id) => apiFetch(`/api/results/${encodeURIComponent(id)}`, { method:'DELETE' }, profile),
+  putGenerator:     (g) => apiFetch('/api/generator', { method:'PUT', body: JSON.stringify(g) }, profile),
+  migrate:          (payload) => apiFetch('/api/migrate', { method:'POST', body: JSON.stringify(payload) }, profile),
+});
 
 // Merge local and server results: union by id, server wins on dup, sort newest first.
 function mergeResults(localArr, serverArr) {
@@ -178,7 +205,10 @@ function mergeResults(localArr, serverArr) {
 }
 
 // ---------- DATA ----------
-const KEY = 'vad-training-v1';
+// Per-profile localStorage bucket. Old single-profile key migrates into the
+// 'vad' bucket on first read so existing data is preserved.
+const KEY_LEGACY = 'vad-training-v1';
+const dataKey = (profile) => `vad-training-v1-${profile}`;
 const SOUND_KEY = 'vt_sound_v1';
 const getSound = () => { try { return localStorage.getItem(SOUND_KEY) !== '0'; } catch { return true; } };
 const setSoundPref = (on) => { try { localStorage.setItem(SOUND_KEY, on ? '1' : '0'); } catch {} };
@@ -192,19 +222,24 @@ const seedData = () => ({
   },
   selectedWeek: 18,
 });
-const loadData = () => {
+const loadData = (profile) => {
   try {
-    // Try v1 key first; if absent, migrate from old crossfit-ai-data-v2
-    let raw = localStorage.getItem(KEY);
-    if (!raw) {
-      const old = localStorage.getItem('crossfit-ai-data-v2');
-      if (old) { raw = old; localStorage.setItem(KEY, old); }
+    const k = dataKey(profile);
+    let raw = localStorage.getItem(k);
+    // First-time read for the 'vad' profile: pull from the legacy single-bucket
+    // key (and from the even-older crossfit-ai-data-v2) if present. We do NOT
+    // do this for tatka — she starts fresh.
+    if (!raw && profile === 'vad') {
+      raw = localStorage.getItem(KEY_LEGACY)
+         || localStorage.getItem('crossfit-ai-data-v2')
+         || null;
+      if (raw) localStorage.setItem(k, raw);
     }
     if (!raw) return seedData();
     return { ...seedData(), ...JSON.parse(raw) };
   } catch { return seedData(); }
 };
-const saveData = (d) => { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch {} };
+const saveData = (profile, d) => { try { localStorage.setItem(dataKey(profile), JSON.stringify(d)); } catch {} };
 
 // ---------- AUDIO + WAKE LOCK ----------
 function useAudio(muted) {
@@ -349,8 +384,37 @@ function LoginScreen({ onSuccess }) {
   );
 }
 
+// ---------- PROFILE PICKER ----------
+function ProfilePicker({ onPick }) {
+  const haptic = useHaptic();
+  return (
+    <div className="min-h-screen bg-stone-950 flex items-center justify-center p-6 pt-safe pb-safe">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-10">
+          <h1 className="gradient-text font-extrabold text-3xl tracking-tight">Who's training?</h1>
+          <p className="text-stone-500 text-sm mt-3">Pick a profile — this device will remember it.</p>
+        </div>
+        <div className="space-y-3">
+          {PROFILES.map(p => (
+            <button
+              key={p.id}
+              onClick={() => { haptic(15); setActiveProfile(p.id); onPick(p.id); }}
+              className={`w-full bg-gradient-to-br ${p.gradient} text-white font-extrabold text-2xl uppercase tracking-[0.18em] py-8 rounded-3xl tap-scale shadow-2xl ${p.glow} flex items-center justify-center gap-3`}
+            >
+              {p.name}
+            </button>
+          ))}
+        </div>
+        <p className="text-[11px] text-stone-600 text-center mt-6 leading-relaxed px-3">
+          You can switch profiles anytime from Settings.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // ---------- SETTINGS BOTTOM SHEET ----------
-function SettingsModal({ onClose, sync, forceResync, pushLocalToCloud }) {
+function SettingsModal({ onClose, sync, forceResync, pushLocalToCloud, profile, onSwitchProfile }) {
   const [view, setView] = useState('main');
   const [oldPw, setOldPw] = useState('');
   const [newPw, setNewPw] = useState('');
@@ -360,6 +424,7 @@ function SettingsModal({ onClose, sync, forceResync, pushLocalToCloud }) {
   const [copied, setCopied] = useState(false);
   const [soundOn, setSoundOnLocal] = useState(getSound);
   const toggleSound = () => { const next = !soundOn; setSoundOnLocal(next); setSoundPref(next); };
+  const meta = profileMeta(profile);
 
   const change = async () => {
     setMsg('');
@@ -383,12 +448,17 @@ function SettingsModal({ onClose, sync, forceResync, pushLocalToCloud }) {
     navigator.clipboard.writeText(hashOut).then(()=>{ setCopied(true); setTimeout(()=>setCopied(false), 2000); });
   };
   const exportData = () => {
-    const data = localStorage.getItem(KEY) || '{}';
+    const data = localStorage.getItem(dataKey(profile)) || '{}';
     const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = `vad-training-backup-${new Date().toISOString().slice(0,10)}.json`;
+    a.href = url; a.download = `vad-training-${profile}-${new Date().toISOString().slice(0,10)}.json`;
     a.click(); URL.revokeObjectURL(url);
+  };
+  const switchProfile = () => {
+    if (!confirm(`Switch profile? You're currently signed into ${meta.name}. You'll be returned to the profile picker.`)) return;
+    onClose();
+    setTimeout(onSwitchProfile, 50);
   };
 
   return (
@@ -402,6 +472,16 @@ function SettingsModal({ onClose, sync, forceResync, pushLocalToCloud }) {
         <div className="p-5 space-y-3">
           {view === 'main' && (
             <>
+              <button onClick={switchProfile} className="w-full text-left active:opacity-90 border border-stone-800 rounded-2xl p-4 flex items-center justify-between tap-scale" style={{background:'linear-gradient(135deg, rgba(60,30,15,0.6) 0%, rgba(50,20,10,0.6) 100%)'}}>
+                <div className="flex items-center gap-3">
+                  <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${meta.gradient} flex items-center justify-center text-white font-extrabold text-xs uppercase tracking-wider`}>{meta.name.slice(0,1)}</div>
+                  <div>
+                    <div className="font-semibold text-base">Profile · <span className="font-bold">{meta.name}</span></div>
+                    <div className="text-xs text-stone-500 mt-0.5">Tap to switch</div>
+                  </div>
+                </div>
+                <Icons.LogOut size={18} className="text-stone-500"/>
+              </button>
               <button onClick={()=>setView('change')} className="w-full text-left bg-stone-900 active:bg-stone-800 border border-stone-800 rounded-2xl p-4 flex items-center justify-between tap-scale">
                 <div><div className="font-semibold text-base">Change password</div><div className="text-xs text-stone-500 mt-0.5">Pick a new password (this device)</div></div>
                 <Icons.Lock size={20} className="text-stone-500"/>
@@ -442,7 +522,7 @@ function SettingsModal({ onClose, sync, forceResync, pushLocalToCloud }) {
                   </button>
                 </>
               )}
-              <div className="text-[10px] text-stone-600 text-center pt-3 uppercase tracking-[0.25em]">Vad Training · v3.2</div>
+              <div className="text-[10px] text-stone-600 text-center pt-3 uppercase tracking-[0.25em]">Vad Training · v3.3</div>
             </>
           )}
           {view === 'change' && (
@@ -557,7 +637,22 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
       } else {
         const rem = restSec - elapsed;
         cb(rem);
-        if (rem <= 0) { audio.go(); haptic([20,30,20]); setPhase('done'); }
+        if (rem <= 0) {
+          audio.go(); haptic([20,30,20]);
+          if (setIdx < restSets) {
+            // Auto-advance straight to next set's working stopwatch — no prestart, no "Next set" tap
+            setSetIdx(s => s + 1);
+            setRestPhase('set');
+            startRef.current = Date.now();
+            pausedElapsedRef.current = 0;
+            lastBeepSec.current = -1;
+            setElapsed(0);
+            // phase stays 'running'
+          } else {
+            // Last rest finished — workout done
+            setPhase('done');
+          }
+        }
       }
     }
     else if (mode === 'amrap') { const rem = amrapMin*60 - elapsed; cb(rem); if (rem <= 0) { audio.done(); haptic([30,30,30,30,30]); setPhase('done'); } }
@@ -976,10 +1071,11 @@ const ProgrammingView = ({ data, setData, openTimer, cloudActions }) => {
 };
 
 // ---------- GENERATOR VIEW ----------
-const GeneratorView = ({ data, setData, cloudActions }) => {
+const GeneratorView = ({ data, setData, cloudActions, profile }) => {
   const [copied, setCopied] = useState(false);
   const haptic = useHaptic();
   const g = data.generator;
+  const meta = profileMeta(profile);
   const update = (patch) => {
     const newG = { ...g, ...patch };
     setData({ ...data, generator: newG });
@@ -988,7 +1084,7 @@ const GeneratorView = ({ data, setData, cloudActions }) => {
 
   const buildPrompt = () => `# Vad Training — Programme Generation Request
 
-Athlete: Vadim
+Athlete: ${meta.name}
 Weeks: ${g.weeks} (starting week ${g.startWeek})
 Workouts per week: ${g.perWeek}
 Focus: ${g.focus}
@@ -1273,25 +1369,43 @@ const SyncDot = ({ state }) => {
 // ---------- APP ----------
 function App() {
   const [authed, setAuthed] = useState(isLoggedIn());
-  const [data, setDataRaw] = useState(loadData);
+  const [profile, setProfile] = useState(getActiveProfile);  // null until picked
+  const [data, setDataRaw] = useState(() => profile ? loadData(profile) : seedData());
   const [tab, setTab] = useState('programming');
   const [timer, setTimer] = useState(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   // Sync states: 'disabled' | 'idle' | 'syncing' | 'synced' | 'offline'
   const [sync, setSync] = useState(cloudEnabled() ? 'idle' : 'disabled');
   const haptic = useHaptic();
-  const setData = (d) => { setDataRaw(d); saveData(d); };
+  const setData = (d) => { setDataRaw(d); if (profile) saveData(profile, d); };
+  const meta = profile ? profileMeta(profile) : null;
+  // Build a cloud client bound to the active profile. useMemo so callers get a
+  // stable reference within a single profile session.
+  const cloud = useMemo(() => cloudFor(profile), [profile]);
+
+  // When the user picks a new profile (initial pick or post-switch), load its bucket.
+  const onPickProfile = (id) => {
+    setProfile(id);
+    setDataRaw(loadData(id));
+    setSync(cloudEnabled() ? 'idle' : 'disabled');
+  };
+  // From Settings → Switch profile.
+  const onSwitchProfile = () => {
+    clearActiveProfile();
+    setProfile(null);
+  };
 
   // Initial reconcile with server: pull snapshot, merge results, push local-only results up.
+  // Re-runs when the active profile changes.
   useEffect(() => {
-    if (!authed || !cloudEnabled()) return;
+    if (!authed || !profile || !cloudEnabled()) return;
     let cancelled = false;
     (async () => {
       setSync('syncing');
       try {
         const snap = await cloud.snapshot();
         if (cancelled) return;
-        const local = loadData();
+        const local = loadData(profile);
         const { merged, localOnly } = mergeResults(local.results, snap.results || []);
         const merged_data = {
           ...local,
@@ -1301,7 +1415,7 @@ function App() {
           generator: snap.generator || local.generator,
         };
         setDataRaw(merged_data);
-        saveData(merged_data);
+        saveData(profile, merged_data);
         // Push any local-only results to the server (fire and forget)
         for (const r of localOnly) {
           cloud.addResult({
@@ -1315,7 +1429,7 @@ function App() {
       }
     })();
     return () => { cancelled = true; };
-  }, [authed]);
+  }, [authed, profile]);
 
   // cloudActions: imperative pushes triggered by view-level mutations.
   // Each one is fire-and-forget — UI already updated via setData(), API failures show in indicator.
@@ -1352,7 +1466,7 @@ function App() {
     setSync('syncing');
     try {
       const snap = await cloud.snapshot();
-      const local = loadData();
+      const local = loadData(profile);
       const { merged } = mergeResults(local.results, snap.results || []);
       const merged_data = {
         ...local,
@@ -1362,7 +1476,7 @@ function App() {
       };
       setData(merged_data);
       setSync('synced');
-      alert('Resynced from cloud.');
+      alert(`Resynced ${meta.name} from cloud.`);
     } catch (e) {
       setSync('offline');
       alert('Resync failed: ' + e.message);
@@ -1372,10 +1486,10 @@ function App() {
   // One-shot bulk push of localStorage to D1 (Settings button)
   const pushLocalToCloud = async () => {
     if (!cloudEnabled()) { alert('Cloud sync is not configured'); return; }
-    if (!confirm('Push ALL local programmes and results to the cloud? Existing cloud entries with the same week/result-id will be overwritten.')) return;
+    if (!confirm(`Push ALL local programmes and results for ${meta.name} to the cloud? Existing cloud entries with the same week/result-id will be overwritten.`)) return;
     setSync('syncing');
     try {
-      const local = loadData();
+      const local = loadData(profile);
       const r = await cloud.migrate({
         programme: local.programme || {},
         results: local.results || [],
@@ -1390,6 +1504,7 @@ function App() {
   };
 
   if (!authed) return <LoginScreen onSuccess={()=>setAuthed(true)}/>;
+  if (!profile) return <ProfilePicker onPick={onPickProfile}/>;
 
   const openTimer = (block, dayIdx, week) => {
     haptic(15);
@@ -1420,7 +1535,10 @@ function App() {
     <div className="min-h-screen bg-stone-950 flex flex-col">
       {/* Compact header — no sticky on mobile to save space */}
       <header className="flex items-center justify-between px-4 pt-3 pb-3 border-b border-stone-900 pt-safe">
-        <span className="gradient-text font-extrabold text-xl tracking-tight">Vad Training</span>
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="gradient-text font-extrabold text-xl tracking-tight truncate">Vad Training</span>
+          <span className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-[0.18em] text-white bg-gradient-to-br ${meta.gradient} shrink-0`}>{meta.name}</span>
+        </div>
         <div className="flex items-center gap-1">
           <SyncDot state={sync}/>
           <button onClick={()=>setSettingsOpen(true)} className="p-2.5 rounded-full text-stone-400 tap-scale"><Icons.Settings size={20}/></button>
@@ -1448,7 +1566,7 @@ function App() {
         </div>
       </nav>
       {timer && <ChronoTimer initialMode={timer.mode} initialConfig={timer.config} onClose={()=>setTimer(null)} onLog={logResult}/>}
-      {settingsOpen && <SettingsModal onClose={()=>setSettingsOpen(false)} sync={sync} forceResync={forceResync} pushLocalToCloud={pushLocalToCloud}/>}
+      {settingsOpen && <SettingsModal onClose={()=>setSettingsOpen(false)} sync={sync} forceResync={forceResync} pushLocalToCloud={pushLocalToCloud} profile={profile} onSwitchProfile={onSwitchProfile}/>}
     </div>
   );
 }
