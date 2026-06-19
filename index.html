@@ -59,11 +59,11 @@
 <body>
 <div id="root"></div>
 
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
 
-<script type="text/babel" data-presets="react">
+<script type="text/babel" data-presets="react" data-runtime="classic">
 const { useState, useEffect, useRef, useMemo } = React;
 
 // ============================================================
@@ -148,7 +148,7 @@ const endSession = () => localStorage.removeItem(SESSION_KEY);
 // Paste your bearer token here to enable cross-device sync via Cloudflare D1.
 // Leave both blank to fall back to pure localStorage mode (works offline / from disk).
 const API_BASE  = 'https://rodiucov.com';
-const API_TOKEN = '54cdb3d799ee3cb3bc7601b894b0e90e395f9e6894bd8d3afbec92ac719609d6';   // <-- paste your 64-char API_TOKEN here
+const API_TOKEN = '';   // <-- paste your 64-char API_TOKEN here
 const cloudEnabled = () => !!(API_BASE && API_TOKEN);
 
 async function apiFetch(path, opts = {}, profile = null) {
@@ -522,7 +522,7 @@ function SettingsModal({ onClose, sync, forceResync, pushLocalToCloud, profile, 
                   </button>
                 </>
               )}
-              <div className="text-[10px] text-stone-600 text-center pt-3 uppercase tracking-[0.25em]">Vad Training · v3.3</div>
+              <div className="text-[10px] text-stone-600 text-center pt-3 uppercase tracking-[0.25em]">Vad Training · v3.5</div>
             </>
           )}
           {view === 'change' && (
