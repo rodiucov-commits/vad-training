@@ -148,7 +148,7 @@ const endSession = () => localStorage.removeItem(SESSION_KEY);
 // Paste your bearer token here to enable cross-device sync via Cloudflare D1.
 // Leave both blank to fall back to pure localStorage mode (works offline / from disk).
 const API_BASE  = 'https://rodiucov.com';
-const API_TOKEN = '117b00bf3d18f07b3850da9643dee6971e463954b76e5effc192a71f443aa145';   // <-- paste your 64-char API_TOKEN here
+const API_TOKEN = '9edb5f644f1d42fc82ed6ffe3b94a98c4338e1336f2e8ee67799299ed6d77dc3';   // <-- paste your 64-char API_TOKEN here
 const cloudEnabled = () => !!(API_BASE && API_TOKEN);
 
 async function apiFetch(path, opts = {}, profile = null) {
