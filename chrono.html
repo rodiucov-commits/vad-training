@@ -75,6 +75,7 @@ const MODES = [
   { id: 'amrap',      label: 'AMRAP' },
   { id: 'fortime',    label: 'FOR TIME' },
   { id: 'emom',       label: 'EMOM' },
+  { id: 'emomblocks', label: 'EMOM BLOCKS' },
   { id: 'intervals',  label: 'INTERVALS' },
   { id: 'hold',       label: 'HOLD' },
   { id: 'stopwatch',  label: 'STOPWATCH' },
@@ -165,6 +166,10 @@ function Chrono() {
   const [holdSec, setHoldSec]               = useState(20);
   const [holdSides, setHoldSides]           = useState(2);
   const [holdRounds, setHoldRounds]         = useState(3);
+  // EMOM Blocks config
+  const [blockWorkMin, setBlockWorkMin]     = useState(12);
+  const [blockRestMin, setBlockRestMin]     = useState(4);
+  const [blockCount, setBlockCount]         = useState(3);
 
   const [phase, setPhase] = useState('idle'); // idle | prestart | running | paused | done
   const [elapsed, setElapsed] = useState(0);
@@ -174,6 +179,9 @@ function Chrono() {
   const [isWork, setIsWork] = useState(true);
   const [sideIdx, setSideIdx] = useState(1);
   const [holdRoundIdx, setHoldRoundIdx] = useState(1);
+  // EMOM Blocks state
+  const [blockIdx, setBlockIdx] = useState(1);
+  const [blockPhase, setBlockPhase] = useState('work'); // 'work' | 'rest'
 
   const startRef = useRef(null);
   const pausedElapsedRef = useRef(0);
@@ -186,6 +194,7 @@ function Chrono() {
   function fullReset() {
     setPhase('idle'); setElapsed(0); setSetIdx(1); setRounds(0);
     setIntervalIdx(1); setIsWork(true); setSideIdx(1); setHoldRoundIdx(1);
+    setBlockIdx(1); setBlockPhase('work');
     startRef.current = null; pausedElapsedRef.current = 0; lastBeepSec.current = -1;
   }
   function timerOnlyReset() {
@@ -241,6 +250,39 @@ function Chrono() {
       const expected = minuteIdx + 1;
       if (minuteIdx >= emomRounds) { audio.done(); setPhase('done'); return; }
       if (expected > intervalIdx) { setIntervalIdx(expected); audio.go(); }
+    } else if (mode === 'emomblocks') {
+      const workSec = blockWorkMin * 60;
+      const restSec = blockRestMin * 60;
+      const cycleSec = workSec + restSec;
+      const inCycle = elapsed - (blockIdx - 1) * cycleSec;
+      
+      if (blockPhase === 'work') {
+        const rem = workSec - inCycle;
+        countdownBeep(rem);
+        if (rem <= 0) {
+          if (blockIdx < blockCount) {
+            audio.rest();
+            setBlockPhase('rest');
+            startRef.current = Date.now() - inCycle * 1000 + workSec * 1000;
+            pausedElapsedRef.current = 0;
+            lastBeepSec.current = -1;
+          } else {
+            audio.done();
+            setPhase('done');
+          }
+        }
+      } else {
+        const rem = restSec - (inCycle - workSec);
+        countdownBeep(rem);
+        if (rem <= 0) {
+          audio.go();
+          setBlockIdx(b => b + 1);
+          setBlockPhase('work');
+          startRef.current = Date.now() - inCycle * 1000 + cycleSec * 1000;
+          pausedElapsedRef.current = 0;
+          lastBeepSec.current = -1;
+        }
+      }
     } else if (mode === 'intervals') {
       const cycle = intWork + intRest;
       const completed = Math.floor(elapsed / cycle);
@@ -336,6 +378,25 @@ function Chrono() {
     phaseLbl = phase === 'done' ? 'DONE' : phase === 'running' ? 'WORK' : 'READY';
     context = `MIN ${intervalIdx} of ${emomRounds}`;
     if (phase === 'running') accent = 'text-lime-400';
+  } else if (mode === 'emomblocks') {
+    const workSec = blockWorkMin * 60;
+    const restSec = blockRestMin * 60;
+    const cycleSec = workSec + restSec;
+    const inCycle = elapsed - (blockIdx - 1) * cycleSec;
+    
+    if (blockPhase === 'work') {
+      const rem = Math.max(0, workSec - inCycle);
+      big = fmt(phase === 'done' ? 0 : rem);
+      phaseLbl = phase === 'done' ? 'DONE' : phase === 'running' ? 'WORK' : 'READY';
+      context = `BLOCK ${blockIdx} of ${blockCount} · WORK`;
+      if (phase === 'running') accent = 'text-lime-400';
+    } else {
+      const rem = Math.max(0, restSec - (inCycle - workSec));
+      big = fmt(rem);
+      phaseLbl = 'REST';
+      context = `BLOCK ${blockIdx} of ${blockCount} · REST`;
+      accent = 'text-sky-400';
+    }
   } else if (mode === 'intervals') {
     const cycle = intWork + intRest;
     const inCycle = elapsed - Math.floor(elapsed / cycle) * cycle;
@@ -382,6 +443,11 @@ function Chrono() {
     if (mode === 'emom') return (<div className={wrap}>
       <Stepper label="Rounds" value={emomRounds} onChange={setEmomRounds} min={1} max={60}/>
     </div>);
+    if (mode === 'emomblocks') return (<div className={wrap}>
+      <Stepper label="Work" value={blockWorkMin} onChange={setBlockWorkMin} min={1} max={60} suffix="m"/>
+      <Stepper label="Rest" value={blockRestMin} onChange={setBlockRestMin} min={1} max={30} suffix="m"/>
+      <Stepper label="Blocks" value={blockCount} onChange={setBlockCount} min={1} max={10}/>
+    </div>);
     if (mode === 'intervals') return (<div className={wrap}>
       <Stepper label="Work" value={intWork} onChange={setIntWork} min={5} step={5} suffix="s"/>
       <Stepper label="Rest" value={intRest} onChange={setIntRest} min={5} step={5} suffix="s"/>
@@ -405,6 +471,10 @@ function Chrono() {
     if (mode === 'amrap')    return Math.min(100, (elapsed / (amrapMin * 60)) * 100);
     if (mode === 'fortime')  return Math.min(100, (elapsed / (forTimeCapMin * 60)) * 100);
     if (mode === 'emom')     return Math.min(100, (elapsed / (emomRounds * 60)) * 100);
+    if (mode === 'emomblocks') {
+      const totalSec = blockCount * (blockWorkMin + blockRestMin) * 60;
+      return Math.min(100, (elapsed / totalSec) * 100);
+    }
     if (mode === 'intervals') {
       const total = intRounds * (intWork + intRest);
       return Math.min(100, (elapsed / total) * 100);
@@ -423,7 +493,7 @@ function Chrono() {
         <header className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-stone-900">
           <div className="flex items-baseline gap-2.5">
             <span className="font-digits font-extrabold text-lg tracking-tight">CHRONO</span>
-            <span className="text-stone-600 text-[10px] uppercase tracking-[0.25em]">v0.2 · rodiucov</span>
+            <span className="text-stone-600 text-[10px] uppercase tracking-[0.25em]">v0.3 · rodiucov</span>
           </div>
           <button onClick={() => setMuted(m => !m)}
                   className="p-2 rounded-full hover:bg-stone-900 transition text-stone-400 hover:text-stone-100">
@@ -519,13 +589,14 @@ function Chrono() {
           )}
 
           <div className="mt-3 text-center text-[10px] uppercase tracking-[0.25em] text-stone-600">
-            {mode === 'rest'      && `REST · ${restSec}s × ${restSets} sets · ${PRESTART_SEC}s lead-in`}
-            {mode === 'amrap'     && `AMRAP · ${amrapMin} min · ${PRESTART_SEC}s lead-in`}
-            {mode === 'fortime'   && `FOR TIME · cap ${forTimeCapMin} min · ${PRESTART_SEC}s lead-in`}
-            {mode === 'emom'      && `EMOM · ${emomRounds} min · ${PRESTART_SEC}s lead-in`}
-            {mode === 'intervals' && `${intRounds} × (${intWork}s / ${intRest}s) · ${PRESTART_SEC}s lead-in`}
-            {mode === 'hold'      && `${holdSec}s × ${holdSides} side${holdSides > 1 ? 's' : ''} × ${holdRounds} rounds · ${PRESTART_SEC}s lead-in`}
-            {mode === 'stopwatch' && `STOPWATCH · ${PRESTART_SEC}s lead-in`}
+            {mode === 'rest'       && `REST · ${restSec}s × ${restSets} sets · ${PRESTART_SEC}s lead-in`}
+            {mode === 'amrap'      && `AMRAP · ${amrapMin} min · ${PRESTART_SEC}s lead-in`}
+            {mode === 'fortime'    && `FOR TIME · cap ${forTimeCapMin} min · ${PRESTART_SEC}s lead-in`}
+            {mode === 'emom'       && `EMOM · ${emomRounds} min · ${PRESTART_SEC}s lead-in`}
+            {mode === 'emomblocks' && `EMOM BLOCKS · ${blockWorkMin}m work / ${blockRestMin}m rest × ${blockCount} blocks · ${PRESTART_SEC}s lead-in`}
+            {mode === 'intervals'  && `${intRounds} × (${intWork}s / ${intRest}s) · ${PRESTART_SEC}s lead-in`}
+            {mode === 'hold'       && `${holdSec}s × ${holdSides} side${holdSides > 1 ? 's' : ''} × ${holdRounds} rounds · ${PRESTART_SEC}s lead-in`}
+            {mode === 'stopwatch'  && `STOPWATCH · ${PRESTART_SEC}s lead-in`}
           </div>
         </div>
       </div>
