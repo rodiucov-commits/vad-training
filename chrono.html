@@ -170,6 +170,12 @@ function Chrono() {
   const [blockWorkMin, setBlockWorkMin]     = useState(12);
   const [blockRestMin, setBlockRestMin]     = useState(4);
   const [blockCount, setBlockCount]         = useState(3);
+  // Block exercise names (from week 33 programme)
+  const BLOCK_EXERCISES = [
+    '12 cal row + max Push-ups',
+    '12 cal row + max Air Squats',
+    '12 cal row + max Burpees',
+  ];
 
   const [phase, setPhase] = useState('idle'); // idle | prestart | running | paused | done
   const [elapsed, setElapsed] = useState(0);
@@ -251,36 +257,48 @@ function Chrono() {
       if (minuteIdx >= emomRounds) { audio.done(); setPhase('done'); return; }
       if (expected > intervalIdx) { setIntervalIdx(expected); audio.go(); }
     } else if (mode === 'emomblocks') {
-      const workSec = blockWorkMin * 60;
-      const restSec = blockRestMin * 60;
-      const cycleSec = workSec + restSec;
-      const inCycle = elapsed - (blockIdx - 1) * cycleSec;
+      const minuteIdx = Math.floor(elapsed / 60); // 0, 1, 2, 3, ... 11 for 12-min block
+      const inMinute = elapsed % 60;
+      const isWorkMinute = minuteIdx % 2 === 0; // even minutes = work (0, 2, 4, 6, 8, 10)
+      const workIntervalNum = Math.floor(minuteIdx / 2) + 1; // 1-6
+      const totalMinutes = blockWorkMin; // e.g. 12
       
-      if (blockPhase === 'work') {
-        const rem = workSec - inCycle;
-        countdownBeep(rem);
-        if (rem <= 0) {
-          if (blockIdx < blockCount) {
-            audio.rest();
-            setBlockPhase('rest');
-            startRef.current = Date.now() - inCycle * 1000 + workSec * 1000;
+      if (minuteIdx >= totalMinutes) {
+        // Block finished — check if more blocks or done
+        if (blockIdx < blockCount) {
+          // Rest between blocks
+          const restElapsed = elapsed - totalMinutes * 60;
+          const restRem = blockRestMin * 60 - restElapsed;
+          if (restRem <= 0) {
+            audio.go();
+            setBlockIdx(b => b + 1);
+            startRef.current = Date.now();
             pausedElapsedRef.current = 0;
             lastBeepSec.current = -1;
-          } else {
-            audio.done();
-            setPhase('done');
+            setElapsed(0);
+            return;
           }
+        } else {
+          audio.done();
+          setPhase('done');
+          return;
         }
-      } else {
-        const rem = restSec - (inCycle - workSec);
-        countdownBeep(rem);
-        if (rem <= 0) {
-          audio.go();
-          setBlockIdx(b => b + 1);
-          setBlockPhase('work');
-          startRef.current = Date.now() - inCycle * 1000 + cycleSec * 1000;
-          pausedElapsedRef.current = 0;
-          lastBeepSec.current = -1;
+      }
+      
+      // Beep at start of each minute
+      if (inMinute < 1 && lastBeepSec.current !== minuteIdx) {
+        lastBeepSec.current = minuteIdx;
+        if (isWorkMinute) audio.go();
+        else audio.rest();
+      }
+      
+      // Countdown beep last 3 seconds of each minute
+      const secLeft = 60 - inMinute;
+      if (secLeft <= 3 && secLeft > 0) {
+        const s = Math.ceil(secLeft);
+        if (lastBeepSec.current !== s + minuteIdx * 100) {
+          lastBeepSec.current = s + minuteIdx * 100;
+          audio.tick();
         }
       }
     } else if (mode === 'intervals') {
@@ -379,23 +397,38 @@ function Chrono() {
     context = `MIN ${intervalIdx} of ${emomRounds}`;
     if (phase === 'running') accent = 'text-lime-400';
   } else if (mode === 'emomblocks') {
-    const workSec = blockWorkMin * 60;
-    const restSec = blockRestMin * 60;
-    const cycleSec = workSec + restSec;
-    const inCycle = elapsed - (blockIdx - 1) * cycleSec;
+    const minuteIdx = Math.floor(elapsed / 60);
+    const inMinute = elapsed % 60;
+    const isWorkMinute = minuteIdx % 2 === 0;
+    const workIntervalNum = Math.floor(minuteIdx / 2) + 1;
+    const totalMinutes = blockWorkMin;
+    const exerciseName = BLOCK_EXERCISES[(blockIdx - 1) % BLOCK_EXERCISES.length] || 'Work';
     
-    if (blockPhase === 'work') {
-      const rem = Math.max(0, workSec - inCycle);
-      big = fmt(phase === 'done' ? 0 : rem);
-      phaseLbl = phase === 'done' ? 'DONE' : phase === 'running' ? 'WORK' : 'READY';
-      context = `BLOCK ${blockIdx} of ${blockCount} · WORK`;
-      if (phase === 'running') accent = 'text-lime-400';
-    } else {
-      const rem = Math.max(0, restSec - (inCycle - workSec));
-      big = fmt(rem);
+    // Check if we're in rest-between-blocks period
+    if (minuteIdx >= totalMinutes && blockIdx < blockCount) {
+      const restElapsed = elapsed - totalMinutes * 60;
+      const restRem = Math.max(0, blockRestMin * 60 - restElapsed);
+      big = fmt(restRem);
       phaseLbl = 'REST';
-      context = `BLOCK ${blockIdx} of ${blockCount} · REST`;
+      context = `BLOCK ${blockIdx} of ${blockCount} done · Next: ${BLOCK_EXERCISES[blockIdx % BLOCK_EXERCISES.length] || 'Work'}`;
       accent = 'text-sky-400';
+    } else if (minuteIdx >= totalMinutes) {
+      big = fmt(0);
+      phaseLbl = 'DONE';
+      context = `ALL ${blockCount} BLOCKS COMPLETE`;
+      accent = 'text-red-500';
+    } else {
+      const secLeft = 60 - inMinute;
+      big = fmt(secLeft);
+      if (isWorkMinute) {
+        phaseLbl = phase === 'done' ? 'DONE' : phase === 'running' ? 'WORK' : 'READY';
+        context = `BLOCK ${blockIdx} of ${blockCount} · INTERVAL ${workIntervalNum} of ${Math.ceil(blockWorkMin / 2)} · ${exerciseName}`;
+        if (phase === 'running') accent = 'text-lime-400';
+      } else {
+        phaseLbl = 'REST';
+        context = `BLOCK ${blockIdx} of ${blockCount} · REST · Next: Interval ${workIntervalNum + 1}`;
+        accent = 'text-sky-400';
+      }
     }
   } else if (mode === 'intervals') {
     const cycle = intWork + intRest;
@@ -472,7 +505,10 @@ function Chrono() {
     if (mode === 'fortime')  return Math.min(100, (elapsed / (forTimeCapMin * 60)) * 100);
     if (mode === 'emom')     return Math.min(100, (elapsed / (emomRounds * 60)) * 100);
     if (mode === 'emomblocks') {
-      const totalSec = blockCount * (blockWorkMin + blockRestMin) * 60;
+      // Total = all work minutes + all rest-between-blocks minutes
+      const totalWorkSec = blockCount * blockWorkMin * 60;
+      const totalRestSec = (blockCount - 1) * blockRestMin * 60;
+      const totalSec = totalWorkSec + totalRestSec;
       return Math.min(100, (elapsed / totalSec) * 100);
     }
     if (mode === 'intervals') {
