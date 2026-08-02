@@ -1504,9 +1504,12 @@ function App() {
     setDataRaw(loadData(id));
     setSync(cloudEnabled() ? 'idle' : 'disabled');
   };
-  // From Settings → Switch profile.
+  // Logout / switch profile: end session AND clear profile → back to profile picker.
+  // Picking a profile then requires the password again (LoginScreen).
   const onSwitchProfile = () => {
+    endSession();
     clearActiveProfile();
+    setAuthed(false);
     setProfile(null);
   };
 
@@ -1618,8 +1621,8 @@ function App() {
     }
   };
 
-  if (!authed) return <LoginScreen onSuccess={()=>setAuthed(true)}/>;
   if (!profile) return <ProfilePicker onPick={onPickProfile}/>;
+  if (!authed) return <LoginScreen onSuccess={()=>setAuthed(true)}/>;
 
   const openTimer = (block, dayIdx, week) => {
     haptic(15);
@@ -1639,7 +1642,7 @@ function App() {
     cloudActions.resultLogged(result);
     if (closeAfter) setTimer(null);
   };
-  const logout = () => { endSession(); setAuthed(false); };
+  const logout = () => { endSession(); clearActiveProfile(); setAuthed(false); setProfile(null); };
 
   const tabs = [
     { id: 'programming', label: 'Today', icon: <Icons.Calendar size={18}/> },
