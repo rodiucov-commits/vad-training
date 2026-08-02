@@ -574,6 +574,12 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
   const [amrapMin, setAmrapMin] = useState(initialConfig.amrapMin ?? 20);
   const [forTimeCapMin, setForTimeCapMin] = useState(initialConfig.capMin ?? 15);
   const [emomRounds, setEmomRounds] = useState(initialConfig.emomRounds ?? 12);
+  // EMOM Blocks state (for minute-by-minute work/rest within a block)
+  const [emomBlockWorkMin, setEmomBlockWorkMin] = useState(initialConfig.emomBlockWorkMin ?? 12);
+  const [emomBlockRestMin, setEmomBlockRestMin] = useState(initialConfig.emomBlockRestMin ?? 4);
+  const [emomBlockCount, setEmomBlockCount] = useState(initialConfig.emomBlockCount ?? 3);
+  const [emomBlockIdx, setEmomBlockIdx] = useState(1);
+  const [emomBlockExercise, setEmomBlockExercise] = useState(initialConfig.emomBlockExercise ?? '');
   const [intWork, setIntWork] = useState(initialConfig.intWork ?? 180);
   const [intRest, setIntRest] = useState(initialConfig.intRest ?? 90);
   const [intRounds, setIntRounds] = useState(initialConfig.intRounds ?? 6);
@@ -662,6 +668,52 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
       if (mi >= emomRounds) { audio.done(); haptic([30,30,30,30,30]); setPhase('done'); return; }
       if (ex > intervalIdx) { setIntervalIdx(ex); audio.go(); haptic(20); }
     }
+    else if (mode === 'emomblocks') {
+      // Minute-by-minute work/rest within a block
+      const minuteIdx = Math.floor(elapsed / 60);
+      const inMinute = elapsed % 60;
+      const totalWorkMinutes = emomBlockWorkMin;
+      
+      if (minuteIdx >= totalWorkMinutes) {
+        // Block work time finished — check if rest between blocks or all done
+        if (emomBlockIdx < emomBlockCount) {
+          // Rest between blocks
+          const restElapsed = elapsed - totalWorkMinutes * 60;
+          const restRem = emomBlockRestMin * 60 - restElapsed;
+          if (restRem <= 0) {
+            audio.go();
+            setEmomBlockIdx(b => b + 1);
+            startRef.current = Date.now();
+            pausedElapsedRef.current = 0;
+            lastBeepSec.current = -1;
+            setElapsed(0);
+            return;
+          }
+        } else {
+          audio.done();
+          setPhase('done');
+          return;
+        }
+      }
+      
+      // Beep at start of each minute
+      if (inMinute < 1 && lastBeepSec.current !== minuteIdx) {
+        lastBeepSec.current = minuteIdx;
+        const isWorkMinute = minuteIdx % 2 === 0;
+        if (isWorkMinute) audio.go();
+        else audio.rest();
+      }
+      
+      // Countdown beep last 3 seconds of each minute
+      const secLeft = 60 - inMinute;
+      if (secLeft <= 3 && secLeft > 0) {
+        const s = Math.ceil(secLeft);
+        if (lastBeepSec.current !== s + minuteIdx * 100) {
+          lastBeepSec.current = s + minuteIdx * 100;
+          audio.tick();
+        }
+      }
+    }
     else if (mode === 'intervals') {
       const cycle = intWork+intRest;
       const completed = Math.floor(elapsed/cycle), inCycle = elapsed - completed*cycle;
@@ -733,6 +785,39 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
   else if (mode === 'amrap')    { const r = Math.max(0, amrapMin*60 - elapsed); big = fmt(phase==='done'?0:r); phaseLbl = phase==='done'?'TIME':phase==='running'?'WORK':'READY'; context = `ROUNDS · ${rounds}`; if (phase==='running') accent='text-lime-400'; if (phase==='done') accent='text-red-500'; }
   else if (mode === 'fortime')  { big = fmt(elapsed); phaseLbl = phase==='done'?'DONE':phase==='running'?'WORK':'READY'; context = `CAP ${fmt(forTimeCapMin*60)}`; if (phase==='running') accent='text-lime-400'; }
   else if (mode === 'emom')     { const mr = 60 - (elapsed%60); big = fmt(phase==='running'?mr:60); phaseLbl = phase==='done'?'DONE':phase==='running'?'WORK':'READY'; context = `MIN ${intervalIdx} of ${emomRounds}`; if (phase==='running') accent='text-lime-400'; }
+  else if (mode === 'emomblocks') {
+    const minuteIdx = Math.floor(elapsed / 60);
+    const inMinute = elapsed % 60;
+    const isWorkMinute = minuteIdx % 2 === 0;
+    const workIntervalNum = Math.floor(minuteIdx / 2) + 1;
+    const totalWorkMinutes = emomBlockWorkMin;
+    
+    if (minuteIdx >= totalWorkMinutes && emomBlockIdx < emomBlockCount) {
+      const restElapsed = elapsed - totalWorkMinutes * 60;
+      const restRem = Math.max(0, emomBlockRestMin * 60 - restElapsed);
+      big = fmt(restRem);
+      phaseLbl = 'REST';
+      context = `BLOCK ${emomBlockIdx} of ${emomBlockCount} done · Rest before next block`;
+      accent = 'text-sky-400';
+    } else if (minuteIdx >= totalWorkMinutes) {
+      big = fmt(0);
+      phaseLbl = 'DONE';
+      context = `ALL ${emomBlockCount} BLOCKS COMPLETE`;
+      accent = 'text-red-500';
+    } else {
+      const secLeft = 60 - inMinute;
+      big = fmt(secLeft);
+      if (isWorkMinute) {
+        phaseLbl = phase === 'done' ? 'DONE' : phase === 'running' ? 'WORK' : 'READY';
+        context = `BLOCK ${emomBlockIdx} of ${emomBlockCount} · INTERVAL ${workIntervalNum} of ${Math.ceil(emomBlockWorkMin / 2)}${emomBlockExercise ? ' · ' + emomBlockExercise : ''}`;
+        if (phase === 'running') accent = 'text-lime-400';
+      } else {
+        phaseLbl = 'REST';
+        context = `BLOCK ${emomBlockIdx} of ${emomBlockCount} · REST · Next: Interval ${workIntervalNum + 1}`;
+        accent = 'text-sky-400';
+      }
+    }
+  }
   else if (mode === 'intervals'){ const cycle = intWork+intRest; const ic = elapsed - Math.floor(elapsed/cycle)*cycle; const pr = isWork?(intWork-ic):(cycle-ic); big = fmt(phase==='running'?Math.max(0,pr):intWork); phaseLbl = phase==='done'?'DONE':phase==='running'?(isWork?'WORK':'REST'):'READY'; context = `REP ${intervalIdx} of ${intRounds}`; if (phase==='running') accent = isWork?'text-lime-400':'text-sky-400'; }
   else if (mode === 'hold')     { const r = Math.max(0, holdSec-elapsed); big = fmt(phase==='done'?0:r); phaseLbl = phase==='done'?'DONE':phase==='running'?(holdSides>1?(sideIdx===1?'LEFT':'RIGHT'):'HOLD'):'READY'; context = `ROUND ${holdRoundIdx} of ${holdRounds}`; if (phase==='running') accent='text-lime-400'; }
   else if (mode === 'stopwatch'){ big = fmt(elapsed); phaseLbl = phase==='running'?'RUNNING':phase==='paused'?'PAUSED':'READY'; if (phase==='running') accent='text-lime-400'; }
@@ -755,6 +840,11 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
     if (mode === 'amrap') return <div className={w}><Step label="Minutes" value={amrapMin} set={setAmrapMin} min={1} max={60} suffix="m"/></div>;
     if (mode === 'fortime') return <div className={w}><Step label="Cap" value={forTimeCapMin} set={setForTimeCapMin} min={1} max={60} suffix="m"/></div>;
     if (mode === 'emom') return <div className={w}><Step label="Rounds" value={emomRounds} set={setEmomRounds} min={1} max={60}/></div>;
+    if (mode === 'emomblocks') return <div className={w}>
+      <Step label="Work" value={emomBlockWorkMin} set={setEmomBlockWorkMin} min={1} max={60} suffix="m"/>
+      <Step label="Rest" value={emomBlockRestMin} set={setEmomBlockRestMin} min={1} max={30} suffix="m"/>
+      <Step label="Blocks" value={emomBlockCount} set={setEmomBlockCount} min={1} max={10}/>
+    </div>;
     if (mode === 'intervals') return <div className={w}><Step label="Work" value={intWork} set={setIntWork} min={5} step={5} suffix="s"/><Step label="Rest" value={intRest} set={setIntRest} min={5} step={5} suffix="s"/><Step label="Reps" value={intRounds} set={setIntRounds} min={1} max={30}/></div>;
     if (mode === 'hold') return <div className={w}><Step label="Duration" value={holdSec} set={setHoldSec} min={5} step={5} suffix="s"/><Step label="Sides" value={holdSides} set={setHoldSides} min={1} max={2}/><Step label="Rounds" value={holdRounds} set={setHoldRounds} min={1} max={10}/></div>;
     return null;
@@ -766,7 +856,13 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
     if (mode==='rest')     return restPhase==='rest' ? Math.min(100, (elapsed/restSec)*100) : 0;
     if (mode==='amrap')    return Math.min(100, (elapsed/(amrapMin*60))*100);
     if (mode==='fortime')  return Math.min(100, (elapsed/(forTimeCapMin*60))*100);
-    if (mode==='emom')     return Math.min(100, (elapsed/(emomRounds*60))*100);
+    if (mode === 'emom') return Math.min(100, (elapsed/(emomRounds*60))*100);
+    if (mode === 'emomblocks') {
+      const totalWorkSec = emomBlockCount * emomBlockWorkMin * 60;
+      const totalRestSec = (emomBlockCount - 1) * emomBlockRestMin * 60;
+      const totalSec = totalWorkSec + totalRestSec;
+      return Math.min(100, (elapsed / totalSec) * 100);
+    }
     if (mode==='intervals'){ const t = intRounds*(intWork+intRest); return Math.min(100,(elapsed/t)*100); }
     if (mode==='hold')     { const pr = holdSec*holdSides; const ir = (sideIdx-1)*holdSec+elapsed; return Math.min(100, (((holdRoundIdx-1)*pr+ir)/(holdRounds*pr))*100); }
     return 0;
@@ -786,7 +882,7 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
 
   const MODES = [
     { id:'rest', label:'REST'}, { id:'amrap', label:'AMRAP'}, { id:'fortime', label:'FOR TIME'},
-    { id:'emom', label:'EMOM'}, { id:'intervals', label:'INTERVALS'}, { id:'hold', label:'HOLD'}, { id:'stopwatch', label:'STOPWATCH'},
+    { id:'emom', label:'EMOM'}, { id:'emomblocks', label:'EMOM BLOCKS'}, { id:'intervals', label:'INTERVALS'}, { id:'hold', label:'HOLD'}, { id:'stopwatch', label:'STOPWATCH'},
   ];
 
   return (
@@ -884,7 +980,20 @@ const blockToTimer = (block) => {
   switch (block.type) {
     case 'AMRAP': return { mode: 'amrap', config: { amrapMin: c.minutes ?? 20 } };
     case 'FOR_TIME': return { mode: 'fortime', config: { capMin: c.capMinutes ?? 15 } };
-    case 'EMOM': return { mode: 'emom', config: { emomRounds: c.rounds ?? 12 } };
+    case 'EMOM': 
+      // Check if this is a block-style EMOM (has work/rest structure in notes or config)
+      if (c.rounds && (block.notes?.includes('odd minutes') || block.notes?.includes('even minutes'))) {
+        return { 
+          mode: 'emomblocks', 
+          config: { 
+            emomBlockWorkMin: c.minutes ?? Math.ceil(c.rounds / 2),
+            emomBlockRestMin: 4,
+            emomBlockCount: 1,
+            emomBlockExercise: block.name
+          } 
+        };
+      }
+      return { mode: 'emom', config: { emomRounds: c.rounds ?? 12 } };
     case 'INTERVALS': return { mode: 'intervals', config: { intWork: c.workSec ?? 60, intRest: c.restSec ?? 60, intRounds: c.rounds ?? 6 } };
     case 'HOLD': return { mode: 'hold', config: { holdSec: c.seconds ?? 30, holdSides: c.sides ?? 1, holdRounds: c.rounds ?? 3 } };
     case 'STRENGTH': return { mode: 'rest', config: { restSec: c.restSec ?? 150, restSets: c.sets ?? 4 } };
