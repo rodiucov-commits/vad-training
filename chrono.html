@@ -540,9 +540,16 @@ function Chrono() {
     <div className="min-h-screen bg-stone-950">
       <div className="relative max-w-md mx-auto min-h-screen flex flex-col grain">
         <header className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-stone-900 pt-safe">
-          <div className="flex items-baseline gap-2.5">
-            <span className="font-digits font-extrabold text-lg tracking-tight">CHRONO</span>
-            <span className="text-stone-600 text-[10px] uppercase tracking-[0.25em]">v0.3 · rodiucov</span>
+          <div className="flex items-center gap-1.5">
+            <a href="/" className="p-2 -ml-2 rounded-full text-stone-400 hover:text-stone-100 hover:bg-stone-900 transition" title="Back to programme">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+              </svg>
+            </a>
+            <div className="flex items-baseline gap-2.5">
+              <span className="font-digits font-extrabold text-lg tracking-tight">CHRONO</span>
+              <span className="text-stone-600 text-[10px] uppercase tracking-[0.25em]">v0.3 · rodiucov</span>
+            </div>
           </div>
           <button onClick={() => setMuted(m => !m)}
                   className="p-2 rounded-full hover:bg-stone-900 transition text-stone-400 hover:text-stone-100">

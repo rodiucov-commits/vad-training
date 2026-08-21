@@ -1147,6 +1147,31 @@ const IMPORT_EXAMPLE = JSON.stringify({
   }
 }, null, 2);
 
+const IMPORT_PROMPT = `You are my strength & conditioning coach. Create my training programme and output ONLY valid JSON in exactly this format — no markdown fences, no comments, no explanation, just the JSON object.
+
+FORMAT RULES
+- Root object: {"week": <number>, "days": {…}}
+- "days" keys are day numbers as strings: "0" = Monday … "6" = Sunday. Include only trained days.
+- Each day: {"title": "…", "blocks": […]} — title optional, blocks required.
+- Each block:
+  · "type" — exactly one of: WARMUP, STRENGTH, AMRAP, FOR_TIME, EMOM, INTERVALS, HOLD, COOLDOWN
+  · "name" — short label shown on the card (required)
+  · "id" — unique string per block (optional, auto-generated if missing)
+  · "movements" — array of strings, the exercises shown in the timer's WOD panel
+  · "notes" — string with extra cues, also shown in the WOD panel
+  · "config" — drives the timer, per type:
+    STRENGTH → {"sets": 4, "restSec": 150}
+    AMRAP → {"minutes": 20}
+    FOR_TIME → {"capMinutes": 15}
+    EMOM → {"rounds": 12}  (1 round = 1 minute)
+    INTERVALS → {"workSec": 180, "restSec": 90, "rounds": 6}
+    HOLD → {"seconds": 30, "sides": 2, "rounds": 3}
+    WARMUP / COOLDOWN → no config needed
+
+EXAMPLE of the exact format:`;
+
+const IMPORT_FULL_PROMPT = IMPORT_PROMPT + '\n' + IMPORT_EXAMPLE;
+
 const VALID_BLOCK_TYPES = Object.keys(BLOCK_STYLE);
 
 // Normalize + validate one block. Returns { block } or { error }.
@@ -1247,7 +1272,7 @@ const ImportView = ({ data, setData, cloudActions, onViewWeek }) => {
   };
 
   const copyExample = () => {
-    navigator.clipboard?.writeText(IMPORT_EXAMPLE).then(() => { setCopied(true); setTimeout(()=>setCopied(false), 1500); });
+    navigator.clipboard?.writeText(IMPORT_FULL_PROMPT).then(() => { setCopied(true); setTimeout(()=>setCopied(false), 1500); });
   };
 
   const previewDays = parsed ? Object.keys(parsed.days).map(k=>+k).sort((a,b)=>a-b) : [];
@@ -1356,12 +1381,12 @@ const ImportView = ({ data, setData, cloudActions, onViewWeek }) => {
               </li>
             </ul>
             <div className="flex items-center justify-between mt-2 mb-1">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-stone-500 font-bold">Example</span>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-stone-500 font-bold">Prompt + example — copy & paste to your AI</span>
               <button onClick={copyExample} className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-orange-400 tap-scale">
-                <Icons.Copy size={12}/> {copied ? 'Copied' : 'Copy'}
+                <Icons.Copy size={12}/> {copied ? 'Copied' : 'Copy all'}
               </button>
             </div>
-            <pre className="bg-stone-950 border border-stone-800 rounded-xl p-3 text-[10px] leading-relaxed text-stone-300 overflow-x-auto whitespace-pre">{IMPORT_EXAMPLE}</pre>
+            <pre className="bg-stone-950 border border-stone-800 rounded-xl p-3 text-[10px] leading-relaxed text-stone-300 overflow-x-auto whitespace-pre-wrap">{IMPORT_FULL_PROMPT}</pre>
             <p className="text-stone-600">Single-day import also accepts just one day object: {"{ \"title\": \"…\", \"blocks\": […] }"}.</p>
           </div>
         )}
