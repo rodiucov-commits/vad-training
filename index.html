@@ -39,8 +39,8 @@
   .card-teal { background: linear-gradient(135deg, rgba(20,30,45,0.9) 0%, rgba(15,25,40,0.9) 100%); border: 1px solid rgba(56,189,248,0.15); }
   .card-orange { background: linear-gradient(135deg, rgba(60,30,15,0.9) 0%, rgba(50,20,10,0.9) 100%); border: 1px solid rgba(249,115,22,0.18); }
   .card-purple { background: linear-gradient(135deg, rgba(45,20,55,0.9) 0%, rgba(35,15,45,0.9) 100%); border: 1px solid rgba(192,132,252,0.18); }
-  .pt-safe { padding-top: var(--safe-top); }
-  .pb-safe { padding-bottom: var(--safe-bottom); }
+  .pt-safe { padding-top: calc(var(--safe-top) + 0.75rem) !important; }
+  .pb-safe { padding-bottom: var(--safe-bottom) !important; }
   .top-safe { top: var(--safe-top); }
   /* iOS-style sheet animation */
   @keyframes sheetSlideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
@@ -598,6 +598,7 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
   // For STRENGTH/rest mode: 'set' = stopwatch counting up during the lift,
   // 'rest' = countdown after user taps DONE
   const [restPhase, setRestPhase] = useState('set');
+  const [showWod, setShowWod] = useState(!!initialConfig.workoutText);
 
   const startRef = useRef(null), pausedElapsedRef = useRef(0), lastBeepSec = useRef(-1);
   useWakeLock(phase === 'running' || phase === 'prestart');
@@ -868,6 +869,14 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
     return 0;
   };
 
+  const ringFrac = () => {
+    if (phase === 'idle') return 0;
+    if (mode === 'stopwatch') return (elapsed % 60) / 60;
+    if (mode === 'rest' && restPhase === 'set' && phase !== 'done') return (elapsed % 60) / 60;
+    return Math.min(1, Math.max(0, progressPct() / 100));
+  };
+  const RING_C = 2 * Math.PI * 150;
+
   const handleLog = (closeAfter = true) => {
     if (!onLog) { onClose(); return; }
     let result = { mode };
@@ -913,6 +922,17 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
         ))}
       </div>
       {renderConfig()}
+      {initialConfig.workoutText && (
+        <div className="border-b border-stone-900">
+          <button onClick={()=>{setShowWod(s=>!s); haptic(5);}} className="w-full flex items-center justify-between px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-stone-500 font-bold tap-scale">
+            <span>WOD</span>
+            {showWod ? <Icons.ChevUp size={14}/> : <Icons.ChevDown size={14}/>}
+          </button>
+          {showWod && (
+            <div className="px-4 pb-3 max-h-28 overflow-y-auto text-sm text-stone-300 leading-snug whitespace-pre-line">{initialConfig.workoutText}</div>
+          )}
+        </div>
+      )}
       <div className="h-[2px] bg-stone-900 relative overflow-hidden">
         <div className={`absolute inset-y-0 left-0 ${phase==='prestart'?'bg-amber-500':'bg-red-600'} transition-all duration-75`} style={{width:`${progressPct()}%`}}/>
       </div>
@@ -925,7 +945,20 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
               phase==='running'?'border-stone-700 text-stone-300 bg-stone-900/50':
               'border-stone-800 text-stone-500'}`}>● {phaseLbl}</span>
           </div>
-          <div className={`font-digits font-extrabold leading-none ${landscape ? 'text-[4.5rem]' : 'text-[5.5rem] sm:text-8xl'} ${accent}`}>{big}</div>
+          <div className={`relative ${landscape ? 'w-48 h-48' : 'w-72 h-72 sm:w-80 sm:h-80'} flex items-center justify-center`}>
+            <svg viewBox="0 0 320 320" className="absolute inset-0 w-full h-full" style={{transform:'rotate(-90deg)'}}>
+              <circle cx="160" cy="160" r="150" fill="none" stroke="#292524" strokeWidth="7"/>
+              <circle cx="160" cy="160" r="150" fill="none" stroke="url(#ringGrad)" strokeWidth="7" strokeLinecap="round"
+                strokeDasharray={RING_C} strokeDashoffset={RING_C * (1 - ringFrac())}
+                style={{transition:'stroke-dashoffset 0.12s linear'}}/>
+              <defs>
+                <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#f97316"/><stop offset="100%" stopColor="#ef4444"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div className={`font-digits font-extrabold leading-none ${landscape ? 'text-4xl' : 'text-6xl sm:text-7xl'} ${accent}`}>{big}</div>
+          </div>
           {mode==='amrap' && phase!=='prestart' && (
             <div className={`${landscape ? 'mt-3' : 'mt-8'} flex flex-col items-center gap-2`}>
               <div className="text-[10px] uppercase tracking-[0.25em] text-stone-500 font-bold">Rounds · tap screen</div>
@@ -1627,7 +1660,8 @@ function App() {
   const openTimer = (block, dayIdx, week) => {
     haptic(15);
     const t = blockToTimer(block);
-    setTimer({ mode: t.mode, config: { ...t.config, workoutName: block.name }, blockId: block.id, blockName: block.name, dayIdx, week });
+    const wodText = [ ...(block.movements || []), ...(block.notes ? [block.notes] : []) ].join('\n');
+    setTimer({ mode: t.mode, config: { ...t.config, workoutName: block.name, workoutText: wodText }, blockId: block.id, blockName: block.name, dayIdx, week });
   };
   const logResult = (value, closeAfter = true) => {
     if (!timer) return;
