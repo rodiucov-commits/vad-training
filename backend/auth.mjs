@@ -60,12 +60,15 @@ export function createSecureGateway(legacy,config){
     if(changing){if(!await session(req,env,profile))return reply({error:'Sign in required'},401);if(typeof body.newPassword!=='string'||body.newPassword.length<10||body.newPassword.length>256)return reply({error:'Use a password of 10–256 characters'},400);body.password=body.oldPassword;}
     const key=await sha((req.headers.get('CF-Connecting-IP')||'unknown')+':'+profile);
     const attempt=await env.DB.prepare('SELECT failures,blocked_until FROM auth_v1_attempts WHERE attempt_key=?').bind(key).first();
-    if(attempt?.blocked_until>Date.now())return reply({error:'Too many attempts. Try again in 10 minutes.'},429,{'Retry-After':'600'});
     const user=await env.DB.prepare('SELECT * FROM auth_v1_users WHERE profile=?').bind(profile).first();
+    // A valid, high-entropy one-time recovery token is a separate credential:
+    // password guessing must not prevent its owner recovering the account.
+    const validSetup=path==='/api/auth/setup'&&!!user?.setup_hash&&user.setup_expires>Date.now()&&typeof body.token==='string'&&body.token.length<=256&&equal(await sha(body.token),user.setup_hash);
+    if(attempt?.blocked_until>Date.now()&&!validSetup)return reply({error:'Too many attempts. Try again in 10 minutes.'},429,{'Retry-After':'600'});
     let valid=false;
     if(path.endsWith('/setup')){
      if(typeof body.password!=='string'||body.password.length<10||body.password.length>256)return reply({error:'Use a password of 10–256 characters'},400);
-     valid=!!user?.setup_hash&&user.setup_expires>Date.now()&&typeof body.token==='string'&&equal(await sha(body.token),user.setup_hash);
+     valid=validSetup;
      if(valid){const salt=random(),hash=await passwordHash(body.password,salt);
       const changed=await env.DB.prepare('UPDATE auth_v1_users SET password_hash=?,salt=?,setup_hash=NULL,setup_expires=NULL WHERE profile=? AND setup_hash=?').bind(hash,salt,profile,user.setup_hash).run();
       if(changed.meta?.changes===0)return reply({error:'Setup link has already been used'},401);

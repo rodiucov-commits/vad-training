@@ -13,3 +13,15 @@ test('Logout and expiration revoke server-side sessions',async()=>{const f=await
 test('Expired setup token and invalid profile cannot enroll',async()=>{const f=await fixture(Date.now()-1000);assert.equal((await f.call('auth/setup',{method:'POST',body:{token:setup,password}})).status,401);assert.equal((await f.call('snapshot',{bearer:machine,profile:'other'})).status,400);});
 test('Changing password verifies old secret and revokes existing sessions',async()=>{const f=await fixture(),cookie=await f.setup();const r=await f.call('auth/change-password',{method:'POST',cookie,body:{oldPassword:password,newPassword:'New fixture-only password'}});assert.equal(r.status,200);assert.equal((await f.call('snapshot',{cookie})).status,401);assert.equal((await f.call('auth/login',{method:'POST',body:{password}})).status,401);assert.equal((await f.call('auth/login',{method:'POST',body:{password:'New fixture-only password'}})).status,200);});
 test('Only machine credential can issue recovery links; schema changes do not modify workouts',async()=>{const f=await fixture();f.DB.raw.exec('CREATE TABLE programmes (marker TEXT)');f.DB.raw.prepare('INSERT INTO programmes VALUES (?)').run('untouched');assert.equal((await f.call('auth/enroll',{method:'POST'})).status,403);const r=await f.call('auth/enroll',{method:'POST',bearer:machine,profile:'tatka'});assert.equal(r.status,200);const data=await r.json();assert.equal(data.setupToken.length,64);assert.equal(f.DB.raw.prepare('SELECT marker FROM programmes').get().marker,'untouched');});
+
+test('Valid profile recovery bypasses password lockout; invalid links stay throttled',async()=>{
+ const f=await fixture(),cookie=await f.setup();
+ const enrollment=await (await f.call('auth/enroll',{method:'POST',bearer:machine})).json();
+ for(let i=0;i<5;i++)assert.equal((await f.call('auth/login',{method:'POST',body:{password:'wrong'}})).status,401);
+ assert.equal((await f.call('auth/login',{method:'POST',body:{password}})).status,429);
+ assert.equal((await f.call('auth/setup',{method:'POST',body:{token:'invalid-token',password}})).status,429);
+ assert.equal((await f.call('auth/setup',{method:'POST',body:{token:enrollment.setupToken,password:'Recovered fixture password'}})).status,200);
+ assert.equal((await f.call('snapshot',{cookie})).status,401);
+ assert.equal((await f.call('auth/login',{method:'POST',body:{password:'Recovered fixture password'}})).status,200);
+ assert.equal((await f.call('auth/setup',{method:'POST',profile:'tatka',body:{token:enrollment.setupToken,password}})).status,401);
+});
