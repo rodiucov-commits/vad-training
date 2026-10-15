@@ -13,7 +13,7 @@ const gateway=createSecureGateway({async fetch(req){const url=new URL(req.url);i
 const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});const ctx=await browser.newContext({viewport:{width:390,height:740}});const errors=[];
 await ctx.route('**/*',async route=>{
  const request=route.request(),url=new URL(request.url());
- if(url.hostname!=='rodiucov.com')return route.fulfill({body:'',contentType:'text/css'});
+ if(!['rodiucov.com','www.rodiucov.com'].includes(url.hostname))return route.fulfill({body:'',contentType:'text/css'});
  if(url.pathname.startsWith('/api/')){
   assert(!request.headers()['authorization'],'Frontend must not send embedded bearer credentials');
   const req=new Request(request.url(),{method:request.method(),headers:request.headers(),...(['GET','HEAD'].includes(request.method())?{}:{body:request.postData()||''})});
@@ -28,7 +28,7 @@ await ctx.addInitScript(()=>{localStorage.setItem('vt_active_profile_v1','vad');
 const p=await ctx.newPage();p.setDefaultTimeout(8000);p.on('pageerror',e=>errors.push(e.message));
 await p.goto('https://rodiucov.com/');await p.getByRole('button',{name:'Sign in',exact:true}).waitFor();
 assert.equal(await p.evaluate(async()=>(await fetch('/api/snapshot?profile=vad')).status),401);
-await p.goto('https://rodiucov.com/#profile=vad&setup=fixture-setup');await p.getByLabel('Password',{exact:true}).fill('Fixture secure password 2026');await p.getByLabel('Confirm password',{exact:true}).fill('Fixture secure password 2026');await p.getByRole('button',{name:'Create password & sign in',exact:true}).click();await p.getByRole('button',{name:'Today',exact:true}).waitFor();
+await p.goto('https://www.rodiucov.com/?activate=fixture#profile=vad&setup=fixture-setup');await p.waitForURL('https://rodiucov.com/?activate=fixture#profile=vad&setup=fixture-setup');await p.getByLabel('Password',{exact:true}).fill('Fixture secure password 2026');await p.getByLabel('Confirm password',{exact:true}).fill('Fixture secure password 2026');await p.getByRole('button',{name:'Create password & sign in',exact:true}).click();await p.getByRole('button',{name:'Today',exact:true}).waitFor();
 const cookies=await ctx.cookies('https://rodiucov.com/api/');assert(cookies.some(c=>c.httpOnly&&c.secure&&c.sameSite==='Strict'));
 assert(!p.url().includes('setup='));assert.equal(await p.evaluate(async()=>(await fetch('/api/snapshot?profile=tatka')).status),401);
 await p.reload();await p.getByRole('button',{name:'Today',exact:true}).waitFor();
@@ -36,4 +36,4 @@ await p.getByRole('button',{name:'Settings',exact:true}).click();await p.getByRo
 await p.getByRole('button',{name:'Sign out',exact:true}).click();
 // Choose the Vad profile using the real profile picker, then sign in again.
 const profileButton=p.getByRole('button',{name:'Vad',exact:true});await profileButton.click();await p.getByLabel('Password',{exact:true}).fill('Changed fixture password 2026');await p.getByRole('button',{name:'Sign in',exact:true}).click();await p.getByRole('button',{name:'Today',exact:true}).waitFor();
-assert.deepEqual(errors,[]);console.log('PASS real gateway + browser UI: forged local session rejected, one-time setup, secure cookie, profile isolation, reload, password change, logout and sign-in; zero production requests.');await browser.close();
+assert.deepEqual(errors,[]);console.log('PASS real gateway + browser UI: www canonical redirect preserves setup link, forged local session rejected, one-time setup, secure cookie, profile isolation, reload, password change, logout and sign-in; zero production requests.');await browser.close();
