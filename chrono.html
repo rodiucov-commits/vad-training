@@ -98,6 +98,7 @@
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
+<script src="/timer-engine.js?v=20261015-logic1"></script>
 
 <script type="text/babel" data-presets="react" data-runtime="classic">
 const { useState, useEffect, useRef } = React;
@@ -221,13 +222,9 @@ function Chrono() {
   const [blockWorkMin, setBlockWorkMin]     = useState(12);
   const [blockRestMin, setBlockRestMin]     = useState(4);
   const [blockCount, setBlockCount]         = useState(3);
-  // Block exercise names (from week 33 programme)
-  const BLOCK_EXERCISES = [
-    '12 cal row + max Push-ups',
-    '12 cal row + max Air Squats',
-    '12 cal row + max Burpees',
-  ];
-
+  const [extraReps, setExtraReps] = useState(0);
+  const [includeFinalRest, setIncludeFinalRest] = useState(false);
+  const lastSegmentRef = useRef(-1);
   const [phase, setPhase] = useState('idle'); // idle | prestart | running | paused | done
   const [settingsOpen, setSettingsOpen] = useState(true);
   useEffect(() => {
@@ -254,16 +251,12 @@ function Chrono() {
   useEffect(() => { fullReset(); }, [mode]);
 
   function fullReset() {
+    setExtraReps(0); lastSegmentRef.current = -1;
     setPhase('idle'); setElapsed(0); setSetIdx(1); setRounds(0);
     setIntervalIdx(1); setIsWork(true); setSideIdx(1); setHoldRoundIdx(1);
     setBlockIdx(1); setBlockPhase('work');
     startRef.current = null; pausedElapsedRef.current = 0; lastBeepSec.current = -1;
   }
-  function timerOnlyReset() {
-    setPhase('idle'); setElapsed(0);
-    startRef.current = null; pausedElapsedRef.current = 0; lastBeepSec.current = -1;
-  }
-
   useEffect(() => {
     if (phase !== 'running' && phase !== 'prestart') return;
     if (!startRef.current) startRef.current = Date.now() - pausedElapsedRef.current * 1000;
@@ -271,128 +264,35 @@ function Chrono() {
     return () => clearInterval(id);
   }, [phase]);
 
+  const plan = WorkoutClock.build(mode==='rest' ? 'countdown' : mode, {amrapMin,capMin:forTimeCapMin,emomRounds,blockWorkMin,blockRestMin,blockCount,
+    intWork,intRest,intRounds,includeFinalRest,holdSec,holdSides,holdRounds,countdownSec:restSec});
+  const clock = WorkoutClock.at(plan, elapsed);
   useEffect(() => {
     if (phase === 'prestart') {
-      const rem = PRESTART_SEC - elapsed;
-      if (rem <= 3 && rem > 0) {
-        const s = Math.ceil(rem);
-        if (lastBeepSec.current !== s) { lastBeepSec.current = s; audio.tickWarn(); }
-      }
-      if (rem <= 0) {
-        audio.go();
-        startRef.current = Date.now();
-        pausedElapsedRef.current = 0;
-        lastBeepSec.current = -1;
-        setElapsed(0);
-        setPhase('running');
+      const rem=PRESTART_SEC-elapsed;
+      if (rem<=3 && rem>0 && lastBeepSec.current!==Math.ceil(rem)) { lastBeepSec.current=Math.ceil(rem); audio.tickWarn(); }
+      if (rem<=0) {
+        audio.go(); startRef.current=Date.now(); pausedElapsedRef.current=0;
+        lastBeepSec.current=-1; lastSegmentRef.current=-1; setElapsed(0); setPhase('running');
       }
       return;
     }
-    if (phase !== 'running') return;
-    const countdownBeep = (rem) => {
-      if (rem <= 3 && rem > 0) {
-        const s = Math.ceil(rem);
-        if (lastBeepSec.current !== s) { lastBeepSec.current = s; audio.tick(); }
-      }
-    };
-    if (mode === 'rest') {
-      const rem = restSec - elapsed;
-      countdownBeep(rem);
-      if (rem <= 0) { audio.go(); setPhase('done'); }
-    } else if (mode === 'amrap') {
-      const rem = amrapMin * 60 - elapsed;
-      countdownBeep(rem);
-      if (rem <= 0) { audio.done(); setPhase('done'); }
-    } else if (mode === 'fortime') {
-      const rem = forTimeCapMin * 60 - elapsed;
-      countdownBeep(rem);
-      if (rem <= 0) { audio.done(); setPhase('done'); }
-    } else if (mode === 'emom') {
-      const minuteIdx = Math.floor(elapsed / 60);
-      const expected = minuteIdx + 1;
-      if (minuteIdx >= emomRounds) { audio.done(); setPhase('done'); return; }
-      if (expected > intervalIdx) { setIntervalIdx(expected); audio.go(); }
-    } else if (mode === 'emomblocks') {
-      const minuteIdx = Math.floor(elapsed / 60); // 0, 1, 2, 3, ... 11 for 12-min block
-      const inMinute = elapsed % 60;
-      const isWorkMinute = minuteIdx % 2 === 0; // even minutes = work (0, 2, 4, 6, 8, 10)
-      const workIntervalNum = Math.floor(minuteIdx / 2) + 1; // 1-6
-      const totalMinutes = blockWorkMin; // e.g. 12
-      
-      if (minuteIdx >= totalMinutes) {
-        // Block finished — check if more blocks or done
-        if (blockIdx < blockCount) {
-          // Rest between blocks
-          const restElapsed = elapsed - totalMinutes * 60;
-          const restRem = blockRestMin * 60 - restElapsed;
-          if (restRem <= 0) {
-            audio.go();
-            setBlockIdx(b => b + 1);
-            startRef.current = Date.now();
-            pausedElapsedRef.current = 0;
-            lastBeepSec.current = -1;
-            setElapsed(0);
-            return;
-          }
-        } else {
-          audio.done();
-          setPhase('done');
-          return;
-        }
-      }
-      
-      // Beep at start of each minute
-      if (inMinute < 1 && lastBeepSec.current !== minuteIdx) {
-        lastBeepSec.current = minuteIdx;
-        if (isWorkMinute) audio.go();
-        else audio.rest();
-      }
-      
-      // Countdown beep last 3 seconds of each minute
-      const secLeft = 60 - inMinute;
-      if (secLeft <= 3 && secLeft > 0) {
-        const s = Math.ceil(secLeft);
-        if (lastBeepSec.current !== s + minuteIdx * 100) {
-          lastBeepSec.current = s + minuteIdx * 100;
-          audio.tick();
-        }
-      }
-    } else if (mode === 'intervals') {
-      const cycle = intWork + intRest;
-      const completed = Math.floor(elapsed / cycle);
-      const inCycle = elapsed - completed * cycle;
-      const nowWork = inCycle < intWork;
-      const currentIdx = completed + 1;
-      if (currentIdx > intRounds) { audio.done(); setPhase('done'); return; }
-      if (currentIdx !== intervalIdx) setIntervalIdx(currentIdx);
-      if (nowWork !== isWork) { setIsWork(nowWork); nowWork ? audio.go() : audio.rest(); }
-      const phaseRem = nowWork ? (intWork - inCycle) : (cycle - inCycle);
-      countdownBeep(phaseRem);
-    } else if (mode === 'hold') {
-      const rem = holdSec - elapsed;
-      countdownBeep(rem);
-      if (rem <= 0) {
-        if (sideIdx < holdSides) {
-          audio.sideSwitch();
-          setSideIdx(s => s + 1);
-          startRef.current = Date.now(); pausedElapsedRef.current = 0;
-          lastBeepSec.current = -1; setElapsed(0);
-        } else if (holdRoundIdx < holdRounds) {
-          audio.sideSwitch();
-          setSideIdx(1); setHoldRoundIdx(r => r + 1);
-          startRef.current = Date.now(); pausedElapsedRef.current = 0;
-          lastBeepSec.current = -1; setElapsed(0);
-        } else {
-          audio.done(); setPhase('done');
-        }
-      }
+    if (phase!=='running') return;
+    if (!plan.segments.length) return;
+    if (clock.done) { setElapsed(plan.totalSec); setPhase('done'); audio.done(); return; }
+    if (lastSegmentRef.current!==clock.index) {
+      if (lastSegmentRef.current!==-1) { clock.segment.phase==='rest' ? audio.rest() : audio.go(); }
+      lastSegmentRef.current=clock.index; lastBeepSec.current=-1;
+    }
+    if (clock.remaining<=3 && clock.remaining>0 && lastBeepSec.current!==Math.ceil(clock.remaining)) {
+      lastBeepSec.current=Math.ceil(clock.remaining); audio.tick();
     }
   }, [elapsed, phase, mode]);
 
   function start() {
     audio.unlock();
     if (phase === 'idle' || phase === 'done') {
-      if (phase === 'done') { setElapsed(0); pausedElapsedRef.current = 0; lastBeepSec.current = -1; }
+      if (phase === 'done') fullReset();
       startRef.current = Date.now();
       pausedElapsedRef.current = 0;
       lastBeepSec.current = -1;
@@ -421,98 +321,23 @@ function Chrono() {
     }
   }
   function nextSet() {
-    if (setIdx < restSets) { setSetIdx(s => s + 1); timerOnlyReset(); }
-    else fullReset();
+    if (setIdx>=restSets) { fullReset(); return; }
+    setSetIdx(i=>i+1); startRef.current=Date.now(); pausedElapsedRef.current=0;
+    lastBeepSec.current=-1; lastSegmentRef.current=-1; setElapsed(0); setPhase('prestart');
   }
 
-  let big = '00:00', phaseLbl = 'READY', context = '', accent = 'text-stone-100';
-
-  if (mode === 'rest') {
-    const rem = Math.max(0, restSec - elapsed);
-    big = fmt(phase === 'done' ? 0 : rem);
-    phaseLbl = phase === 'done' ? 'GO' : phase === 'running' ? 'RESTING' : 'READY';
-    context = `SET ${setIdx} of ${restSets}`;
-    if (phase === 'done') accent = 'text-lime-400';
-    else if (phase === 'running' && rem <= 10) accent = 'text-amber-400';
-  } else if (mode === 'amrap') {
-    const rem = Math.max(0, amrapMin * 60 - elapsed);
-    big = fmt(phase === 'done' ? 0 : rem);
-    phaseLbl = phase === 'done' ? 'TIME' : phase === 'running' ? 'WORK' : 'READY';
-    context = `ROUNDS · ${rounds}`;
-    if (phase === 'running') accent = 'text-lime-400';
-    if (phase === 'done') accent = 'text-red-500';
-  } else if (mode === 'fortime') {
-    big = fmt(elapsed);
-    phaseLbl = phase === 'done' ? 'DONE' : phase === 'running' ? 'WORK' : 'READY';
-    context = `CAP ${fmt(forTimeCapMin * 60)}`;
-    if (phase === 'running') accent = 'text-lime-400';
-  } else if (mode === 'emom') {
-    const minRem = 60 - (elapsed % 60);
-    big = fmt(phase === 'running' ? minRem : 60);
-    phaseLbl = phase === 'done' ? 'DONE' : phase === 'running' ? 'WORK' : 'READY';
-    context = `MIN ${intervalIdx} of ${emomRounds}`;
-    if (phase === 'running') accent = 'text-lime-400';
-  } else if (mode === 'emomblocks') {
-    const minuteIdx = Math.floor(elapsed / 60);
-    const inMinute = elapsed % 60;
-    const isWorkMinute = minuteIdx % 2 === 0;
-    const workIntervalNum = Math.floor(minuteIdx / 2) + 1;
-    const totalMinutes = blockWorkMin;
-    const exerciseName = BLOCK_EXERCISES[(blockIdx - 1) % BLOCK_EXERCISES.length] || 'Work';
-    
-    // Check if we're in rest-between-blocks period
-    if (minuteIdx >= totalMinutes && blockIdx < blockCount) {
-      const restElapsed = elapsed - totalMinutes * 60;
-      const restRem = Math.max(0, blockRestMin * 60 - restElapsed);
-      big = fmt(restRem);
-      phaseLbl = 'REST';
-      context = `BLOCK ${blockIdx} of ${blockCount} done · Next: ${BLOCK_EXERCISES[blockIdx % BLOCK_EXERCISES.length] || 'Work'}`;
-      accent = 'text-sky-400';
-    } else if (minuteIdx >= totalMinutes) {
-      big = fmt(0);
-      phaseLbl = 'DONE';
-      context = `ALL ${blockCount} BLOCKS COMPLETE`;
-      accent = 'text-red-500';
-    } else {
-      const secLeft = 60 - inMinute;
-      big = fmt(secLeft);
-      if (isWorkMinute) {
-        phaseLbl = phase === 'done' ? 'DONE' : phase === 'running' ? 'WORK' : 'READY';
-        context = `BLOCK ${blockIdx} of ${blockCount} · INTERVAL ${workIntervalNum} of ${Math.ceil(blockWorkMin / 2)} · ${exerciseName}`;
-        if (phase === 'running') accent = 'text-lime-400';
-      } else {
-        phaseLbl = 'REST';
-        context = `BLOCK ${blockIdx} of ${blockCount} · REST · Next: Interval ${workIntervalNum + 1}`;
-        accent = 'text-sky-400';
-      }
-    }
-  } else if (mode === 'intervals') {
-    const cycle = intWork + intRest;
-    const inCycle = elapsed - Math.floor(elapsed / cycle) * cycle;
-    const phaseRem = isWork ? (intWork - inCycle) : (cycle - inCycle);
-    big = fmt(phase === 'running' ? Math.max(0, phaseRem) : intWork);
-    phaseLbl = phase === 'done' ? 'DONE' : phase === 'running' ? (isWork ? 'WORK' : 'REST') : 'READY';
-    context = `REP ${intervalIdx} of ${intRounds}`;
-    if (phase === 'running') accent = isWork ? 'text-lime-400' : 'text-sky-400';
-  } else if (mode === 'hold') {
-    const rem = Math.max(0, holdSec - elapsed);
-    big = fmt(phase === 'done' ? 0 : rem);
-    phaseLbl = phase === 'done' ? 'DONE' : phase === 'running' ? (holdSides > 1 ? (sideIdx === 1 ? 'LEFT' : 'RIGHT') : 'HOLD') : 'READY';
-    context = `ROUND ${holdRoundIdx} of ${holdRounds}`;
-    if (phase === 'running') accent = 'text-lime-400';
-  } else if (mode === 'stopwatch') {
-    big = fmt(elapsed);
-    phaseLbl = phase === 'running' ? 'RUNNING' : phase === 'paused' ? 'PAUSED' : 'READY';
-    if (phase === 'running') accent = 'text-lime-400';
-  }
-
-  // Pre-start override (all modes)
-  if (phase === 'prestart') {
-    const rem = Math.max(0, PRESTART_SEC - elapsed);
-    big = String(Math.ceil(rem)).padStart(2, '0');
-    phaseLbl = 'GET READY';
-    context = 'STARTING IN...';
-    accent = 'text-amber-400';
+  const view=WorkoutClock.describe(plan,elapsed);
+  let big=fmt(view.big), phaseLbl=view.label, context=view.context;
+  let accent=clock.segment?.phase==='rest' ? 'text-sky-400' : 'text-lime-400';
+  if (mode==='stopwatch') { big=fmt(elapsed); phaseLbl='RUNNING'; context=''; }
+  if (mode==='rest') context=`REST · SET ${setIdx}/${restSets}`;
+  if (mode==='amrap') context=`ROUNDS ${rounds} + ${extraReps} REPS`;
+  if (phase==='idle') { phaseLbl='READY'; accent='text-stone-100'; }
+  if (phase==='paused') phaseLbl='PAUSED';
+  if (phase==='done') { phaseLbl='DONE'; accent='text-lime-400'; }
+  if (phase==='prestart') {
+    big=String(Math.ceil(Math.max(0,PRESTART_SEC-elapsed))).padStart(2,'0');
+    phaseLbl='GET READY'; context='STARTING IN...'; accent='text-amber-400';
   }
 
   const renderConfig = () => {
@@ -540,7 +365,7 @@ function Chrono() {
     if (mode === 'intervals') return (<div className={wrap}>
       <Stepper label="Work" value={intWork} onChange={setIntWork} min={5} step={5} suffix="s"/>
       <Stepper label="Rest" value={intRest} onChange={setIntRest} min={5} step={5} suffix="s"/>
-      <Stepper label="Reps" value={intRounds} onChange={setIntRounds} min={1} max={30}/>
+      <Stepper label="Rounds" value={intRounds} onChange={setIntRounds} min={1} max={30}/>
     </div>);
     if (mode === 'hold') return (<div className={wrap}>
       <Stepper label="Duration" value={holdSec} onChange={setHoldSec} min={5} step={5} suffix="s"/>
@@ -554,35 +379,11 @@ function Chrono() {
     if (phase === 'running' && mode === 'amrap') { setRounds(r => r + 1); audio.tick(); }
   };
 
-  const progressPct = () => {
-    if (phase === 'prestart') return Math.min(100, (elapsed / PRESTART_SEC) * 100);
-    if (mode === 'rest')     return Math.min(100, (elapsed / restSec) * 100);
-    if (mode === 'amrap')    return Math.min(100, (elapsed / (amrapMin * 60)) * 100);
-    if (mode === 'fortime')  return Math.min(100, (elapsed / (forTimeCapMin * 60)) * 100);
-    if (mode === 'emom')     return Math.min(100, (elapsed / (emomRounds * 60)) * 100);
-    if (mode === 'emomblocks') {
-      // Total = all work minutes + all rest-between-blocks minutes
-      const totalWorkSec = blockCount * blockWorkMin * 60;
-      const totalRestSec = (blockCount - 1) * blockRestMin * 60;
-      const totalSec = totalWorkSec + totalRestSec;
-      return Math.min(100, (elapsed / totalSec) * 100);
-    }
-    if (mode === 'intervals') {
-      const total = intRounds * (intWork + intRest);
-      return Math.min(100, (elapsed / total) * 100);
-    }
-    if (mode === 'hold') {
-      const perRound = holdSec * holdSides;
-      const inRound = (sideIdx - 1) * holdSec + elapsed;
-      return Math.min(100, (((holdRoundIdx - 1) * perRound + inRound) / (holdRounds * perRound)) * 100);
-    }
-    return 0;
-  };
-
+  const progressPct = () => phase==='prestart' ? Math.min(100,elapsed/PRESTART_SEC*100) : clock.progress*100;
   const ringFrac = () => {
-    if (phase === 'idle') return 0;
-    if (mode === 'stopwatch') return (elapsed % 60) / 60;
-    return Math.min(1, Math.max(0, progressPct() / 100));
+    if (phase==='idle') return 0;
+    if (mode==='stopwatch' ) return (elapsed%60)/60;
+    return clock.progress;
   };
   const RING_C = 2 * Math.PI * 150;
   const config = renderConfig();
@@ -626,7 +427,10 @@ function Chrono() {
                     className="chrono-settings-toggle w-full px-5 text-left text-xs uppercase tracking-widest text-stone-400">
               Settings · {settingsOpen ? 'Hide −' : 'Show +'}
             </button>
-            <div id="timer-settings" hidden={!settingsOpen}>{config}</div>
+            <div id="timer-settings" hidden={!settingsOpen}>{config}
+              {mode==='intervals' && <button type="button" aria-pressed={includeFinalRest} onClick={()=>setIncludeFinalRest(v=>!v)}
+                className="w-full min-h-[44px] px-4 pb-3 text-xs text-stone-400">Final rest: {includeFinalRest?'Included':'Off — between rounds only'}</button>}
+            </div>
           </section>
         )}
 
@@ -678,6 +482,15 @@ function Chrono() {
             </div>
           )}
 
+          {mode==='amrap' && phase!=='prestart' && (
+            <div className="flex items-center gap-3 text-xs text-stone-400" onClick={e=>e.stopPropagation()}>
+              <label htmlFor="amrap-extra-reps">Extra reps</label>
+              <input id="amrap-extra-reps" aria-label="AMRAP extra reps" type="number" min="0" value={extraReps}
+                onChange={e=>setExtraReps(Math.max(0,Math.floor(Number(e.target.value)||0)))}
+                className="w-20 h-12 text-center rounded-xl bg-stone-900 border border-stone-700 font-digits"/>
+            </div>
+          )}
+
           {context && (mode !== 'amrap' || phase === 'prestart') && (
             <div className={`chrono-context text-xs uppercase tracking-[0.28em] font-semibold ${phase === 'prestart' ? 'text-amber-500/70' : 'text-stone-500'}`}>{context}</div>
           )}
@@ -697,7 +510,7 @@ function Chrono() {
                 <Pause size={18}/> Pause
               </button>
             ) : phase === 'done' && mode === 'rest' && setIdx < restSets ? (
-              <button onClick={() => { nextSet(); setTimeout(start, 50); }}
+              <button onClick={nextSet}
                 className="flex-1 bg-red-600 text-white font-bold uppercase tracking-[0.2em] text-sm py-4 rounded-xl active:scale-[0.98] transition flex items-center justify-center gap-2">
                 <Skip size={18}/> Next set ({setIdx + 1}/{restSets})
               </button>

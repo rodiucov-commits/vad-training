@@ -91,6 +91,7 @@
 <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
+<script src="/timer-engine.js?v=20261015-logic1"></script>
 
 <script type="text/babel" data-presets="react" data-runtime="classic">
 const { useState, useEffect, useRef, useMemo } = React;
@@ -616,6 +617,13 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
   const [holdSides, setHoldSides] = useState(initialConfig.holdSides ?? 2);
   const [holdRounds, setHoldRounds] = useState(initialConfig.holdRounds ?? 3);
 
+  const [extraReps, setExtraReps] = useState(0);
+  const [includeFinalRest, setIncludeFinalRest] = useState(initialConfig.includeFinalRest === true);
+  const [countdownSec, setCountdownSec] = useState(initialConfig.countdownSec ?? 240);
+  const [completedSets, setCompletedSets] = useState(0);
+  const [roundEntries, setRoundEntries] = useState([]);
+  const manualElapsedRef = useRef(0);
+  const lastSegmentRef = useRef(-1);
   const [phase, setPhase] = useState('idle');
   const [timerSettingsOpen, setTimerSettingsOpen] = useState(true);
   useEffect(() => {
@@ -639,16 +647,14 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
   useEffect(() => { fullReset(); }, [mode]);
 
   function fullReset() {
+    setExtraReps(0); lastSegmentRef.current = -1;
+    setCompletedSets(0); setRoundEntries([]); manualElapsedRef.current = 0;
+    setEmomBlockIdx(1);
     setPhase('idle'); setElapsed(0); setSetIdx(1); setRounds(0);
     setIntervalIdx(1); setIsWork(true); setSideIdx(1); setHoldRoundIdx(1);
     setRestPhase('set');
     startRef.current = null; pausedElapsedRef.current = 0; lastBeepSec.current = -1;
   }
-  function timerOnlyReset() {
-    setPhase('idle'); setElapsed(0); setRestPhase('set');
-    startRef.current = null; pausedElapsedRef.current = 0; lastBeepSec.current = -1;
-  }
-
   useEffect(() => {
     if (phase !== 'running' && phase !== 'prestart') return;
     if (!startRef.current) startRef.current = Date.now() - pausedElapsedRef.current * 1000;
@@ -656,122 +662,50 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
     return () => clearInterval(id);
   }, [phase]);
 
+  const plan = WorkoutClock.build(mode, {amrapMin,capMin:forTimeCapMin,emomRounds,minuteCycle:mode===initialMode ? initialConfig.minuteCycle : [],
+    blockWorkMin:emomBlockWorkMin,blockRestMin:emomBlockRestMin,blockCount:emomBlockCount,exercise:emomBlockExercise,
+    intWork,intRest,intRounds,includeFinalRest,holdSec,holdSides,holdRounds,countdownSec});
+  const clock = WorkoutClock.at(plan, elapsed);
   useEffect(() => {
     if (phase === 'prestart') {
-      const rem = PRESTART_SEC - elapsed;
-      if (rem <= 3 && rem > 0) {
-        const s = Math.ceil(rem);
-        if (lastBeepSec.current !== s) { lastBeepSec.current = s; audio.tickWarn(); haptic(15); }
-      }
-      if (rem <= 0) {
-        audio.go(); haptic([30,30,30]);
-        startRef.current = Date.now(); pausedElapsedRef.current = 0;
-        lastBeepSec.current = -1; setElapsed(0); setPhase('running');
+      const rem=PRESTART_SEC-elapsed;
+      if (rem<=3 && rem>0 && lastBeepSec.current!==Math.ceil(rem)) { lastBeepSec.current=Math.ceil(rem); audio.tickWarn(); }
+      if (rem<=0) {
+        audio.go(); startRef.current=Date.now(); pausedElapsedRef.current=0;
+        lastBeepSec.current=-1; lastSegmentRef.current=-1; setElapsed(0); setPhase('running');
       }
       return;
     }
-    if (phase !== 'running') return;
-    const cb = (rem) => { if (rem <= 3 && rem > 0) { const s = Math.ceil(rem); if (lastBeepSec.current !== s) { lastBeepSec.current = s; audio.tick(); haptic(10); } } };
-    if (mode === 'rest') {
-      if (restPhase === 'set') {
-        // stopwatch — no auto-finish; user taps DONE to switch to rest countdown
-      } else {
-        const rem = restSec - elapsed;
-        cb(rem);
-        if (rem <= 0) {
-          audio.go(); haptic([20,30,20]);
-          if (setIdx < restSets) {
-            // Auto-advance straight to next set's working stopwatch — no prestart, no "Next set" tap
-            setSetIdx(s => s + 1);
-            setRestPhase('set');
-            startRef.current = Date.now();
-            pausedElapsedRef.current = 0;
-            lastBeepSec.current = -1;
-            setElapsed(0);
-            // phase stays 'running'
-          } else {
-            // Last rest finished — workout done
-            setPhase('done');
+    if (phase!=='running') return;
+    if (mode==='rest' || mode==='circuit') {
+      if (restPhase==='rest') {
+        const remaining=restSec-elapsed;
+        if (remaining<=0) {
+          if (setIdx>=restSets) { setElapsed(restSec); setPhase('done'); audio.done(); }
+          else {
+            manualElapsedRef.current+=restSec;
+            setSetIdx(i=>i+1); setRestPhase('set'); startRef.current=Date.now();
+            pausedElapsedRef.current=0; lastBeepSec.current=-1; setElapsed(0); audio.go();
           }
-        }
+        } else if (remaining<=3 && lastBeepSec.current!==Math.ceil(remaining)) { lastBeepSec.current=Math.ceil(remaining); audio.tick(); }
       }
+      return;
     }
-    else if (mode === 'amrap') { const rem = amrapMin*60 - elapsed; cb(rem); if (rem <= 0) { audio.done(); haptic([30,30,30,30,30]); setPhase('done'); } }
-    else if (mode === 'fortime') { const rem = forTimeCapMin*60 - elapsed; cb(rem); if (rem <= 0) { audio.done(); haptic([30,30,30,30,30]); setPhase('done'); } }
-    else if (mode === 'emom') {
-      const mi = Math.floor(elapsed/60), ex = mi+1;
-      if (mi >= emomRounds) { audio.done(); haptic([30,30,30,30,30]); setPhase('done'); return; }
-      if (ex > intervalIdx) { setIntervalIdx(ex); audio.go(); haptic(20); }
+    if (!plan.segments.length) return;
+    if (clock.done) { setElapsed(plan.totalSec); setPhase('done'); audio.done(); haptic([30,30,30,30,30]); return; }
+    if (lastSegmentRef.current!==clock.index) {
+      if (lastSegmentRef.current!==-1) { clock.segment.phase==='rest' ? audio.rest() : audio.go(); haptic(20); }
+      lastSegmentRef.current=clock.index; lastBeepSec.current=-1;
     }
-    else if (mode === 'emomblocks') {
-      // Minute-by-minute work/rest within a block
-      const minuteIdx = Math.floor(elapsed / 60);
-      const inMinute = elapsed % 60;
-      const totalWorkMinutes = emomBlockWorkMin;
-      
-      if (minuteIdx >= totalWorkMinutes) {
-        // Block work time finished — check if rest between blocks or all done
-        if (emomBlockIdx < emomBlockCount) {
-          // Rest between blocks
-          const restElapsed = elapsed - totalWorkMinutes * 60;
-          const restRem = emomBlockRestMin * 60 - restElapsed;
-          if (restRem <= 0) {
-            audio.go();
-            setEmomBlockIdx(b => b + 1);
-            startRef.current = Date.now();
-            pausedElapsedRef.current = 0;
-            lastBeepSec.current = -1;
-            setElapsed(0);
-            return;
-          }
-        } else {
-          audio.done();
-          setPhase('done');
-          return;
-        }
-      }
-      
-      // Beep at start of each minute
-      if (inMinute < 1 && lastBeepSec.current !== minuteIdx) {
-        lastBeepSec.current = minuteIdx;
-        const isWorkMinute = minuteIdx % 2 === 0;
-        if (isWorkMinute) audio.go();
-        else audio.rest();
-      }
-      
-      // Countdown beep last 3 seconds of each minute
-      const secLeft = 60 - inMinute;
-      if (secLeft <= 3 && secLeft > 0) {
-        const s = Math.ceil(secLeft);
-        if (lastBeepSec.current !== s + minuteIdx * 100) {
-          lastBeepSec.current = s + minuteIdx * 100;
-          audio.tick();
-        }
-      }
-    }
-    else if (mode === 'intervals') {
-      const cycle = intWork+intRest;
-      const completed = Math.floor(elapsed/cycle), inCycle = elapsed - completed*cycle;
-      const nowWork = inCycle < intWork, ci = completed+1;
-      if (ci > intRounds) { audio.done(); haptic([30,30,30,30,30]); setPhase('done'); return; }
-      if (ci !== intervalIdx) setIntervalIdx(ci);
-      if (nowWork !== isWork) { setIsWork(nowWork); nowWork ? audio.go() : audio.rest(); haptic(15); }
-      cb(nowWork ? (intWork-inCycle) : (cycle-inCycle));
-    }
-    else if (mode === 'hold') {
-      const rem = holdSec - elapsed; cb(rem);
-      if (rem <= 0) {
-        if (sideIdx < holdSides) { audio.sideSwitch(); haptic(15); setSideIdx(s=>s+1); startRef.current=Date.now(); pausedElapsedRef.current=0; lastBeepSec.current=-1; setElapsed(0); }
-        else if (holdRoundIdx < holdRounds) { audio.sideSwitch(); haptic(15); setSideIdx(1); setHoldRoundIdx(r=>r+1); startRef.current=Date.now(); pausedElapsedRef.current=0; lastBeepSec.current=-1; setElapsed(0); }
-        else { audio.done(); haptic([30,30,30,30,30]); setPhase('done'); }
-      }
+    if (clock.remaining<=3 && clock.remaining>0 && lastBeepSec.current!==Math.ceil(clock.remaining)) {
+      lastBeepSec.current=Math.ceil(clock.remaining); audio.tick();
     }
   }, [elapsed, phase, mode]);
 
   const start = () => {
     audio.unlock(); haptic(15);
     if (phase === 'idle' || phase === 'done') {
-      if (phase === 'done') { setElapsed(0); pausedElapsedRef.current = 0; lastBeepSec.current = -1; }
+      if (phase === 'done') fullReset();
       startRef.current = Date.now(); pausedElapsedRef.current = 0; lastBeepSec.current = -1;
       setElapsed(0); setPhase('prestart');
     } else if (phase === 'paused') setPhase('running');
@@ -783,80 +717,37 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
     lastBeepSec.current = -1; setElapsed(0); setPhase('running');
   };
   const pause = () => { if (phase === 'running') { haptic(10); pausedElapsedRef.current = elapsed; startRef.current = null; setPhase('paused'); } };
-  const nextSet = () => { if (setIdx < restSets) { setSetIdx(s=>s+1); setRestPhase('set'); timerOnlyReset(); } else fullReset(); };
-  // Strength flow: tap DONE after a set → instantly switch to rest countdown without confirmation
+  // Completing the final set/round finishes immediately unless final rest is explicitly requested.
   const setDone = () => {
-    if (mode !== 'rest' || phase !== 'running' || restPhase !== 'set') return;
-    haptic([10,20,10]); audio.rest();
-    setRestPhase('rest');
-    startRef.current = Date.now(); pausedElapsedRef.current = 0; lastBeepSec.current = -1;
-    setElapsed(0);
+    if (!['rest','circuit'].includes(mode) || phase!=='running' || restPhase!=='set') return;
+    setCompletedSets(n=>n+1);
+    setRoundEntries(entries=>[...entries,{round:setIdx,workSec:Math.floor(elapsed)}]);
+    if (setIdx>=restSets && !includeFinalRest) { audio.done(); setPhase('done'); return; }
+    manualElapsedRef.current+=elapsed;
+    startRef.current=Date.now(); pausedElapsedRef.current=0; lastBeepSec.current=-1; setElapsed(0);
+    if (restSec>0) { setRestPhase('rest'); audio.rest(); }
+    else if (setIdx<restSets) { setSetIdx(i=>i+1); audio.go(); }
+    else { setPhase('done'); audio.done(); }
   };
 
-  let big = '00:00', phaseLbl = 'READY', context = '', accent = 'text-stone-100';
-  if (mode === 'rest')      {
-    if (restPhase === 'set' && phase === 'running') {
-      big = fmt(elapsed);
-      phaseLbl = 'WORKING';
-      context = `SET ${setIdx} of ${restSets}`;
-      accent='text-lime-400';
-    } else if (restPhase === 'rest' && phase === 'running') {
-      const r = Math.max(0, restSec - elapsed);
-      big = fmt(r);
-      phaseLbl = 'RESTING';
-      context = `SET ${setIdx} of ${restSets}`;
-      accent = r<=10 ? 'text-amber-400' : 'text-sky-400';
-    } else if (phase === 'done') {
-      big = fmt(0);
-      phaseLbl = 'GO';
-      context = `SET ${setIdx} of ${restSets}`;
-      accent='text-lime-400';
-    } else {
-      big = fmt(0);
-      phaseLbl = 'READY';
-      context = `SET ${setIdx} of ${restSets}`;
-    }
+  const view=WorkoutClock.describe(plan,elapsed);
+  let big=fmt(view.big), phaseLbl=view.label, context=view.context;
+  let accent=clock.segment?.phase==='rest' ? 'text-sky-400' : 'text-lime-400';
+  if (mode==='stopwatch') { big=fmt(elapsed); phaseLbl='RUNNING'; context=''; }
+  if (mode==='rest' || mode==='circuit') {
+    big=fmt(restPhase==='rest' ? Math.max(0,restSec-elapsed) : elapsed);
+    phaseLbl=restPhase==='rest' ? 'REST' : 'WORK';
+    context=`${mode==='circuit'?'ROUND':'SET'} ${setIdx}/${restSets}`;
+    accent=restPhase==='rest'?'text-sky-400':'text-lime-400';
   }
-  else if (mode === 'amrap')    { const r = Math.max(0, amrapMin*60 - elapsed); big = fmt(phase==='done'?0:r); phaseLbl = phase==='done'?'TIME':phase==='running'?'WORK':'READY'; context = `ROUNDS · ${rounds}`; if (phase==='running') accent='text-lime-400'; if (phase==='done') accent='text-red-500'; }
-  else if (mode === 'fortime')  { big = fmt(elapsed); phaseLbl = phase==='done'?'DONE':phase==='running'?'WORK':'READY'; context = `CAP ${fmt(forTimeCapMin*60)}`; if (phase==='running') accent='text-lime-400'; }
-  else if (mode === 'emom')     { const mr = 60 - (elapsed%60); big = fmt(phase==='running'?mr:60); phaseLbl = phase==='done'?'DONE':phase==='running'?'WORK':'READY'; context = `MIN ${intervalIdx} of ${emomRounds}`; if (phase==='running') accent='text-lime-400'; }
-  else if (mode === 'emomblocks') {
-    const minuteIdx = Math.floor(elapsed / 60);
-    const inMinute = elapsed % 60;
-    const isWorkMinute = minuteIdx % 2 === 0;
-    const workIntervalNum = Math.floor(minuteIdx / 2) + 1;
-    const totalWorkMinutes = emomBlockWorkMin;
-    
-    if (minuteIdx >= totalWorkMinutes && emomBlockIdx < emomBlockCount) {
-      const restElapsed = elapsed - totalWorkMinutes * 60;
-      const restRem = Math.max(0, emomBlockRestMin * 60 - restElapsed);
-      big = fmt(restRem);
-      phaseLbl = 'REST';
-      context = `BLOCK ${emomBlockIdx} of ${emomBlockCount} done · Rest before next block`;
-      accent = 'text-sky-400';
-    } else if (minuteIdx >= totalWorkMinutes) {
-      big = fmt(0);
-      phaseLbl = 'DONE';
-      context = `ALL ${emomBlockCount} BLOCKS COMPLETE`;
-      accent = 'text-red-500';
-    } else {
-      const secLeft = 60 - inMinute;
-      big = fmt(secLeft);
-      if (isWorkMinute) {
-        phaseLbl = phase === 'done' ? 'DONE' : phase === 'running' ? 'WORK' : 'READY';
-        context = `BLOCK ${emomBlockIdx} of ${emomBlockCount} · INTERVAL ${workIntervalNum} of ${Math.ceil(emomBlockWorkMin / 2)}${emomBlockExercise ? ' · ' + emomBlockExercise : ''}`;
-        if (phase === 'running') accent = 'text-lime-400';
-      } else {
-        phaseLbl = 'REST';
-        context = `BLOCK ${emomBlockIdx} of ${emomBlockCount} · REST · Next: Interval ${workIntervalNum + 1}`;
-        accent = 'text-sky-400';
-      }
-    }
+  if (mode==='amrap') context=`ROUNDS ${rounds} + ${extraReps} REPS`;
+  if (phase==='idle') { phaseLbl='READY'; accent='text-stone-100'; }
+  if (phase==='paused') phaseLbl='PAUSED';
+  if (phase==='done') { phaseLbl='DONE'; accent='text-lime-400'; }
+  if (phase==='prestart') {
+    big=String(Math.ceil(Math.max(0,PRESTART_SEC-elapsed))).padStart(2,'0');
+    phaseLbl='GET READY'; context='STARTING IN...'; accent='text-amber-400';
   }
-  else if (mode === 'intervals'){ const cycle = intWork+intRest; const ic = elapsed - Math.floor(elapsed/cycle)*cycle; const pr = isWork?(intWork-ic):(cycle-ic); big = fmt(phase==='running'?Math.max(0,pr):intWork); phaseLbl = phase==='done'?'DONE':phase==='running'?(isWork?'WORK':'REST'):'READY'; context = `REP ${intervalIdx} of ${intRounds}`; if (phase==='running') accent = isWork?'text-lime-400':'text-sky-400'; }
-  else if (mode === 'hold')     { const r = Math.max(0, holdSec-elapsed); big = fmt(phase==='done'?0:r); phaseLbl = phase==='done'?'DONE':phase==='running'?(holdSides>1?(sideIdx===1?'LEFT':'RIGHT'):'HOLD'):'READY'; context = `ROUND ${holdRoundIdx} of ${holdRounds}`; if (phase==='running') accent='text-lime-400'; }
-  else if (mode === 'stopwatch'){ big = fmt(elapsed); phaseLbl = phase==='running'?'RUNNING':phase==='paused'?'PAUSED':'READY'; if (phase==='running') accent='text-lime-400'; }
-  if (phase === 'prestart') { const r = Math.max(0, PRESTART_SEC-elapsed); big = String(Math.ceil(r)).padStart(2,'0'); phaseLbl='GET READY'; context='STARTING IN...'; accent='text-amber-400'; }
 
   const Step = ({label, value, set, min=0, max=999, step=1, suffix}) => (
     <div className="flex flex-col gap-1.5">
@@ -871,6 +762,8 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
   const renderConfig = () => {
     if (phase === 'running' || phase === 'prestart') return null;
     const w = "grid grid-cols-3 gap-2 px-4 py-4";
+    if (mode==='countdown') return <div className={w}><Step label="Seconds" value={countdownSec} set={setCountdownSec} min={5} step={5} suffix="s"/></div>;
+    if (mode==='circuit') return <div className={w}><Step label="Rounds" value={restSets} set={setRestSets} min={1} max={50}/><Step label="Rest" value={restSec} set={setRestSec} min={0} step={5} suffix="s"/></div>;
     if (mode === 'rest') return <div className={w}><Step label="Rest" value={restSec} set={setRestSec} min={5} step={5} suffix="s"/><Step label="Sets" value={restSets} set={setRestSets} min={1} max={20}/><Step label="Set #" value={setIdx} set={setSetIdx} min={1} max={restSets}/></div>;
     if (mode === 'amrap') return <div className={w}><Step label="Minutes" value={amrapMin} set={setAmrapMin} min={1} max={60} suffix="m"/></div>;
     if (mode === 'fortime') return <div className={w}><Step label="Cap" value={forTimeCapMin} set={setForTimeCapMin} min={1} max={60} suffix="m"/></div>;
@@ -880,51 +773,32 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
       <Step label="Rest" value={emomBlockRestMin} set={setEmomBlockRestMin} min={1} max={30} suffix="m"/>
       <Step label="Blocks" value={emomBlockCount} set={setEmomBlockCount} min={1} max={10}/>
     </div>;
-    if (mode === 'intervals') return <div className={w}><Step label="Work" value={intWork} set={setIntWork} min={5} step={5} suffix="s"/><Step label="Rest" value={intRest} set={setIntRest} min={5} step={5} suffix="s"/><Step label="Reps" value={intRounds} set={setIntRounds} min={1} max={30}/></div>;
+    if (mode === 'intervals') return <div className={w}><Step label="Work" value={intWork} set={setIntWork} min={5} step={5} suffix="s"/><Step label="Rest" value={intRest} set={setIntRest} min={5} step={5} suffix="s"/><Step label="Rounds" value={intRounds} set={setIntRounds} min={1} max={30}/></div>;
     if (mode === 'hold') return <div className={w}><Step label="Duration" value={holdSec} set={setHoldSec} min={5} step={5} suffix="s"/><Step label="Sides" value={holdSides} set={setHoldSides} min={1} max={2}/><Step label="Rounds" value={holdRounds} set={setHoldRounds} min={1} max={10}/></div>;
     return null;
   };
 
   const onRoundTap = () => { if (phase==='running' && mode==='amrap') { setRounds(r=>r+1); audio.tick(); haptic(15); } };
-  const progressPct = () => {
-    if (phase === 'prestart') return Math.min(100, (elapsed/PRESTART_SEC)*100);
-    if (mode==='rest')     return restPhase==='rest' ? Math.min(100, (elapsed/restSec)*100) : 0;
-    if (mode==='amrap')    return Math.min(100, (elapsed/(amrapMin*60))*100);
-    if (mode==='fortime')  return Math.min(100, (elapsed/(forTimeCapMin*60))*100);
-    if (mode === 'emom') return Math.min(100, (elapsed/(emomRounds*60))*100);
-    if (mode === 'emomblocks') {
-      const totalWorkSec = emomBlockCount * emomBlockWorkMin * 60;
-      const totalRestSec = (emomBlockCount - 1) * emomBlockRestMin * 60;
-      const totalSec = totalWorkSec + totalRestSec;
-      return Math.min(100, (elapsed / totalSec) * 100);
-    }
-    if (mode==='intervals'){ const t = intRounds*(intWork+intRest); return Math.min(100,(elapsed/t)*100); }
-    if (mode==='hold')     { const pr = holdSec*holdSides; const ir = (sideIdx-1)*holdSec+elapsed; return Math.min(100, (((holdRoundIdx-1)*pr+ir)/(holdRounds*pr))*100); }
-    return 0;
-  };
-
+  const progressPct = () => phase==='prestart' ? Math.min(100,elapsed/PRESTART_SEC*100) : clock.progress*100;
   const ringFrac = () => {
-    if (phase === 'idle') return 0;
-    if (mode === 'stopwatch') return (elapsed % 60) / 60;
-    if (mode === 'rest' && restPhase === 'set' && phase !== 'done') return (elapsed % 60) / 60;
-    return Math.min(1, Math.max(0, progressPct() / 100));
+    if (phase==='idle') return 0;
+    if (mode==='stopwatch' || ((mode==='rest'||mode==='circuit') && restPhase==='set')) return (elapsed%60)/60;
+    if ((mode==='rest'||mode==='circuit') && restPhase==='rest') return Math.min(1,elapsed/Math.max(1,restSec));
+    return clock.progress;
   };
   const RING_C = 2 * Math.PI * 150;
 
-  const handleLog = (closeAfter = true) => {
+  const handleLog = (closeAfter=true) => {
     if (!onLog) { onClose(); return; }
-    let result = { mode };
-    if (mode === 'amrap')    result = { mode, rounds, timeSec: Math.floor(elapsed) };
-    else if (mode === 'fortime') result = { mode, timeSec: Math.floor(elapsed), capped: phase==='done' && elapsed >= forTimeCapMin*60 };
-    else if (mode === 'rest')    result = { mode, setsCompleted: phase==='done' ? setIdx : Math.max(0, setIdx - (restPhase==='set'?1:0)) };
-    else if (mode === 'intervals') result = { mode, repsCompleted: intervalIdx };
-    else                       result = { mode, timeSec: Math.floor(elapsed) };
-    haptic([10,30,10]);
-    onLog(result, closeAfter);
+    let result=WorkoutClock.score(plan,elapsed,{rounds,extraReps,completed:phase==='done'});
+    if (mode==='rest'||mode==='circuit') result={mode,timeSec:Math.floor(manualElapsedRef.current+elapsed),
+      setsCompleted:completedSets,roundsCompleted:completedSets,roundEntries,completed:phase==='done',
+      ...(initialConfig.weightKg!=null ? {weightKg:initialConfig.weightKg} : {})};
+    haptic([10,30,10]); onLog(result,closeAfter);
   };
 
   const MODES = [
-    { id:'rest', label:'REST'}, { id:'amrap', label:'AMRAP'}, { id:'fortime', label:'FOR TIME'},
+    { id:'rest', label:'STRENGTH'}, {id:'circuit',label:'ROUNDS'}, {id:'countdown',label:'COUNTDOWN'}, { id:'amrap', label:'AMRAP'}, { id:'fortime', label:'FOR TIME'},
     { id:'emom', label:'EMOM'}, { id:'emomblocks', label:'EMOM BLOCKS'}, { id:'intervals', label:'INTERVALS'}, { id:'hold', label:'HOLD'}, { id:'stopwatch', label:'STOPWATCH'},
   ];
   const timerConfig = renderConfig();
@@ -965,7 +839,10 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
                   className="w-full px-4 text-left text-xs uppercase tracking-widest text-stone-400">
             Settings · {timerSettingsOpen ? 'Hide −' : 'Show +'}
           </button>
-          <div id="workout-timer-settings" hidden={!timerSettingsOpen}>{timerConfig}</div>
+          <div id="workout-timer-settings" hidden={!timerSettingsOpen}>{timerConfig}
+              {mode==='intervals' && <button type="button" aria-pressed={includeFinalRest} onClick={()=>setIncludeFinalRest(v=>!v)}
+                className="w-full min-h-[44px] px-4 pb-3 text-xs text-stone-400">Final rest: {includeFinalRest?'Included':'Off — between rounds only'}</button>}
+            </div>
         </section>
       )}
       {initialConfig.workoutText && (
@@ -1016,6 +893,15 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
               </div>
             </div>
           )}
+          {mode==='amrap' && phase!=='prestart' && (
+            <div className="flex items-center gap-3 text-xs text-stone-400" onClick={e=>e.stopPropagation()}>
+              <label htmlFor="amrap-extra-reps">Extra reps</label>
+              <input id="amrap-extra-reps" aria-label="AMRAP extra reps" type="number" min="0" value={extraReps}
+                onChange={e=>setExtraReps(Math.max(0,Math.floor(Number(e.target.value)||0)))}
+                className="w-20 h-12 text-center rounded-xl bg-stone-900 border border-stone-700 font-digits"/>
+            </div>
+          )}
+
           {context && (mode!=='amrap' || phase==='prestart') && (
             <div className={`workout-timer-context text-xs uppercase tracking-[0.28em] font-bold ${phase==='prestart'?'text-amber-500/70':'text-stone-500'}`}>{context}</div>
           )}
@@ -1027,23 +913,21 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
               <button onClick={skipPrestart} className={`${landscape ? 'w-full' : 'flex-1'} bg-amber-500 text-stone-950 font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Skip size={20}/> Skip · {Math.ceil(Math.max(0, PRESTART_SEC-elapsed))}</button>
             ) : phase==='running' ? (
               <button onClick={pause} className={`${landscape ? 'w-full' : 'flex-1'} bg-stone-100 text-stone-950 font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Pause size={20}/> Pause</button>
-            ) : phase==='done' && mode==='rest' && setIdx<restSets ? (
-              <button onClick={()=>{nextSet(); setTimeout(start,50);}} className={`${landscape ? 'w-full' : 'flex-1'} bg-red-600 text-white font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Skip size={20}/> Next set ({setIdx+1}/{restSets})</button>
             ) : (
               <button onClick={start} className={`${landscape ? 'w-full' : 'flex-1'} gradient-orange text-white font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale shadow-lg shadow-orange-900/30`}><Icons.Play size={20}/>{phase==='paused'?'Resume':phase==='done'?'Again':'Start'}</button>
             )}
             <button onClick={fullReset} aria-label="Reset timer" className={`${landscape ? 'w-full h-12' : 'w-14 h-14'} bg-stone-900 border border-stone-800 text-stone-400 rounded-2xl flex items-center justify-center tap-scale`}><Icons.Reset size={20}/></button>
           </div>
-          {/* DONE button — strength flow: appears during the SET phase, instantly switches to rest countdown */}
-          {mode==='rest' && phase==='running' && restPhase==='set' && (
-            <button onClick={setDone} className={`mt-2 w-full bg-lime-500 text-stone-950 font-bold uppercase tracking-[0.2em] text-sm h-12 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Check size={18}/> Done · start rest</button>
+          {/* Set/round completion: rest between rounds; finish immediately after the last. */}
+          {(mode==='rest'||mode==='circuit') && phase==='running' && restPhase==='set' && (
+            <button onClick={setDone} className={`mt-2 w-full bg-lime-500 text-stone-950 font-bold uppercase tracking-[0.2em] text-sm h-12 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Check size={18}/> {setIdx>=restSets&&!includeFinalRest?'Finish':mode==='circuit'?'Round done':'Set done · rest'}</button>
           )}
           {/* Manual finish — for_time mode keeps its own bespoke button */}
           {mode==='fortime' && phase==='running' && (
             <button onClick={()=>{audio.done(); haptic([30,30,30,30,30]); setPhase('done');}} className={`mt-2 w-full bg-lime-500 text-stone-950 font-bold uppercase tracking-[0.2em] text-sm h-12 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Check size={18}/> Finish</button>
           )}
           {/* Log & close mid-workout — available while running on any logging mode (not for_time which has its own Finish) */}
-          {phase==='running' && onLog && mode!=='fortime' && (
+          {(phase==='running'||phase==='paused') && onLog && mode!=='fortime' && (
             <button onClick={()=>handleLog(true)} className={`mt-2 w-full bg-stone-800 border border-stone-700 text-stone-100 font-bold uppercase tracking-[0.2em] text-sm h-12 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Save size={18}/> Log &amp; close</button>
           )}
           {/* End-of-timer log button (existing flow) */}
@@ -1056,32 +940,7 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
   );
 }
 
-const blockToTimer = (block) => {
-  const c = block.config || {};
-  switch (block.type) {
-    case 'AMRAP': return { mode: 'amrap', config: { amrapMin: c.minutes ?? 20 } };
-    case 'FOR_TIME': return { mode: 'fortime', config: { capMin: c.capMinutes ?? 15 } };
-    case 'EMOM': 
-      // Check if this is a block-style EMOM (has work/rest structure in notes or config)
-      if (c.rounds && (block.notes?.includes('odd minutes') || block.notes?.includes('even minutes'))) {
-        return { 
-          mode: 'emomblocks', 
-          config: { 
-            emomBlockWorkMin: c.minutes ?? Math.ceil(c.rounds / 2),
-            emomBlockRestMin: 4,
-            emomBlockCount: 1,
-            emomBlockExercise: block.name
-          } 
-        };
-      }
-      return { mode: 'emom', config: { emomRounds: c.rounds ?? 12 } };
-    case 'INTERVALS': return { mode: 'intervals', config: { intWork: c.workSec ?? 60, intRest: c.restSec ?? 60, intRounds: c.rounds ?? 6 } };
-    case 'HOLD': return { mode: 'hold', config: { holdSec: c.seconds ?? 30, holdSides: c.sides ?? 1, holdRounds: c.rounds ?? 3 } };
-    case 'STRENGTH': return { mode: 'rest', config: { restSec: c.restSec ?? 150, restSets: c.sets ?? 4 } };
-    case 'WARMUP': return { mode: 'stopwatch', config: {} };
-    default: return { mode: 'stopwatch', config: {} };
-  }
-};
+const blockToTimer = (block) => WorkoutClock.fromBlock(block);
 
 const BLOCK_STYLE = {
   WARMUP: { label: 'Warm-up', color: 'text-amber-400 bg-amber-950/20 border-amber-900/40' },
@@ -1095,7 +954,7 @@ const BLOCK_STYLE = {
 };
 const BlockCard = ({ block, onStart, lastResult }) => {
   const style = BLOCK_STYLE[block.type] || BLOCK_STYLE.WARMUP;
-  const showTimer = block.type !== 'WARMUP' && block.type !== 'COOLDOWN';
+  const showTimer = (block.type !== 'WARMUP' && block.type !== 'COOLDOWN') || blockToTimer(block).mode !== 'stopwatch';
   return (
     <div className="bg-stone-900/40 border border-stone-800 rounded-2xl p-4 mb-2.5">
       <div className="flex items-center gap-2 mb-2 flex-wrap">
@@ -1132,10 +991,11 @@ const BlockCard = ({ block, onStart, lastResult }) => {
 
 const formatResult = (r) => {
   const v = r.value || {};
-  if (v.mode === 'amrap') return `${v.rounds} rounds${v.timeSec?` in ${fmt(v.timeSec)}`:''}`;
+  if (v.mode === 'amrap') return `${v.rounds} rounds${v.extraReps ? ` + ${v.extraReps} reps` : ''}${v.timeSec?` in ${fmt(v.timeSec)}`:''}`;
   if (v.mode === 'fortime') return v.capped ? `Capped at ${fmt(v.timeSec)}` : fmt(v.timeSec);
   if (v.mode === 'rest') return `${v.setsCompleted} sets`;
-  if (v.mode === 'intervals') return `${v.repsCompleted} reps`;
+  if (v.mode === 'intervals') return `${v.intervalsCompleted ?? v.repsCompleted} intervals${v.completed === false ? ' · partial' : ''}`;
+  if (v.mode === 'circuit') return `${v.roundsCompleted} rounds`;
   if (v.timeSec) return fmt(v.timeSec);
   return 'logged';
 };
@@ -1646,8 +1506,9 @@ const ExerciseChart = ({ results }) => {
         if (v.weightKg != null) metric = { label: 'kg', value: v.weightKg };
         else if (v.timeSec != null) metric = { label: 's', value: v.timeSec };
         else if (v.rounds != null) metric = { label: 'rds', value: v.rounds };
+        else if (v.mode === 'circuit') metric = { label: 'rds', value: v.roundsCompleted };
         else if (v.setsCompleted != null) metric = { label: 'sets', value: v.setsCompleted };
-        else if (v.repsCompleted != null) metric = { label: 'reps', value: v.repsCompleted };
+        else if (v.repsCompleted != null) metric = { label: 'ints', value: v.intervalsCompleted ?? v.repsCompleted };
         return metric ? { date: r.date, ...metric } : null;
       })
       .filter(Boolean);
