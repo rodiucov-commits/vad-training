@@ -181,7 +181,7 @@ const cloudEnabled=()=>!!API_BASE;
 async function authFetch(action,profile,body){
  const response=await fetch(API_BASE+'/api/auth/'+action+'?profile='+encodeURIComponent(profile),{method:body?'POST':'GET',credentials:'same-origin',headers:body?{'Content-Type':'application/json'}:{},...(body?{body:JSON.stringify(body)}:{})});
  const data=await response.json().catch(()=>({error:'Could not reach sign-in service'}));
- if(!response.ok)throw Error(data.error||'Sign-in failed');return data;
+ if(!response.ok){const error=Error(data.error||'Sign-in failed');error.status=response.status;throw error;}return data;
 }
 
 async function apiFetch(path, opts = {}, profile = null) {
@@ -1558,6 +1558,7 @@ function ResultEditor({draft,onSave,onCancel,onDelete,canNext}) {
 
 function App() {
   const [authed, setAuthed] = useState(false);
+  const [offlineSession,setOfflineSession]=useState(false);
   const [profile, setProfile] = useState(getActiveProfile);  // null until picked
   const [data, setDataRaw] = useState(() => profile ? loadData(profile) : seedData());
   const [tab, setTab] = useState('programming');
@@ -1572,10 +1573,21 @@ function App() {
   useEffect(()=>{
     if(!profile)return;
     if(new URLSearchParams(location.hash.slice(1)).has('setup')){setAuthed(false);return;}
-    let cancelled=false;authFetch('session',profile).then(()=>{if(!cancelled)setAuthed(true);}).catch(()=>{if(!cancelled)setAuthed(false);});
-    return()=>{cancelled=true;};
+    let cancelled=false;
+    const verify=()=>authFetch('session',profile).then(()=>{
+      if(cancelled)return;localStorage.setItem('vt_verified_session_v1_'+profile,String(Date.now()));setOfflineSession(false);setAuthed(true);
+    }).catch(e=>{
+      if(cancelled)return;
+      const verified=Number(localStorage.getItem('vt_verified_session_v1_'+profile)||0);
+      // This grants cached-device display only. Every cloud request still requires the HttpOnly server cookie.
+      const cached=(e.status==null||e.status>=500)&&verified>0&&Date.now()-verified<30*86400000;
+      if(!cached)localStorage.removeItem('vt_verified_session_v1_'+profile);
+      setOfflineSession(cached);setAuthed(cached);
+    });
+    verify();window.addEventListener('online',verify);
+    return()=>{cancelled=true;window.removeEventListener('online',verify);};
   },[profile]);
-  useEffect(()=>{const expired=e=>{if(e.detail?.profile&&e.detail.profile!==profile)return;setAuthed(false);setStorageError('Session expired. Sign in to upload saved changes.');};window.addEventListener('vt-auth-expired',expired);return()=>window.removeEventListener('vt-auth-expired',expired);},[profile]);
+  useEffect(()=>{const expired=e=>{if(e.detail?.profile&&e.detail.profile!==profile)return;localStorage.removeItem('vt_verified_session_v1_'+profile);setAuthed(false);setOfflineSession(false);setStorageError('Session expired. Sign in to upload saved changes.');};window.addEventListener('vt-auth-expired',expired);return()=>window.removeEventListener('vt-auth-expired',expired);},[profile]);
   const haptic = useHaptic();
   const setData = (d) => {try{if(profile)saveData(profile,d);setDataRaw(d);setStorageError('');return true;}catch(e){setStorageError('Could not save on this device. Free storage or export a backup before continuing.');return false;}};
   const meta = profile ? profileMeta(profile) : null;
@@ -1618,6 +1630,7 @@ function App() {
   // Picking a profile then requires the password again (LoginScreen).
   const onSwitchProfile = async () => {
     try{if(profile)await authFetch('logout',profile,{});}catch(e){setStorageError('Could not sign out of the server. Please retry online.');return;}
+    localStorage.removeItem('vt_verified_session_v1_'+profile);setOfflineSession(false);
     endSession();
     clearActiveProfile();
     setAuthed(false);
@@ -1698,7 +1711,7 @@ function App() {
   };
 
   if (!profile) return <ProfilePicker onPick={onPickProfile}/>;
-  if (!authed) return <LoginScreen profile={profile} onSuccess={()=>{setActiveProfile(profile);setAuthed(true);}}/>;
+  if (!authed) return <LoginScreen profile={profile} onSuccess={()=>{setActiveProfile(profile);localStorage.setItem('vt_verified_session_v1_'+profile,String(Date.now()));setOfflineSession(false);setAuthed(true);}}/>;
 
   const openTimer = (block, dayIdx, week) => {
     haptic(15);
@@ -1756,6 +1769,7 @@ function App() {
         </div>
       </header>
       <div className="px-4 text-xs text-stone-300" role="status" aria-live="polite">
+        {offlineSession&&<p className="text-amber-200 py-2">Offline cached view · connect to verify your cloud session.</p>}
         {storageError && <p className="p-3 border border-red-700 rounded-xl text-red-300" role="alert">{storageError}</p>}
         {cloudEnabled() && <button className="min-h-[44px] text-left underline" onClick={()=>outbox?.flush()}>{pendingCount?`${pendingCount} change(s) saved locally · tap to retry upload`:sync==='synced'?'All changes uploaded':sync==='syncing'?'Checking cloud…':'Cloud unavailable · working locally'}</button>}
       </div>

@@ -70,8 +70,8 @@ navigation are available.
 The browser fixture intercepts **every** network request and uses a fake backend. It
 checks all eight workout modes in portrait/landscape with safe-area padding, save/edit/
 delete, offline/reload retry, imports, next-block navigation and standalone rendering.
-It requires `BROWSER_CDP` (default http://127.0.0.1:18800); its local fixture does not
-verify production backend authorization or write semantics.
+It launches an isolated headless Chrome (`CHROME_PATH` can select the executable);
+its local fixture does not verify production backend authorization or write semantics.
 
 ### Backend security
 
@@ -101,3 +101,5 @@ private setup link without changing the existing password until that link is use
 Health remains public; every data read/write requires a valid profile session or
 machine credential. Deploy backend and frontend together and verify anonymous 401,
 machine access, cookie/profile isolation and unchanged profile data snapshots.
+
+Offline session checks may allow a previously verified profile to display its cached device data during a connection failure. That UI state grants no server privileges: all cloud reads/writes still require the server session cookie, and a 401 clears the cached-view marker.
