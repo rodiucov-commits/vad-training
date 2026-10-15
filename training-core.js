@@ -38,7 +38,7 @@ function programme(json,targetWeek){
  return {week,days};
 }
 function exerciseKey(r){
- if(r.exerciseId)return r.exerciseId;
+ if(r.exerciseId||r.value?.exerciseId)return r.exerciseId||r.value.exerciseId;
  const mode=r.value?.mode||r.type||'workout';let name=String(r.blockName||r.name||'').trim();
  if(mode==='rest'||mode==='STRENGTH')name=name.replace(/\s*[—–]\s*\d.*$/,'').replace(/\s*@\s*[\d.]+\s*kg.*$/i,'');
  return mode+':'+name.toLowerCase().replace(/\s+/g,' ');

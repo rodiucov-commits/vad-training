@@ -11,3 +11,4 @@ tailwind.config.cjs
 wrangler.jsonc
 .env*
 .dev.vars*
+backend/

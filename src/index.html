@@ -107,7 +107,7 @@ const { useState, useEffect, useRef, useMemo } = React;
 // ============================================================
 // PASSWORD CONFIG (see Settings → Lock to file for cross-device)
 // ============================================================
-const PASSWORD_SHA256 = "";
+// Password verification and profile sessions are server-side.
 const SESSION_DAYS = 30;
 
 // ---------- ICONS ----------
@@ -153,6 +153,8 @@ const PROFILES = [
 ];
 const PROFILE_KEY = 'vt_active_profile_v1';
 const getActiveProfile = () => {
+  const setup=new URLSearchParams(location.hash.slice(1));
+  if(setup.has('setup')&&PROFILES.some(p=>p.id===setup.get('profile')))return setup.get('profile');
   const stored = localStorage.getItem(PROFILE_KEY);
   if (stored && PROFILES.some(p => p.id === stored)) return stored;
   return null;  // not yet picked → show profile picker after login
@@ -169,25 +171,18 @@ async function sha256(text) {
 }
 const SESSION_KEY = 'vt_session_v1';
 const HASH_KEY = 'vt_pwhash_v1';
-const getStoredHash = () => PASSWORD_SHA256 || localStorage.getItem(HASH_KEY) || '';
-const setStoredHash = (h) => localStorage.setItem(HASH_KEY, h);
-const isLoggedIn = () => {
-  try {
-    const raw = localStorage.getItem(SESSION_KEY);
-    if (!raw) return false;
-    const { ts } = JSON.parse(raw);
-    return Date.now() - ts < SESSION_DAYS * 24 * 60 * 60 * 1000;
-  } catch { return false; }
-};
-const startSession = () => localStorage.setItem(SESSION_KEY, JSON.stringify({ ts: Date.now() }));
 const endSession = () => localStorage.removeItem(SESSION_KEY);
 
 // ---------- CLOUD API ----------
 // Paste your bearer token here to enable cross-device sync via Cloudflare D1.
 // Leave both blank to fall back to pure localStorage mode (works offline / from disk).
 const API_BASE  = 'https://rodiucov.com';
-const API_TOKEN = '9edb5f644f1d42fc82ed6ffe3b94a98c4338e1336f2e8ee67799299ed6d77dc3';   // <-- paste your 64-char API_TOKEN here
-const cloudEnabled = () => !!(API_BASE && API_TOKEN);
+const cloudEnabled=()=>!!API_BASE;
+async function authFetch(action,profile,body){
+ const response=await fetch(API_BASE+'/api/auth/'+action+'?profile='+encodeURIComponent(profile),{method:body?'POST':'GET',credentials:'same-origin',headers:body?{'Content-Type':'application/json'}:{},...(body?{body:JSON.stringify(body)}:{})});
+ const data=await response.json().catch(()=>({error:'Could not reach sign-in service'}));
+ if(!response.ok)throw Error(data.error||'Sign-in failed');return data;
+}
 
 async function apiFetch(path, opts = {}, profile = null) {
   // Append ?profile=<id> (or &profile=) to every authed call so server scopes
@@ -200,13 +195,14 @@ async function apiFetch(path, opts = {}, profile = null) {
   }
   const r = await fetch(url, {
     ...opts,
+    credentials:'same-origin',
     headers: {
-      'Authorization': `Bearer ${API_TOKEN}`,
       'Content-Type': 'application/json',
       ...(opts.headers || {}),
     },
   });
   if (!r.ok) {
+    if(r.status===401)window.dispatchEvent(new CustomEvent('vt-auth-expired',{detail:{profile}}));
     if (opts.method==='DELETE' && r.status===404) return null;
     const txt = await r.text().catch(()=>'');
     throw new Error(`API ${r.status}: ${txt || r.statusText}`);
@@ -354,76 +350,35 @@ const fmt = (sec) => {
 };
 
 // ---------- LOGIN ----------
-function LoginScreen({ onSuccess }) {
-  const [pw, setPw] = useState('');
-  const [confirm, setConfirm] = useState('');
-  const [show, setShow] = useState(false);
-  const [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
-  const stored = getStoredHash();
-  const isSetup = !stored;
-  const haptic = useHaptic();
-
-  const submit = async () => {
-    setError(''); setBusy(true);
-    try {
-      if (isSetup) {
-        if (pw.length < 6) { setError('Password must be at least 6 characters'); setBusy(false); haptic([20,40,20]); return; }
-        if (pw !== confirm) { setError('Passwords do not match'); setBusy(false); haptic([20,40,20]); return; }
-        const h = await sha256(pw);
-        setStoredHash(h); startSession(); haptic(15); onSuccess();
-      } else {
-        const h = await sha256(pw);
-        if (h !== stored) { setError('Wrong password'); setBusy(false); haptic([20,40,20]); return; }
-        startSession(); haptic(15); onSuccess();
-      }
-    } catch (e) { setError('Crypto failed: '+e.message); }
-    setBusy(false);
+function LoginScreen({profile,onSuccess}) {
+  const params=new URLSearchParams(location.hash.slice(1));
+  const setup=params.get('profile')===profile?params.get('setup'):null;
+  const [password,setPassword]=useState(''),[confirmPassword,setConfirmPassword]=useState('');
+  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[show,setShow]=useState(false);
+  const submit=async e=>{
+    e?.preventDefault();if(busy)return;setError('');
+    if(setup&&(password.length<10||password!==confirmPassword)){setError(password.length<10?'Use at least 10 characters.':'Passwords do not match.');return;}
+    setBusy(true);
+    try{await authFetch(setup?'setup':'login',profile,{password,...(setup?{token:setup}:{})});
+      if(setup)history.replaceState(null,'',location.pathname+location.search);
+      setPassword('');setConfirmPassword('');onSuccess();
+    }catch(e){setError(e.message);}finally{setBusy(false);}
   };
-  const onKey = (e) => { if (e.key === 'Enter') submit(); };
-
-  return (
-    <div className="min-h-screen bg-stone-950 flex items-center justify-center p-6 pt-safe pb-safe">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl gradient-orange mb-6 shadow-2xl shadow-orange-900/40">
-            <Icons.Lock size={32}/>
-          </div>
-          <h1 className="gradient-text font-extrabold text-4xl tracking-tight">Vad Training</h1>
-          <p className="text-stone-500 text-sm mt-3">{isSetup ? 'First-time setup — create a password' : 'Enter your password'}</p>
-        </div>
-        <div className="space-y-3">
-          <div className="relative">
-            <input type={show ? 'text' : 'password'} value={pw} onChange={e=>setPw(e.target.value)} onKeyDown={onKey}
-              placeholder="Password" autoFocus
-              autoComplete={isSetup ? 'new-password' : 'current-password'}
-              className="w-full bg-stone-900 border border-stone-800 rounded-2xl px-5 py-5 pr-14 text-stone-100 focus:outline-none focus:border-orange-500"/>
-            <button onClick={()=>setShow(s=>!s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 p-2 tap-scale">
-              {show ? <Icons.EyeOff size={20}/> : <Icons.Eye size={20}/>}
-            </button>
-          </div>
-          {isSetup && (
-            <input type={show ? 'text' : 'password'} value={confirm} onChange={e=>setConfirm(e.target.value)} onKeyDown={onKey}
-              placeholder="Confirm password" autoComplete="new-password"
-              className="w-full bg-stone-900 border border-stone-800 rounded-2xl px-5 py-5 text-stone-100 focus:outline-none focus:border-orange-500"/>
-          )}
-          {error && <div className="text-red-400 text-sm px-2 text-center">{error}</div>}
-          <button onClick={submit} disabled={busy || !pw}
-            className="w-full gradient-orange text-white font-bold uppercase tracking-[0.15em] py-5 rounded-2xl disabled:opacity-50 tap-scale shadow-lg shadow-orange-900/30">
-            {busy ? '…' : isSetup ? 'Create password' : 'Unlock'}
-          </button>
-          {isSetup && (
-            <p className="text-[11px] text-stone-600 text-center px-3 mt-4 leading-relaxed">
-              Saved to this device. To use the same password on another device, open Settings → Lock to file after login.
-            </p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+  return <main className="min-h-screen flex items-center justify-center bg-stone-950 p-6 pt-safe pb-safe">
+    <form onSubmit={submit} className="w-full max-w-sm">
+      <h1 className="text-2xl font-bold mb-2">{profileMeta(profile).name} · Vad Training</h1>
+      <p className="text-sm text-stone-300 mb-5">{setup?'Create your secure profile password. This setup link works once.':'Sign in to your profile. Your password works across devices.'}</p>
+      <label className="block text-sm mb-2" htmlFor="profile-password">Password</label>
+      <input id="profile-password" className="w-full h-14 rounded-xl p-3 bg-stone-900 border border-stone-700" type={show?'text':'password'} value={password} onChange={e=>setPassword(e.target.value)} required maxLength={256} autoComplete={setup?'new-password':'current-password'}/>
+      <button type="button" className="text-sm text-stone-300 underline" onClick={()=>setShow(v=>!v)}>{show?'Hide password':'Show password'}</button>
+      {setup&&<><label className="block text-sm mb-2 mt-3" htmlFor="profile-password-confirm">Confirm password</label><input id="profile-password-confirm" className="w-full h-14 rounded-xl p-3 bg-stone-900 border border-stone-700" type={show?'text':'password'} value={confirmPassword} onChange={e=>setConfirmPassword(e.target.value)} required maxLength={256} autoComplete="new-password"/></>}
+      {error&&<p role="alert" className="text-red-300 text-sm my-3">{error}</p>}
+      <button type="submit" disabled={busy} className="w-full h-14 rounded-xl gradient-orange font-bold mt-4 disabled:opacity-50">{busy?'Signing in…':setup?'Create password & sign in':'Sign in'}</button>
+      {!setup&&<p className="text-xs text-stone-400 mt-4">First time or forgotten password? Ask Uni for a private, one-time setup link.</p>}
+    </form>
+  </main>;
 }
 
-// ---------- PROFILE PICKER ----------
 function ProfilePicker({ onPick }) {
   const haptic = useHaptic();
   return (
@@ -453,151 +408,23 @@ function ProfilePicker({ onPick }) {
 }
 
 // ---------- SETTINGS BOTTOM SHEET ----------
-function SettingsModal({ onClose, sync, forceResync, pushLocalToCloud, profile, onSwitchProfile }) {
-  const [view, setView] = useState('main');
-  const [oldPw, setOldPw] = useState('');
-  const [newPw, setNewPw] = useState('');
-  const [newConfirm, setNewConfirm] = useState('');
-  const [msg, setMsg] = useState('');
-  const [hashOut, setHashOut] = useState('');
-  const [copied, setCopied] = useState(false);
-  const [soundOn, setSoundOnLocal] = useState(getSound);
-  const toggleSound = () => { const next = !soundOn; setSoundOnLocal(next); setSoundPref(next); };
-  const meta = profileMeta(profile);
-
-  const change = async () => {
-    setMsg('');
-    const stored = getStoredHash();
-    const oh = await sha256(oldPw);
-    if (oh !== stored) { setMsg('Old password is wrong'); return; }
-    if (newPw.length < 6) { setMsg('New password must be at least 6 characters'); return; }
-    if (newPw !== newConfirm) { setMsg('New passwords do not match'); return; }
-    const nh = await sha256(newPw);
-    setStoredHash(nh);
-    setMsg('Password changed.');
-    setHashOut(nh); setView('lock');
-    setOldPw(''); setNewPw(''); setNewConfirm('');
-  };
-  const showCurrentHash = () => {
-    const h = getStoredHash();
-    if (!h) { setMsg('No password set yet'); return; }
-    setHashOut(h); setView('lock');
-  };
-  const copyHash = () => {
-    navigator.clipboard.writeText(hashOut).then(()=>{ setCopied(true); setTimeout(()=>setCopied(false), 2000); });
-  };
-  const exportData = () => {
-    const data = localStorage.getItem(dataKey(profile)) || '{}';
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `vad-training-${profile}-${new Date().toISOString().slice(0,10)}.json`;
-    a.click(); URL.revokeObjectURL(url);
-  };
-  const switchProfile = () => {
-    if (!confirm(`Switch profile? You're currently signed into ${meta.name}. You'll be returned to the profile picker.`)) return;
-    onClose();
-    setTimeout(onSwitchProfile, 50);
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
-      <div className="w-full sm:max-w-md bg-stone-950 border-t sm:border border-stone-800 settings-sheet rounded-t-3xl sm:rounded-3xl overflow-hidden sheet-slide pb-safe" onClick={e=>e.stopPropagation()}>
-        <div className="w-12 h-1.5 bg-stone-800 rounded-full mx-auto mt-3 sm:hidden"/>
-        <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-stone-900">
-          <h2 className="text-lg font-bold flex items-center gap-2"><Icons.Settings size={18}/> Settings</h2>
-          <button onClick={onClose} className="p-2 -mr-2 text-stone-400 tap-scale"><Icons.X size={20}/></button>
-        </div>
-        <div className="p-5 space-y-3">
-          {view === 'main' && (
-            <>
-              <button onClick={switchProfile} className="w-full text-left active:opacity-90 border border-stone-800 rounded-2xl p-4 flex items-center justify-between tap-scale" style={{background:'linear-gradient(135deg, rgba(60,30,15,0.6) 0%, rgba(50,20,10,0.6) 100%)'}}>
-                <div className="flex items-center gap-3">
-                  <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${meta.gradient} flex items-center justify-center text-white font-extrabold text-xs uppercase tracking-wider`}>{meta.name.slice(0,1)}</div>
-                  <div>
-                    <div className="font-semibold text-base">Profile · <span className="font-bold">{meta.name}</span></div>
-                    <div className="text-xs text-stone-500 mt-0.5">Tap to switch</div>
-                  </div>
-                </div>
-                <Icons.LogOut size={18} className="text-stone-500"/>
-              </button>
-              <button onClick={()=>setView('change')} className="w-full text-left bg-stone-900 active:bg-stone-800 border border-stone-800 rounded-2xl p-4 flex items-center justify-between tap-scale">
-                <div><div className="font-semibold text-base">Change password</div><div className="text-xs text-stone-500 mt-0.5">Pick a new password (this device)</div></div>
-                <Icons.Lock size={20} className="text-stone-500"/>
-              </button>
-              <button onClick={showCurrentHash} className="w-full text-left bg-stone-900 active:bg-stone-800 border border-stone-800 rounded-2xl p-4 flex items-center justify-between tap-scale">
-                <div><div className="font-semibold text-base">Lock to file</div><div className="text-xs text-stone-500 mt-0.5">Get hash for cross-device login</div></div>
-                <Icons.Save size={20} className="text-stone-500"/>
-              </button>
-              <button onClick={exportData} className="w-full text-left bg-stone-900 active:bg-stone-800 border border-stone-800 rounded-2xl p-4 flex items-center justify-between tap-scale">
-                <div><div className="font-semibold text-base">Export backup</div><div className="text-xs text-stone-500 mt-0.5">Download all data as JSON</div></div>
-                <Icons.Save size={20} className="text-stone-500"/>
-              </button>
-              <button onClick={toggleSound} className="w-full text-left bg-stone-900 active:bg-stone-800 border border-stone-800 rounded-2xl p-4 flex items-center justify-between tap-scale">
-                <div>
-                  <div className="font-semibold text-base">Timer sound</div>
-                  <div className="text-xs text-stone-500 mt-0.5">{soundOn ? 'Beeps and warnings on' : 'Silent — haptics only'}</div>
-                </div>
-                <div className={`w-11 h-7 rounded-full p-0.5 transition-colors ${soundOn ? 'bg-orange-500' : 'bg-stone-700'}`}>
-                  <div className={`w-6 h-6 rounded-full bg-white transition-transform ${soundOn ? 'translate-x-4' : ''}`}/>
-                </div>
-              </button>
-              {sync !== 'disabled' && (
-                <>
-                  <div className="pt-2 pb-1 text-[10px] text-stone-500 uppercase tracking-wider font-bold">Cloud sync</div>
-                  <button onClick={() => { onClose(); setTimeout(forceResync, 50); }} className="w-full text-left bg-stone-900 active:bg-stone-800 border border-stone-800 rounded-2xl p-4 flex items-center justify-between tap-scale">
-                    <div>
-                      <div className="font-semibold text-base">Pull from cloud</div>
-                      <div className="text-xs text-stone-500 mt-0.5">Resync programmes &amp; results from D1</div>
-                    </div>
-                    <span className={`block w-2.5 h-2.5 rounded-full ${sync==='synced'?'bg-emerald-500':sync==='offline'?'bg-rose-500':sync==='syncing'?'bg-amber-400 animate-pulse':'bg-stone-500'}`}/>
-                  </button>
-                  <button onClick={() => { onClose(); setTimeout(pushLocalToCloud, 50); }} className="w-full text-left bg-stone-900 active:bg-stone-800 border border-stone-800 rounded-2xl p-4 flex items-center justify-between tap-scale">
-                    <div>
-                      <div className="font-semibold text-base">Push local to cloud</div>
-                      <div className="text-xs text-stone-500 mt-0.5">One-shot bulk migrate localStorage → D1</div>
-                    </div>
-                    <Icons.Save size={20} className="text-stone-500"/>
-                  </button>
-                </>
-              )}
-              <div className="text-[10px] text-stone-600 text-center pt-3 uppercase tracking-[0.25em]">Vad Training · v3.5</div>
-            </>
-          )}
-          {view === 'change' && (
-            <>
-              <input type="password" value={oldPw} onChange={e=>setOldPw(e.target.value)} placeholder="Current password" autoComplete="current-password" className="w-full bg-stone-900 border border-stone-800 rounded-2xl px-4 py-4 text-stone-100 focus:outline-none focus:border-orange-500"/>
-              <input type="password" value={newPw} onChange={e=>setNewPw(e.target.value)} placeholder="New password (min 6)" autoComplete="new-password" className="w-full bg-stone-900 border border-stone-800 rounded-2xl px-4 py-4 text-stone-100 focus:outline-none focus:border-orange-500"/>
-              <input type="password" value={newConfirm} onChange={e=>setNewConfirm(e.target.value)} placeholder="Confirm new password" autoComplete="new-password" className="w-full bg-stone-900 border border-stone-800 rounded-2xl px-4 py-4 text-stone-100 focus:outline-none focus:border-orange-500"/>
-              {msg && <div className="text-amber-400 text-sm text-center">{msg}</div>}
-              <div className="flex gap-2 pt-2">
-                <button onClick={()=>setView('main')} className="flex-1 bg-stone-900 border border-stone-800 rounded-2xl py-4 text-stone-300 font-semibold tap-scale">Cancel</button>
-                <button onClick={change} className="flex-1 gradient-orange text-white font-bold rounded-2xl py-4 tap-scale">Change</button>
-              </div>
-            </>
-          )}
-          {view === 'lock' && (
-            <>
-              <p className="text-sm text-stone-300 leading-relaxed">
-                Paste this into your <code className="bg-stone-900 px-1.5 py-0.5 rounded text-orange-400 text-xs">index.html</code> for cross-device login:
-              </p>
-              <pre className="text-[11px] font-digits text-stone-300 bg-stone-900 rounded-2xl p-4 break-all whitespace-pre-wrap">const PASSWORD_SHA256 = "{hashOut}";</pre>
-              <button onClick={copyHash} className="w-full bg-stone-100 text-stone-950 font-bold rounded-2xl py-4 flex items-center justify-center gap-2 tap-scale">
-                {copied ? <><Icons.Check size={18}/> Copied</> : <><Icons.Copy size={18}/> Copy line</>}
-              </button>
-              <p className="text-[11px] text-stone-500 leading-relaxed text-center">
-                Then re-upload <code className="bg-stone-900 px-1 rounded">index.html</code> to Hostinger.
-              </p>
-              <button onClick={()=>setView('main')} className="w-full bg-stone-900 border border-stone-800 rounded-2xl py-4 text-stone-300 font-semibold tap-scale mt-2">Back</button>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+function SettingsModal({onClose,sync,forceResync,pushLocalToCloud,profile,onSwitchProfile}) {
+ const [change,setChange]=useState(false),[oldPassword,setOld]=useState(''),[newPassword,setNew]=useState(''),[confirm,setConfirm]=useState(''),[msg,setMsg]=useState(''),[busy,setBusy]=useState(false),[sound,setSound]=useState(getSound);
+ const changePassword=async()=>{setMsg('');if(newPassword.length<10||newPassword!==confirm){setMsg(newPassword.length<10?'Use at least 10 characters.':'Passwords do not match.');return;}setBusy(true);try{await authFetch('change-password',profile,{oldPassword,newPassword});setOld('');setNew('');setConfirm('');setMsg('Password changed. Other sessions have been signed out.');}catch(e){setMsg(e.message);}finally{setBusy(false);}};
+ const backup=()=>{const value={...loadData(profile),pendingUploads:JSON.parse(localStorage.getItem('vt_outbox_v1_'+profile)||'[]')};const url=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`vad-training-${profile}-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url);};
+ return <div className="result-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose();}}><section className="result-sheet" role="dialog" aria-modal="true" aria-label="Settings">
+  <div className="flex items-center justify-between mb-3"><h2 className="text-lg font-bold">Settings · {profileMeta(profile).name}</h2><button aria-label="Close settings" onClick={onClose}>✕</button></div>
+  <div className="flex flex-col gap-3">
+   <button className="h-12 bg-stone-800 rounded-xl" onClick={async()=>{await onSwitchProfile();onClose();}}>Switch profile / sign out</button>
+   <button className="h-12 bg-stone-800 rounded-xl" onClick={()=>setChange(v=>!v)}>Change password</button>
+   {change&&<div className="flex flex-col gap-2"><label>Current password<input type="password" autoComplete="current-password" className="w-full h-12 p-3 bg-stone-900 rounded-xl" value={oldPassword} onChange={e=>setOld(e.target.value)}/></label><label>New password (10+ characters)<input type="password" autoComplete="new-password" className="w-full h-12 p-3 bg-stone-900 rounded-xl" value={newPassword} onChange={e=>setNew(e.target.value)}/></label><label>Confirm new password<input type="password" autoComplete="new-password" className="w-full h-12 p-3 bg-stone-900 rounded-xl" value={confirm} onChange={e=>setConfirm(e.target.value)}/></label><button disabled={busy} className="h-12 gradient-orange rounded-xl" onClick={changePassword}>{busy?'Changing…':'Save password'}</button>{msg&&<p role="status" className="text-sm text-amber-200">{msg}</p>}</div>}
+   <button className="h-12 bg-stone-800 rounded-xl" onClick={backup}>Export backup (including pending changes)</button>
+   <button className="h-12 bg-stone-800 rounded-xl" aria-pressed={sound} onClick={()=>{setSound(!sound);setSoundPref(!sound);}}>Timer sound: {sound?'On':'Off'}</button>
+   {sync!=='disabled'&&<><button className="h-12 bg-stone-800 rounded-xl" onClick={()=>{onClose();forceResync();}}>Pull from cloud</button><button className="h-12 bg-stone-800 rounded-xl" onClick={()=>{onClose();pushLocalToCloud();}}>Push local backup to cloud</button></>}
+  </div>
+ </section></div>;
 }
 
-// ---------- CHRONO TIMER (mobile-optimized) ----------
 const PRESTART_SEC = 10;
 
 function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
@@ -1730,7 +1557,7 @@ function ResultEditor({draft,onSave,onCancel,onDelete,canNext}) {
 }
 
 function App() {
-  const [authed, setAuthed] = useState(isLoggedIn());
+  const [authed, setAuthed] = useState(false);
   const [profile, setProfile] = useState(getActiveProfile);  // null until picked
   const [data, setDataRaw] = useState(() => profile ? loadData(profile) : seedData());
   const [tab, setTab] = useState('programming');
@@ -1742,6 +1569,13 @@ function App() {
   const generatorTimerRef=useRef(null);
   // Sync states: 'disabled' | 'idle' | 'syncing' | 'synced' | 'offline'
   const [sync, setSync] = useState(cloudEnabled() ? 'idle' : 'disabled');
+  useEffect(()=>{
+    if(!profile)return;
+    if(new URLSearchParams(location.hash.slice(1)).has('setup')){setAuthed(false);return;}
+    let cancelled=false;authFetch('session',profile).then(()=>{if(!cancelled)setAuthed(true);}).catch(()=>{if(!cancelled)setAuthed(false);});
+    return()=>{cancelled=true;};
+  },[profile]);
+  useEffect(()=>{const expired=e=>{if(e.detail?.profile&&e.detail.profile!==profile)return;setAuthed(false);setStorageError('Session expired. Sign in to upload saved changes.');};window.addEventListener('vt-auth-expired',expired);return()=>window.removeEventListener('vt-auth-expired',expired);},[profile]);
   const haptic = useHaptic();
   const setData = (d) => {try{if(profile)saveData(profile,d);setDataRaw(d);setStorageError('');return true;}catch(e){setStorageError('Could not save on this device. Free storage or export a backup before continuing.');return false;}};
   const meta = profile ? profileMeta(profile) : null;
@@ -1776,13 +1610,14 @@ function App() {
 
   // When the user picks a new profile (initial pick or post-switch), load its bucket.
   const onPickProfile = (id) => {
-    setProfile(id);
+    setAuthed(false);setProfile(id);
     setDataRaw(loadData(id));
     setSync(cloudEnabled() ? 'idle' : 'disabled');
   };
   // Logout / switch profile: end session AND clear profile → back to profile picker.
   // Picking a profile then requires the password again (LoginScreen).
-  const onSwitchProfile = () => {
+  const onSwitchProfile = async () => {
+    try{if(profile)await authFetch('logout',profile,{});}catch(e){setStorageError('Could not sign out of the server. Please retry online.');return;}
     endSession();
     clearActiveProfile();
     setAuthed(false);
@@ -1863,7 +1698,7 @@ function App() {
   };
 
   if (!profile) return <ProfilePicker onPick={onPickProfile}/>;
-  if (!authed) return <LoginScreen onSuccess={()=>setAuthed(true)}/>;
+  if (!authed) return <LoginScreen profile={profile} onSuccess={()=>{setActiveProfile(profile);setAuthed(true);}}/>;
 
   const openTimer = (block, dayIdx, week) => {
     haptic(15);
@@ -1873,7 +1708,7 @@ function App() {
   };
   const logResult=(value,closeAfter=true)=>{
     if(!timer)return;
-    const proposed={...value};
+    const proposed={...value,exerciseId:timer.exerciseId};
     if(proposed.weightKg!=null){proposed.plannedWeightKg=proposed.weightKg;delete proposed.weightKg;}
     setResultDraft({result:{id:'r_'+TrainingCore.uuid(),blockId:timer.blockId,blockName:timer.blockName,exerciseId:timer.exerciseId,week:timer.week,dayIdx:timer.dayIdx,date:new Date().toISOString(),value:proposed},closeAfter});
   };
@@ -1892,7 +1727,7 @@ function App() {
     if(setData({...data,results:data.results.filter(r=>r.id!==id)})===false)return;
     queueChange('deleteResult',{id});setResultDraft(null);
   };
-  const logout = () => { endSession(); clearActiveProfile(); setAuthed(false); setProfile(null); };
+  const logout = () => onSwitchProfile();
 
   const tabs = [
     { id: 'programming', label: 'Today', icon: <Icons.Calendar size={18}/> },

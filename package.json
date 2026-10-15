@@ -4,7 +4,9 @@
   "scripts": {
     "build": "node scripts/build.cjs",
     "test": "node --test tests/training-core.cjs && node tests/timer-engine.cjs && node tests/timer-components.cjs",
-    "test:browser": "node tests/browser.cjs"
+    "test:browser": "node tests/browser.cjs",
+    "test:auth": "node --test backend/auth.test.mjs",
+    "test:auth-browser": "node backend/browser-auth.mjs"
   },
   "devDependencies": {
     "@babel/standalone": "7.26.4",

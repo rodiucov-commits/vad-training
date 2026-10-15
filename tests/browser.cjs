@@ -2,7 +2,7 @@
 const {chromium}=require('playwright-core'),fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 (async()=>{
- const browser=await chromium.connectOverCDP(process.env.BROWSER_CDP || 'http://127.0.0.1:18800');
+ const browser=await chromium.launch({executablePath:process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
  const context=await browser.newContext({viewport:{width:390,height:740},deviceScaleFactor:1,isMobile:true,hasTouch:true});
  let offline=false,writes=0;const errors=[];
  const server={programme:{42:{1:{title:'Engine day',date:'2026-10-13',notes:'Day notes must remain visible.',blocks:[{id:'engine',type:'EMOM',name:'Engine EMOM 20 min',config:{rounds:20},movements:['Min 1: Bike','Min 2: Step-ups','Min 3: Sled','Min 4: Rest / walk'],notes:'Repeat the four-minute cycle five times.'},{id:'strength',type:'STRENGTH',name:'Back Squat — 4×6 @ 80kg',config:{sets:4,reps:6,restSec:120,weightKg:80}},{id:'rounds',type:'CORE',name:'Core circuit — 3 rounds',config:{rounds:3,restSec:45}},{id:'amrap',type:'AMRAP',name:'AMRAP test',config:{minutes:10}},{id:'fortime',type:'FOR_TIME',name:'For Time test',config:{capMinutes:10}},{id:'hold',type:'HOLD',name:'Hold test',config:{seconds:20,sides:2,rounds:3}},{id:'intervals',type:'INTERVALS',name:'Intervals test',config:{rounds:4,workSec:300,restSec:60}},{id:'countdown',type:'WARMUP',name:'Rest 4 min'}]}}},results:[],generator:{focus:'General Fitness'}};
@@ -18,7 +18,7 @@ const root=path.resolve(__dirname,'..');
    if(req.method()==='PUT'&&url.pathname==='/api/programme'){const p=req.postDataJSON();server.programme[p.week]=p.days;writes++;return route.fulfill({json:{ok:true},headers});}
    return route.fulfill({json:{ok:true},headers});
   }
-  if(url.hostname!=='training.test')return route.fulfill({status:200,body:'',contentType:'text/css'});
+  if(url.hostname!=='rodiucov.com')return route.fulfill({status:200,body:'',contentType:'text/css'});
   const name=url.pathname==='/'?'index.html':url.pathname==='/chrono'?'chrono.html':url.pathname.slice(1);const file=path.resolve(root,name);
   if(!file.startsWith(root+'/')||!fs.existsSync(file)||fs.statSync(file).isDirectory())return route.fulfill({status:404,body:'Not found'});
   return route.fulfill({body:fs.readFileSync(file),contentType:name.endsWith('.js')?'application/javascript':name.endsWith('.css')?'text/css':'text/html'});
@@ -28,7 +28,7 @@ const root=path.resolve(__dirname,'..');
   if(!localStorage.getItem('vad-training-v1-vad'))localStorage.setItem('vad-training-v1-vad',JSON.stringify({programme:{},results:[],selectedWeek:42,generator:{}}));
  });
  const page=await context.newPage();page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());
- await page.goto('https://training.test/');await page.getByText('All changes uploaded',{exact:true}).waitFor();
+ await page.goto('https://rodiucov.com/');await page.getByText('All changes uploaded',{exact:true}).waitFor();
  assert.equal(await page.evaluate(()=>typeof window.Babel),'undefined');
  if(!await page.getByText('Day notes must remain visible.').isVisible())await page.getByRole('button',{name:/Tuesday/}).click();await page.getByText('Day notes must remain visible.').waitFor();console.log('PASS app load/day metadata');
  await page.locator('[data-workout-block=engine]').getByRole('button',{name:'Start workout',exact:true}).click();
@@ -71,7 +71,7 @@ const root=path.resolve(__dirname,'..');
  await page.locator('textarea').first().fill(JSON.stringify(pasted));await page.getByRole('button',{name:'Validate',exact:true}).click();await page.getByText(/invalid workSec/).waitFor();
  pasted.days[1].blocks[0].config.workSec=300;await page.locator('textarea').first().fill(JSON.stringify(pasted));await page.getByRole('button',{name:'Validate',exact:true}).click();
  await page.getByRole('button',{name:'Upload',exact:true}).click();await page.getByText('All changes uploaded',{exact:true}).waitFor();assert.equal(server.programme[42][1].notes,'Preserved notes');assert.equal(server.programme[42][1].date,'2026-10-13');
- await page.goto('https://training.test/chrono');await page.getByRole('button',{name:'Start',exact:true}).waitFor();
+ await page.goto('https://rodiucov.com/chrono');await page.getByRole('button',{name:'Start',exact:true}).waitFor();
  const standalone=page.getByRole('group',{name:'Timer controls'});for(const button of await standalone.getByRole('button').all()){const b=await button.boundingBox();assert(b.y+b.height<=740);}
  await page.screenshot({path:'/tmp/training-portrait-tested.png'});
  assert.deepEqual(errors,[]);console.log('PASS browser: production assets, portrait/landscape control bounds, logging, edit, offline/reload retry, import validation/metadata, standalone rendering; '+writes+' mock writes, zero live API writes.');

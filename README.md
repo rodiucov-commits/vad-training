@@ -73,10 +73,31 @@ delete, offline/reload retry, imports, next-block navigation and standalone rend
 It requires `BROWSER_CDP` (default http://127.0.0.1:18800); its local fixture does not
 verify production backend authorization or write semantics.
 
-### Pending backend security work
+### Backend security
 
-The legacy backend still exposes public read endpoints and accepts a shared browser
-bearer token for writes. Device-local password checks are not server authorization.
-Real server-side login/profile authorization and credential rotation require access
-to the deployed Cloudflare API Worker. Do not remove/rotate the current credential
-without coordinating backend and the agent API helper; that would break existing sync.
+Server-side authentication is implemented below. Original snapshots, settings and the previous private helper credential are backed up outside the public repository.
+
+## Server-side authentication
+
+The live API Worker is `vad-training-api` on `rodiucov.com/api/*`, backed by the D1
+`DB` binding. `backend/auth.mjs` wraps the preserved legacy handler. Public snapshot /
+programme reads and the old browser bearer credential are rejected. Website users
+have separate profile sessions using Secure, HttpOnly, SameSite=Strict cookies.
+Passwords use salted PBKDF2; sign-in attempts are throttled. Setup/recovery tokens
+are profile-bound, single-use and expire after 48 hours. Password changes revoke
+other sessions. The website must never embed the agent machine credential.
+
+Run `npm run test:auth` and `npm run test:auth-browser` (Node with `node:sqlite` and
+Chrome installed). Browser tests launch an isolated headless Chrome; they do not
+close or reuse the signed-in Cloudflare dashboard. Set CHROME_PATH for a different
+Chrome installation in the ordinary browser test.
+
+For Worker builds, `scripts/build-worker.cjs` reads a private config with only
+machine/setup hashes, never raw credentials. Preserve the original D1 and secret
+bindings when uploading. Agent API access uses a separate private machine credential
+whose SHA-256 hash is in the Worker config; the local vt.sh config holds the raw key.
+A machine-authenticated POST `/api/auth/enroll?profile=vad` (or tatka) issues a new
+private setup link without changing the existing password until that link is used.
+Health remains public; every data read/write requires a valid profile session or
+machine credential. Deploy backend and frontend together and verify anonymous 401,
+machine access, cookie/profile isolation and unchanged profile data snapshots.
