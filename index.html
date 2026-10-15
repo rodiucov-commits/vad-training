@@ -54,6 +54,35 @@
   button { font-family: inherit; }
   /* Prevent input zoom on iOS — must be 16px+ */
   input, select, textarea { font-size: 16px; }
+  /* In-workout timer: controls are never part of the scrolling workout pane. */
+  .workout-timer {
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+  .workout-timer > header, .workout-timer-modes { flex-shrink: 0; }
+  .workout-timer-layout { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .workout-timer-main { flex: 1; min-height: 0; min-width: 0; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; }
+  .workout-timer-settings, .workout-timer-wod, .workout-timer-progress { flex-shrink: 0; }
+  .workout-timer-settings > button, .workout-timer-wod > button { min-height: 44px; }
+  .workout-timer-stage { flex: 1 0 auto; display: flex; flex-direction: column; align-items: center; padding: 12px 20px; gap: 12px; }
+  .workout-timer-stage > :not(.workout-timer-ring-slot) { flex-shrink: 0; }
+  .workout-timer-ring-slot { position: relative; flex: 1 0 144px; min-height: 144px; width: 100%; display: flex; align-items: center; justify-content: center; container-type: size; }
+  .workout-timer-ring { width: min(65vw, 30vh, 320px); aspect-ratio: 1; flex-shrink: 0; }
+  @supports (width: 1cqh) { .workout-timer-ring { width: min(100cqw, 100cqh, 320px); } }
+  .workout-timer-digits { font-size: clamp(2.5rem, 12vw, 4.5rem); }
+  .workout-timer-context { text-align: center; overflow-wrap: anywhere; }
+  .workout-timer-controls { flex-shrink: 0; position: relative; z-index: 1; padding: 12px 16px; }
+  .workout-timer-controls button { flex-shrink: 0; min-height: 48px; }
+  .workout-timer[data-landscape="true"] .workout-timer-layout { flex-direction: row; }
+  .workout-timer[data-landscape="true"] .workout-timer-controls { width: 42%; max-width: 320px; min-height: 0; overflow-y: auto; }
+  .workout-timer[data-landscape="true"] .workout-timer-digits { font-size: 2.5rem; }
+  @media (max-height: 700px) {
+    .workout-timer > header { padding-top: 0; padding-bottom: 8px; }
+    .workout-timer-stage { padding-top: 8px; padding-bottom: 8px; gap: 8px; }
+    .workout-timer-controls { padding-top: 8px; padding-bottom: 8px; }
+  }
 </style>
 </head>
 <body>
@@ -588,6 +617,11 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
   const [holdRounds, setHoldRounds] = useState(initialConfig.holdRounds ?? 3);
 
   const [phase, setPhase] = useState('idle');
+  const [timerSettingsOpen, setTimerSettingsOpen] = useState(true);
+  useEffect(() => {
+    if (phase === 'running' || phase === 'prestart') setTimerSettingsOpen(false);
+    if (phase === 'idle') setTimerSettingsOpen(true);
+  }, [phase, mode]);
   const [elapsed, setElapsed] = useState(0);
   const [setIdx, setSetIdx] = useState(1);
   const [rounds, setRounds] = useState(0);
@@ -893,9 +927,10 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
     { id:'rest', label:'REST'}, { id:'amrap', label:'AMRAP'}, { id:'fortime', label:'FOR TIME'},
     { id:'emom', label:'EMOM'}, { id:'emomblocks', label:'EMOM BLOCKS'}, { id:'intervals', label:'INTERVALS'}, { id:'hold', label:'HOLD'}, { id:'stopwatch', label:'STOPWATCH'},
   ];
+  const timerConfig = renderConfig();
 
   return (
-    <div className="fixed inset-0 z-50 bg-stone-950 flex flex-col sheet-slide pt-safe pb-safe">
+    <div className="workout-timer fixed inset-0 z-50 bg-stone-950 flex flex-col sheet-slide pt-safe pb-safe" data-landscape={landscape} role="dialog" aria-modal="true" aria-label={initialConfig.workoutName || 'Workout timer'}>
       <header className="flex items-start justify-between px-4 pt-3 pb-3 border-b border-stone-900 gap-3">
         <div className="flex flex-col min-w-0 flex-1 gap-0.5">
           <span className="font-digits font-extrabold text-base tracking-tight">CHRONO</span>
@@ -910,10 +945,10 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
               <polyline points="12 6 12 12 16 14"/>
             </svg>
           </a>
-          <button onClick={onClose} className="p-2.5 rounded-full text-stone-400 tap-scale"><Icons.X size={20}/></button>
+          <button onClick={onClose} aria-label="Close timer" className="p-2.5 rounded-full text-stone-400 tap-scale"><Icons.X size={20}/></button>
         </div>
       </header>
-      <div className="flex overflow-x-auto gap-1.5 px-3 py-2.5 border-b border-stone-900 scrollbar-hide">
+      <div className="workout-timer-modes flex overflow-x-auto gap-1.5 px-3 py-2.5 border-b border-stone-900 scrollbar-hide">
         {MODES.map(m=>(
           <button key={m.id} onClick={()=>{setMode(m.id); haptic(8);}}
             className={`px-3.5 py-2 rounded-full text-[11px] font-bold uppercase tracking-[0.14em] whitespace-nowrap transition border tap-scale ${mode===m.id?'bg-stone-100 text-stone-950 border-stone-100':'border-stone-800 text-stone-500'}`}>
@@ -921,9 +956,20 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
           </button>
         ))}
       </div>
-      {renderConfig()}
+      <div className="workout-timer-layout">
+      <div className="workout-timer-main">
+      {timerConfig && (
+        <section className="workout-timer-settings border-b border-stone-900">
+          <button type="button" onClick={()=>setTimerSettingsOpen(open=>!open)}
+                  aria-expanded={timerSettingsOpen} aria-controls="workout-timer-settings"
+                  className="w-full px-4 text-left text-xs uppercase tracking-widest text-stone-400">
+            Settings · {timerSettingsOpen ? 'Hide −' : 'Show +'}
+          </button>
+          <div id="workout-timer-settings" hidden={!timerSettingsOpen}>{timerConfig}</div>
+        </section>
+      )}
       {initialConfig.workoutText && (
-        <div className="border-b border-stone-900">
+        <div className="workout-timer-wod border-b border-stone-900">
           <button onClick={()=>{setShowWod(s=>!s); haptic(5);}} className="w-full flex items-center justify-between px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-stone-500 font-bold tap-scale">
             <span>WOD</span>
             {showWod ? <Icons.ChevUp size={14}/> : <Icons.ChevDown size={14}/>}
@@ -933,19 +979,19 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
           )}
         </div>
       )}
-      <div className="h-[2px] bg-stone-900 relative overflow-hidden">
+      <div className="workout-timer-progress h-[2px] bg-stone-900 relative overflow-hidden">
         <div className={`absolute inset-y-0 left-0 ${phase==='prestart'?'bg-amber-500':'bg-red-600'} transition-all duration-75`} style={{width:`${progressPct()}%`}}/>
       </div>
-      <div className={`flex-1 flex ${landscape ? 'flex-row' : 'flex-col'} min-h-0`}>
-        <div onClick={onRoundTap} className={`flex-1 flex flex-col items-center justify-center px-5 ${landscape ? 'py-3' : 'py-6'} ${mode==='amrap'&&phase==='running'?'cursor-pointer active:bg-stone-900/50':''}`}>
-          <div className={landscape ? 'mb-2' : 'mb-5'}>
+        <div onClick={onRoundTap} className={`workout-timer-stage ${mode==='amrap'&&phase==='running'?'cursor-pointer active:bg-stone-900/50':''}`}>
+          <div>
             <span className={`inline-block px-3.5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.25em] border ${
               phase==='prestart'?'border-amber-600 text-amber-400 bg-amber-950/30 animate-pulse':
               phase==='done'?'border-red-600 text-red-500 bg-red-950/30':
               phase==='running'?'border-stone-700 text-stone-300 bg-stone-900/50':
               'border-stone-800 text-stone-500'}`}>● {phaseLbl}</span>
           </div>
-          <div className={`relative ${landscape ? 'w-48 h-48' : 'w-72 h-72 sm:w-80 sm:h-80'} flex items-center justify-center`}>
+          <div className="workout-timer-ring-slot">
+          <div className="workout-timer-ring relative flex items-center justify-center">
             <svg viewBox="0 0 320 320" className="absolute inset-0 w-full h-full" style={{transform:'rotate(-90deg)'}}>
               <circle cx="160" cy="160" r="150" fill="none" stroke="#292524" strokeWidth="7"/>
               <circle cx="160" cy="160" r="150" fill="none" stroke="url(#ringGrad)" strokeWidth="7" strokeLinecap="round"
@@ -957,10 +1003,11 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
                 </linearGradient>
               </defs>
             </svg>
-            <div className={`font-digits font-extrabold leading-none ${landscape ? 'text-4xl' : 'text-6xl sm:text-7xl'} ${accent}`}>{big}</div>
+            <div className={`workout-timer-digits font-digits font-extrabold leading-none ${accent}`}>{big}</div>
+          </div>
           </div>
           {mode==='amrap' && phase!=='prestart' && (
-            <div className={`${landscape ? 'mt-3' : 'mt-8'} flex flex-col items-center gap-2`}>
+            <div className="flex flex-col items-center gap-2">
               <div className="text-[10px] uppercase tracking-[0.25em] text-stone-500 font-bold">Rounds · tap screen</div>
               <div className="flex items-center gap-3">
                 <button onClick={(e)=>{e.stopPropagation(); setRounds(r=>Math.max(0,r-1)); haptic(5);}} className="w-12 h-12 rounded-full bg-stone-900 border border-stone-800 text-stone-400 flex items-center justify-center tap-scale"><Icons.Minus size={18}/></button>
@@ -970,10 +1017,11 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
             </div>
           )}
           {context && (mode!=='amrap' || phase==='prestart') && (
-            <div className={`${landscape ? 'mt-3' : 'mt-6'} text-xs uppercase tracking-[0.28em] font-bold ${phase==='prestart'?'text-amber-500/70':'text-stone-500'}`}>{context}</div>
+            <div className={`workout-timer-context text-xs uppercase tracking-[0.28em] font-bold ${phase==='prestart'?'text-amber-500/70':'text-stone-500'}`}>{context}</div>
           )}
         </div>
-        <div className={`${landscape ? 'border-l w-[42%] max-w-xs flex flex-col justify-center' : 'border-t'} border-stone-900 bg-stone-950 px-4 ${landscape ? 'py-3' : 'pt-4 pb-5'}`}>
+        </div>
+        <div className={`workout-timer-controls ${landscape ? 'border-l' : 'border-t'} border-stone-900 bg-stone-950`} role="group" aria-label="Workout timer controls">
           <div className={`flex ${landscape ? 'flex-col' : 'items-stretch'} gap-2`}>
             {phase==='prestart' ? (
               <button onClick={skipPrestart} className={`${landscape ? 'w-full' : 'flex-1'} bg-amber-500 text-stone-950 font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale`}><Icons.Skip size={20}/> Skip · {Math.ceil(Math.max(0, PRESTART_SEC-elapsed))}</button>
@@ -984,7 +1032,7 @@ function ChronoTimer({ initialMode='rest', initialConfig={}, onClose, onLog }) {
             ) : (
               <button onClick={start} className={`${landscape ? 'w-full' : 'flex-1'} gradient-orange text-white font-bold uppercase tracking-[0.2em] text-sm h-14 rounded-2xl flex items-center justify-center gap-2 tap-scale shadow-lg shadow-orange-900/30`}><Icons.Play size={20}/>{phase==='paused'?'Resume':phase==='done'?'Again':'Start'}</button>
             )}
-            <button onClick={fullReset} className={`${landscape ? 'w-full h-12' : 'w-14 h-14'} bg-stone-900 border border-stone-800 text-stone-400 rounded-2xl flex items-center justify-center tap-scale`}><Icons.Reset size={20}/></button>
+            <button onClick={fullReset} aria-label="Reset timer" className={`${landscape ? 'w-full h-12' : 'w-14 h-14'} bg-stone-900 border border-stone-800 text-stone-400 rounded-2xl flex items-center justify-center tap-scale`}><Icons.Reset size={20}/></button>
           </div>
           {/* DONE button — strength flow: appears during the SET phase, instantly switches to rest countdown */}
           {mode==='rest' && phase==='running' && restPhase==='set' && (
