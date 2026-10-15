@@ -1,0 +1,13 @@
+node_modules/
+src/
+scripts/
+tests/
+.git/
+.github/
+README.md
+package.json
+package-lock.json
+tailwind.config.cjs
+wrangler.jsonc
+.env*
+.dev.vars*

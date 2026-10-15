@@ -1,11 +1,11 @@
 // Source-driven component transition tests; no browser, network writes or training-data logging.
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
-const Babel=require(process.env.BABEL_STANDALONE || '/tmp/chrono-babel-7.26.4.js');
+const Babel=require(process.env.BABEL_STANDALONE || '@babel/standalone');
 const WorkoutClock=require('../timer-engine.js');
 const root=path.resolve(__dirname,'..'),cache={};let groups=0;
 function compile(kind){
  if(cache[kind])return cache[kind];
- const html=fs.readFileSync(path.join(root,kind==='workout'?'index.html':'chrono.html'),'utf8');
+ const html=fs.readFileSync(path.join(root,'src',kind==='workout'?'index.html':'chrono.html'),'utf8');
  const source=kind==='workout'?html.slice(html.indexOf('function ChronoTimer('),html.indexOf('const BLOCK_STYLE =')):html.slice(html.indexOf('function Chrono()'),html.indexOf('ReactDOM.createRoot'));
  return cache[kind]={names:[...source.matchAll(/const \[(\w+),[^\]]+\]\s*=\s*useState\(/g)].map(m=>m[1]),code:Babel.transform(source,{presets:['env','react']}).code};
 }

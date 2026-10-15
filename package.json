@@ -1,0 +1,14 @@
+{
+  "name": "vad-training",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "test": "node --test tests/training-core.cjs && node tests/timer-engine.cjs && node tests/timer-components.cjs",
+    "test:browser": "node tests/browser.cjs"
+  },
+  "devDependencies": {
+    "@babel/standalone": "7.26.4",
+    "playwright-core": "1.56.1",
+    "tailwindcss": "3.4.17"
+  }
+}

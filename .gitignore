@@ -1,5 +1,7 @@
-# wrangler files
-.wrangler
+# Local dependencies, runtime state and secrets
+node_modules/
+.wrangler/
+.DS_Store
 .dev.vars*
 !.dev.vars.example
 .env*
