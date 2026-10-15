@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0c0a09">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -45,6 +45,51 @@
   .scrollbar-hide { scrollbar-width: none; }
   .pt-safe { padding-top: calc(var(--safe-top) + 1.25rem) !important; }
   .pb-safe { padding-bottom: calc(var(--safe-bottom) + 0.5rem) !important; }
+  /* Only the middle pane scrolls: workout actions always have their own space. */
+  .chrono-shell {
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+  .chrono-shell > header, .chrono-modes, .chrono-controls { flex-shrink: 0; }
+  .chrono-main { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
+  .chrono-settings, .chrono-progress { flex-shrink: 0; }
+  .chrono-settings-toggle { min-height: 44px; }
+  .chrono-stage {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 20px;
+    gap: 12px;
+  }
+  .chrono-stage > :not(.chrono-ring-slot) { flex-shrink: 0; }
+  .chrono-ring-slot {
+    position: relative;
+    flex: 1 0 144px;
+    min-height: 144px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    container-type: size;
+  }
+  .chrono-ring { width: min(65vw, 30vh, 320px); aspect-ratio: 1; flex-shrink: 0; }
+  @supports (width: 1cqh) {
+    .chrono-ring { width: min(100cqw, 100cqh, 320px); }
+  }
+  .chrono-context { text-align: center; overflow-wrap: anywhere; }
+  .chrono-controls { position: relative; z-index: 1; padding: 12px 20px; }
+  .chrono-controls button { min-height: 48px; }
+  .chrono-rounds button { min-width: 44px; min-height: 44px; }
+  @media (max-height: 700px) {
+    .chrono-shell > header { padding-top: calc(var(--safe-top) + 0.5rem) !important; padding-bottom: 0.5rem; }
+    .chrono-modes { padding-top: 8px; padding-bottom: 8px; }
+    .chrono-stage { padding-top: 8px; padding-bottom: 8px; gap: 8px; }
+    .chrono-controls { padding-top: 8px; }
+    .chrono-summary { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -184,6 +229,11 @@ function Chrono() {
   ];
 
   const [phase, setPhase] = useState('idle'); // idle | prestart | running | paused | done
+  const [settingsOpen, setSettingsOpen] = useState(true);
+  useEffect(() => {
+    if (phase === 'running' || phase === 'prestart') setSettingsOpen(false);
+    if (phase === 'idle') setSettingsOpen(true);
+  }, [phase, mode]);
   const [elapsed, setElapsed] = useState(0);
   const [setIdx, setSetIdx] = useState(1);
   const [rounds, setRounds] = useState(0);
@@ -535,10 +585,11 @@ function Chrono() {
     return Math.min(1, Math.max(0, progressPct() / 100));
   };
   const RING_C = 2 * Math.PI * 150;
+  const config = renderConfig();
 
   return (
-    <div className="min-h-screen bg-stone-950">
-      <div className="relative max-w-md mx-auto min-h-screen flex flex-col grain">
+    <div className="bg-stone-950">
+      <div className="chrono-shell relative max-w-md mx-auto flex flex-col grain">
         <header className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-stone-900 pt-safe">
           <div className="flex items-center gap-1.5">
             <a href="/" className="p-2 -ml-2 rounded-full text-stone-400 hover:text-stone-100 hover:bg-stone-900 transition" title="Back to programme">
@@ -557,7 +608,7 @@ function Chrono() {
           </button>
         </header>
 
-        <div className="flex overflow-x-auto gap-1.5 px-4 py-3 border-b border-stone-900 scrollbar-hide">
+        <div className="chrono-modes flex overflow-x-auto gap-1.5 px-4 py-3 border-b border-stone-900 scrollbar-hide">
           {MODES.map(m => (
             <button key={m.id} onClick={() => setMode(m.id)}
               className={`px-3.5 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-[0.14em] whitespace-nowrap transition border ${
@@ -567,16 +618,26 @@ function Chrono() {
           ))}
         </div>
 
-        {renderConfig()}
+        <main className="chrono-main">
+        {config && (
+          <section className="chrono-settings border-b border-stone-900">
+            <button type="button" onClick={() => setSettingsOpen(open => !open)}
+                    aria-expanded={settingsOpen} aria-controls="timer-settings"
+                    className="chrono-settings-toggle w-full px-5 text-left text-xs uppercase tracking-widest text-stone-400">
+              Settings · {settingsOpen ? 'Hide −' : 'Show +'}
+            </button>
+            <div id="timer-settings" hidden={!settingsOpen}>{config}</div>
+          </section>
+        )}
 
-        <div className="h-px bg-stone-900 relative overflow-hidden">
+        <div className="chrono-progress h-px bg-stone-900 relative overflow-hidden">
           <div className={`absolute inset-y-0 left-0 ${phase === 'prestart' ? 'bg-amber-500' : 'bg-red-600'} transition-all duration-75`}
                style={{ width: `${progressPct()}%` }}/>
         </div>
 
         <div onClick={onRoundTap}
-             className={`flex-1 flex flex-col items-center justify-center px-5 py-10 ${mode === 'amrap' && phase === 'running' ? 'cursor-pointer active:bg-stone-900/50' : ''} transition`}>
-          <div className="mb-6">
+             className={`chrono-stage ${mode === 'amrap' && phase === 'running' ? 'cursor-pointer active:bg-stone-900/50' : ''} transition`}>
+          <div>
             <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.25em] border ${
               phase === 'prestart' ? 'border-amber-600 text-amber-400 bg-amber-950/30 animate-pulse' :
               phase === 'done' ? 'border-red-600 text-red-500 bg-red-950/30' :
@@ -585,7 +646,8 @@ function Chrono() {
             }`}>● {phaseLbl}</span>
           </div>
 
-          <div className="relative w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center">
+          <div className="chrono-ring-slot">
+          <div className="chrono-ring relative flex items-center justify-center">
             <svg viewBox="0 0 320 320" className="absolute inset-0 w-full h-full" style={{transform:'rotate(-90deg)'}}>
               <circle cx="160" cy="160" r="150" fill="none" stroke="#292524" strokeWidth="7"/>
               <circle cx="160" cy="160" r="150" fill="none" stroke="url(#ringGrad)" strokeWidth="7" strokeLinecap="round"
@@ -601,9 +663,10 @@ function Chrono() {
               {big}
             </div>
           </div>
+          </div>
 
           {mode === 'amrap' && phase !== 'prestart' && (
-            <div className="mt-10 flex flex-col items-center gap-2">
+            <div className="chrono-rounds flex flex-col items-center gap-2">
               <div className="text-[10px] uppercase tracking-[0.25em] text-stone-500">Rounds · tap screen</div>
               <div className="flex items-center gap-4">
                 <button onClick={(e) => { e.stopPropagation(); setRounds(r => Math.max(0, r - 1)); }}
@@ -616,11 +679,12 @@ function Chrono() {
           )}
 
           {context && (mode !== 'amrap' || phase === 'prestart') && (
-            <div className={`mt-8 text-xs uppercase tracking-[0.28em] font-semibold ${phase === 'prestart' ? 'text-amber-500/70' : 'text-stone-500'}`}>{context}</div>
+            <div className={`chrono-context text-xs uppercase tracking-[0.28em] font-semibold ${phase === 'prestart' ? 'text-amber-500/70' : 'text-stone-500'}`}>{context}</div>
           )}
         </div>
+        </main>
 
-        <div className="p-5 pb-8 border-t border-stone-900 bg-stone-950 pb-safe">
+        <div className="chrono-controls border-t border-stone-900 bg-stone-950 pb-safe" role="group" aria-label="Timer controls">
           <div className="flex items-stretch gap-2">
             {phase === 'prestart' ? (
               <button onClick={skipPrestart}
@@ -645,6 +709,7 @@ function Chrono() {
               </button>
             )}
             <button onClick={fullReset}
+              aria-label="Reset timer"
               className="px-5 bg-stone-900 border border-stone-800 text-stone-400 rounded-xl hover:text-stone-100 active:scale-[0.98] transition">
               <Reset size={18}/>
             </button>
@@ -657,7 +722,7 @@ function Chrono() {
             </button>
           )}
 
-          <div className="mt-3 text-center text-[10px] uppercase tracking-[0.25em] text-stone-600">
+          <div className="chrono-summary mt-3 text-center text-[10px] uppercase tracking-[0.25em] text-stone-600">
             {mode === 'rest'       && `REST · ${restSec}s × ${restSets} sets · ${PRESTART_SEC}s lead-in`}
             {mode === 'amrap'      && `AMRAP · ${amrapMin} min · ${PRESTART_SEC}s lead-in`}
             {mode === 'fortime'    && `FOR TIME · cap ${forTimeCapMin} min · ${PRESTART_SEC}s lead-in`}
