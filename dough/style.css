@@ -3,3 +3,5 @@
 .flour-total-row{background:#e6e8db}.flour-total-row td{padding-top:14px;padding-bottom:14px;border-top:2px solid #b8beaf}.flour-total-row .flour-target{text-align:left;color:var(--muted);font-size:11px}.flour-ok{padding:12px 16px;background:#e9ecdf;border-left:3px solid var(--green);font-size:12px;line-height:1.7;color:var(--green)}
 
 .dough-total-row{background:#e6e8db;font-weight:650}.dough-total-row td,.dough-total-row th{border-top:2px solid #b8beaf;padding-top:14px;padding-bottom:14px}.dough-total-row th{text-transform:none;letter-spacing:0;text-align:left;font-size:13px;color:var(--ink)}.preferment-feed td,.final-mix-table td{font-variant-numeric:tabular-nums}
+
+.pizza-batch{border-color:#aab69d}.pizza-batch h2{color:var(--green)}.pizza-yield{font:23px var(--serif);color:var(--green);line-height:1.5}.pizza-batch .controls{margin-bottom:16px}.pizza-batch .field input{width:170px}@media(max-width:560px){.pizza-batch .field input{width:130px}}

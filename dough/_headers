@@ -8,3 +8,12 @@
   Cache-Control: no-cache
 /workbook.json
   Cache-Control: public, max-age=0, must-revalidate
+
+/app.js
+  Cache-Control: no-cache
+/recipes.js
+  Cache-Control: no-cache
+/pizza.js
+  Cache-Control: no-cache
+/style.css
+  Cache-Control: no-cache
