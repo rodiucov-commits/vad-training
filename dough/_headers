@@ -17,3 +17,6 @@
   Cache-Control: no-cache
 /style.css
   Cache-Control: no-cache
+
+/version.json
+  Cache-Control: no-store
