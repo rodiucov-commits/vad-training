@@ -13,3 +13,7 @@ From this directory: `python3 -m http.server 8876`. No dependencies or build req
 User inputs and notes are local to each browser. Export/import backups support moving them; sharing includes the current sheet's input overrides and batch multiplier, never notes. No authentication, analytics or API backend. The service worker caches the static app for offline use after the initial visit. Changes to public recipe defaults require a source commit.
 
 The original extraction script and attachment remain in the agent workspace under `projects/dough-calculator`. The workbook itself is not published. Browser checks covered every recipe at 390px width, desktop rendering, percent input, worksheet editing, persistence, scaling with non-gram units, export and offline reload.
+
+## Dough-temperature calculator
+
+`temperature.js` implements the standard bakery factor method. Straight dough: water = 3 × desired dough − flour − room − friction. With preferment: use 4 factors and subtract preferment temperature too. Calibration reverses that relationship using measured finished dough and actual mixing water. All internal calculations use °C; friction converts as a temperature difference, not an absolute temperature. The default 6°C friction is an editable estimate. Temperature settings use separate local storage and are not included in recipe exports. Run `node tests/temperature.mjs` for pure calculation and unit-conversion checks.
