@@ -12,3 +12,4 @@ wrangler.jsonc
 .env*
 .dev.vars*
 backend/
+dough/
