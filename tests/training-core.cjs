@@ -57,3 +57,12 @@ test('Manual browsing survives same-day reload but Today and a new day use progr
  assert.equal(C.selectCurrentWeek(manual,now,true).selectedWeek,1);
  assert.equal(C.selectCurrentWeek(manual,new Date(2026,9,23,12)).selectedWeek,1);
 });
+test('Repeated weekly guidance is shown once without losing day-specific instructions',()=>{
+ const shared='Programme guidance: use the appropriate modifications and respect the prescribed progression. Stop if symptoms worsen.';
+ const days={0:{notes:shared+' Monday: rest three minutes.',blocks:[{}]},3:{notes:shared+' Thursday: complete both sides.',blocks:[{}]}};
+ const original=JSON.stringify(days),out=C.programmeNotes(days);
+ assert.equal(out.shared,shared);assert.equal(out.dayNotes[0],'Monday: rest three minutes.');assert.equal(out.dayNotes[3],'Thursday: complete both sides.');assert.equal(JSON.stringify(days),original);
+ assert.equal(C.programmeNotes({0:days[0]}).shared,'');
+ assert.equal(C.programmeNotes({0:days[0],1:{notes:'Different important instruction',blocks:[{}]}}).shared,'');
+ assert.equal(C.programmeNotes({0:{notes:shared,blocks:[{}]},1:{notes:shared,blocks:[{}]}}).dayNotes[1],'');
+});

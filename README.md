@@ -72,6 +72,9 @@ Seasonal programme Week 1 can therefore correspond to calendar week 43. Opening 
 syncing the app corrects old cached selections; manual week browsing is retained for
 the current day. “Jump to current week” always resolves the dated programme, including
 rest days. Navigation does not renumber programmes or change logged results.
+Verbatim guidance repeated at the start of every day's notes is displayed once in a
+collapsed weekly “Programme guidance & safety” note. Day-specific instructions remain
+visible in their day cards; original programme text and exercise notes are unchanged.
 
 The browser fixture intercepts **every** network request and uses a fake backend. It
 checks all eight workout modes in portrait/landscape with safe-area padding, save/edit/

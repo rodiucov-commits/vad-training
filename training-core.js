@@ -73,6 +73,16 @@ function selectCurrentWeek(data,now=new Date(),force=false){
  if(!force&&data._weekSelectionMode==='manual'&&data._weekSelectionDate===today)return data;
  return {...data,selectedWeek:currentProgrammeWeek(data.programme,now),_weekSelectionMode:'auto',_weekSelectionDate:today};
 }
+function programmeNotes(days={}){
+ const entries=Object.entries(days).filter(([,d])=>d?.blocks?.length),dayNotes=Object.fromEntries(entries.map(([k,d])=>[k,String(d.notes||'').trim()]));
+ if(entries.length<2)return {shared:'',dayNotes};
+ const notes=Object.values(dayNotes);let prefix=notes[0];
+ for(const note of notes.slice(1)){let i=0;while(i<prefix.length&&prefix[i]===note[i])i++;prefix=prefix.slice(0,i);}
+ // Move only complete, verbatim sentences shared by every scheduled day.
+ const end=prefix.lastIndexOf('. '),shared=notes.every(n=>n===prefix)?prefix:end>=0?prefix.slice(0,end+1):'';
+ if(shared.length<80)return {shared:'',dayNotes};
+ return {shared,dayNotes:Object.fromEntries(Object.entries(dayNotes).map(([k,n])=>[k,n.slice(shared.length).trim()]))};
+}
 function parseTime(text){
  if(typeof text==='number'&&Number.isFinite(text)&&text>=0)return text;
  if(!/^\d+(?::[0-5]\d){0,2}$/.test(String(text).trim()))throw Error('Time must be seconds, mm:ss or hh:mm:ss');
@@ -111,6 +121,6 @@ function reconcile(local,snap,jobs=[]){
  return {...local,programme,results:[...results.values()].sort((a,b)=>new Date(b.date)-new Date(a.date)),generator:jobs.some(j=>j.kind==='generator')?local.generator:(snap.generator||local.generator),
   _serverWeeks:Object.keys(snap.programme||{}),_serverResultIds:server.map(r=>r.id)};
 }
-const api={block,day,programme,exerciseKey,metric,isoWeek,weekDate,localDate,currentProgrammeWeek,selectCurrentWeek,parseTime,outbox,reconcile,uuid};
+const api={block,day,programme,exerciseKey,metric,isoWeek,weekDate,localDate,currentProgrammeWeek,selectCurrentWeek,programmeNotes,parseTime,outbox,reconcile,uuid};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;root.TrainingCore=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

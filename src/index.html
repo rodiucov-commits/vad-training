@@ -108,7 +108,7 @@ if (location.hostname === 'www.rodiucov.com') {
 <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
 <script src="/timer-engine.js?v=20261015-logic1"></script>
-<script src="/training-core.js?v=20261022-dated-weeks1"></script>
+<script src="/training-core.js?v=20261022-week-notes1"></script>
 
 <script type="text/babel" data-presets="react" data-runtime="classic">
 const { useState, useEffect, useRef, useMemo } = React;
@@ -849,7 +849,7 @@ const formatResult = (r) => {
 const DAY_NAMES = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 const DAY_SHORT = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 
-const DayCard = ({ day, dayIdx, week, onStartBlock, results, defaultOpen }) => {
+const DayCard = ({ day, dayIdx, week, onStartBlock, results, defaultOpen, displayNotes = day.notes }) => {
   const [open, setOpen] = useState(defaultOpen);
   const haptic = useHaptic();
   const blockCount = day.blocks?.length || 0;
@@ -870,7 +870,7 @@ const DayCard = ({ day, dayIdx, week, onStartBlock, results, defaultOpen }) => {
       </button>
       {open && (
         <div className="px-3 pb-3">
-          {day.notes && <p className="text-sm text-amber-200 mb-3 whitespace-pre-line">{day.notes}</p>}
+          {displayNotes && <p className="text-sm text-amber-200 mb-3 whitespace-pre-line">{displayNotes}</p>}
           {day.blocks.map((b) => {
             const last = results.filter(r => r.blockId === b.id).sort((a,c) => c.date.localeCompare(a.date))[0];
             return <BlockCard key={b.id} block={b} onStart={() => onStartBlock(b)} lastResult={last}/>;
@@ -1133,6 +1133,7 @@ const ProgrammingView = ({ data, setData, openTimer, cloudActions }) => {
   const haptic = useHaptic();
   const week = data.selectedWeek;
   const programmeWeek = data.programme[week] || {};
+  const weekNotes = TrainingCore.programmeNotes(programmeWeek);
   const programmedDayIdx = Object.keys(programmeWeek)
     .map(k => +k)
     .filter(i => programmeWeek[i]?.blocks?.length > 0)
@@ -1187,6 +1188,10 @@ const ProgrammingView = ({ data, setData, openTimer, cloudActions }) => {
       </div>
 
       <button className="mb-3 text-sm text-orange-300 underline" onClick={()=>setData(TrainingCore.selectCurrentWeek(data,new Date(),true))}>Jump to current week</button>
+      {weekNotes.shared && <details key={week} className="mb-4 rounded-xl border border-stone-800 bg-stone-900/30 px-4 py-3">
+        <summary className="text-sm text-stone-300 font-semibold cursor-pointer">Programme guidance &amp; safety</summary>
+        <p className="text-sm text-stone-400 whitespace-pre-line mt-3">{weekNotes.shared}</p>
+      </details>}
       {/* Action row */}
       <div className="grid grid-cols-2 gap-2 mb-5">
         <button onClick={()=>fileRef.current.click()} className="bg-stone-900 border border-stone-800 rounded-xl h-11 text-stone-200 flex items-center justify-center gap-2 tap-scale font-semibold text-sm">
@@ -1212,6 +1217,7 @@ const ProgrammingView = ({ data, setData, openTimer, cloudActions }) => {
               key={i}
               week={week}
               day={programmeWeek[i]}
+              displayNotes={weekNotes.dayNotes[i]}
               dayIdx={i}
               defaultOpen={i === todayIdx || programmedDayIdx.length === 1}
               results={data.results}
