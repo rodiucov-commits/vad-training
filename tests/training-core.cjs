@@ -37,3 +37,23 @@ test('Charts compare workout-specific scores, not prescribed duration',()=>{
 test('Calendar and editable result times use explicit valid formats',()=>{
  assert.deepEqual(C.isoWeek(new Date('2026-10-15T12:00:00Z')),{year:2026,week:42});assert.equal(C.weekDate(42,1,2026),'2026-10-13');assert.equal(C.parseTime('06:29'),389);assert.equal(C.parseTime('1:02:03'),3723);assert.throws(()=>C.parseTime('02:99'));
 });
+test('Dated programme weeks beat legacy ISO slots, including rest days and year rollover',()=>{
+ const programmes={1:{0:{date:'2026-10-19'},3:{date:'2026-10-22'}},2:{0:{date:'2026-10-26'}},43:{3:{title:'Old strength'}}};
+ assert.equal(C.currentProgrammeWeek(programmes,new Date(2026,9,22,12)),1);
+ assert.equal(C.currentProgrammeWeek(programmes,new Date(2026,9,25,12)),1);
+ assert.equal(C.currentProgrammeWeek(programmes,new Date(2026,9,26,12)),2);
+ assert.equal(C.currentProgrammeWeek({12:{0:{date:'2026-12-28'}}},new Date(2027,0,1,12)),12);
+ assert.equal(C.currentProgrammeWeek({42:{}},new Date(2026,9,15,12)),42);
+});
+test('A stale cached week is corrected again when dated cloud data arrives',()=>{
+ const now=new Date(2026,9,22,12),local=C.selectCurrentWeek({programme:{43:{}},selectedWeek:43,results:[{id:'saved'}]},now);
+ const snap={programme:{1:{3:{date:'2026-10-22'}}},results:[{id:'saved'}]};
+ const current=C.selectCurrentWeek(C.reconcile(local,snap),now);
+ assert.equal(current.selectedWeek,1);assert.deepEqual(current.results,[{id:'saved'}]);assert.equal(current.programme[43]!=null,true);
+});
+test('Manual browsing survives same-day reload but Today and a new day use programme dates',()=>{
+ const now=new Date(2026,9,22,12),manual={programme:{1:{0:{date:'2026-10-19'}}},selectedWeek:2,_weekSelectionMode:'manual',_weekSelectionDate:'2026-10-22'};
+ assert.equal(C.selectCurrentWeek(manual,now).selectedWeek,2);
+ assert.equal(C.selectCurrentWeek(manual,now,true).selectedWeek,1);
+ assert.equal(C.selectCurrentWeek(manual,new Date(2026,9,23,12)).selectedWeek,1);
+});

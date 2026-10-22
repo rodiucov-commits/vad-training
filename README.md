@@ -67,6 +67,12 @@ load/reps, effort, notes and per-round scores. Planned load is not silently reco
 actual load. Current-week navigation, dated days, day instructions and next-block
 navigation are available.
 
+Current-week selection prefers explicit workout dates over ISO-numbered legacy slots.
+Seasonal programme Week 1 can therefore correspond to calendar week 43. Opening or
+syncing the app corrects old cached selections; manual week browsing is retained for
+the current day. “Jump to current week” always resolves the dated programme, including
+rest days. Navigation does not renumber programmes or change logged results.
+
 The browser fixture intercepts **every** network request and uses a fake backend. It
 checks all eight workout modes in portrait/landscape with safe-area padding, save/edit/
 delete, offline/reload retry, imports, next-block navigation and standalone rendering.

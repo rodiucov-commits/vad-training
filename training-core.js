@@ -58,6 +58,21 @@ function isoWeek(now=new Date()){
  const year=d.getUTCFullYear();return {year,week:Math.ceil((((d-new Date(Date.UTC(year,0,1)))/86400000)+1)/7)};
 }
 function weekDate(week,day,year=isoWeek().year){const d=new Date(Date.UTC(year,0,4));d.setUTCDate(d.getUTCDate()-(d.getUTCDay()||7)+1+(Number(week)-1)*7+Number(day));return d.toISOString().slice(0,10);}
+function localDate(now=new Date()){return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;}
+function currentProgrammeWeek(programmes={},now=new Date()){
+ const calendar=isoWeek(now),start=weekDate(calendar.week,0,calendar.year),end=weekDate(calendar.week,6,calendar.year),today=localDate(now);
+ const matches=Object.entries(programmes).flatMap(([week,days])=>{
+  const dates=Object.values(days||{}).map(d=>d?.date).filter(d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&d>=start&&d<=end).sort();
+  return dates.length?[{week:Number(week),exact:dates.includes(today),first:dates[0]}]:[];
+ });
+ matches.sort((a,b)=>Number(b.exact)-Number(a.exact)||a.first.localeCompare(b.first)||a.week-b.week);
+ return matches[0]?.week??calendar.week;
+}
+function selectCurrentWeek(data,now=new Date(),force=false){
+ const today=localDate(now);
+ if(!force&&data._weekSelectionMode==='manual'&&data._weekSelectionDate===today)return data;
+ return {...data,selectedWeek:currentProgrammeWeek(data.programme,now),_weekSelectionMode:'auto',_weekSelectionDate:today};
+}
 function parseTime(text){
  if(typeof text==='number'&&Number.isFinite(text)&&text>=0)return text;
  if(!/^\d+(?::[0-5]\d){0,2}$/.test(String(text).trim()))throw Error('Time must be seconds, mm:ss or hh:mm:ss');
@@ -96,6 +111,6 @@ function reconcile(local,snap,jobs=[]){
  return {...local,programme,results:[...results.values()].sort((a,b)=>new Date(b.date)-new Date(a.date)),generator:jobs.some(j=>j.kind==='generator')?local.generator:(snap.generator||local.generator),
   _serverWeeks:Object.keys(snap.programme||{}),_serverResultIds:server.map(r=>r.id)};
 }
-const api={block,day,programme,exerciseKey,metric,isoWeek,weekDate,parseTime,outbox,reconcile,uuid};
+const api={block,day,programme,exerciseKey,metric,isoWeek,weekDate,localDate,currentProgrammeWeek,selectCurrentWeek,parseTime,outbox,reconcile,uuid};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;root.TrainingCore=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

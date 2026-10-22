@@ -28,6 +28,7 @@ const root=path.resolve(__dirname,'..');
   if(!localStorage.getItem('vad-training-v1-vad'))localStorage.setItem('vad-training-v1-vad',JSON.stringify({programme:{},results:[],selectedWeek:42,generator:{}}));
  });
  const page=await context.newPage();page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());
+ await page.clock.setFixedTime(new Date('2026-10-13T12:00:00+02:00'));
  await page.goto('https://rodiucov.com/');await page.getByText('All changes uploaded',{exact:true}).waitFor();
  assert.equal(await page.evaluate(()=>typeof window.Babel),'undefined');
  if(!await page.getByText('Day notes must remain visible.').isVisible())await page.getByRole('button',{name:/Tuesday/}).click();await page.getByText('Day notes must remain visible.').waitFor();console.log('PASS app load/day metadata');

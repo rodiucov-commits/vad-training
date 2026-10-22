@@ -108,7 +108,7 @@ if (location.hostname === 'www.rodiucov.com') {
 <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
 <script src="/timer-engine.js?v=20261015-logic1"></script>
-<script src="/training-core.js?v=20261015-upgrade1"></script>
+<script src="/training-core.js?v=20261022-dated-weeks1"></script>
 
 <script type="text/babel" data-presets="react" data-runtime="classic">
 const { useState, useEffect, useRef, useMemo } = React;
@@ -264,7 +264,7 @@ const seedData = () => ({
     perWeek: 3, weeks: 4, startWeek: 1,
     focus: 'General Fitness', intensity: 'Moderate',
   },
-  selectedWeek: 18,
+  selectedWeek: TrainingCore.isoWeek().week,
 });
 const loadData = (profile) => {
   try {
@@ -280,7 +280,7 @@ const loadData = (profile) => {
       if (raw) localStorage.setItem(k, raw);
     }
     if (!raw) return seedData();
-    return { ...seedData(), ...JSON.parse(raw) };
+    return TrainingCore.selectCurrentWeek({ ...seedData(), ...JSON.parse(raw) });
   } catch { return seedData(); }
 };
 const saveData = (profile, d) => localStorage.setItem(dataKey(profile), JSON.stringify(d));
@@ -992,6 +992,8 @@ const ImportView = ({ data, setData, cloudActions, onViewWeek }) => {
       daysToPush = merged;
     }
     next.selectedWeek = weekNum;
+    next._weekSelectionMode = 'manual';
+    next._weekSelectionDate = TrainingCore.localDate();
     if (setData(next)===false) return;
     const queued=cloudActions?.programmeUploaded(weekNum, daysToPush);
     haptic([15,40,15]);
@@ -1138,7 +1140,7 @@ const ProgrammingView = ({ data, setData, openTimer, cloudActions }) => {
   // Auto-detect today's day to open it by default
   const todayIdx = (new Date().getDay() + 6) % 7; // mon=0
 
-  const setWeek = (n) => { haptic(5); setData({...data, selectedWeek: Math.max(1,Math.min(53,n))}); };
+  const setWeek = (n) => { haptic(5); setData({...data, selectedWeek: Math.max(1,Math.min(53,n)), _weekSelectionMode:'manual', _weekSelectionDate:TrainingCore.localDate()}); };
   const handleUpload = (e) => {
     const file = e.target.files?.[0]; if (!file) return;
     const reader = new FileReader();
@@ -1150,6 +1152,8 @@ const ProgrammingView = ({ data, setData, openTimer, cloudActions }) => {
         const next = JSON.parse(JSON.stringify(data));
         next.programme[targetWeek] = { ...json.days };
         next.selectedWeek = targetWeek;
+        next._weekSelectionMode = 'manual';
+        next._weekSelectionDate = TrainingCore.localDate();
         if (setData(next)===false) return;
         cloudActions?.programmeUploaded(targetWeek, json.days);
         const dayCount = Object.values(json.days || {}).filter(d => d?.blocks?.length > 0).length;
@@ -1176,13 +1180,13 @@ const ProgrammingView = ({ data, setData, openTimer, cloudActions }) => {
         <button aria-label="Previous week" onClick={()=>setWeek(week-1)} className="w-11 h-11 bg-stone-900 border border-stone-800 rounded-xl text-stone-400 flex items-center justify-center tap-scale shrink-0"><Icons.Minus size={18}/></button>
         <div className="flex-1 h-11 bg-stone-900 border border-stone-800 rounded-xl flex items-center justify-center gap-2">
           <Icons.Calendar size={14} className="text-orange-500"/>
-          <span className="text-stone-400 text-xs uppercase tracking-wider font-bold">Week</span>
+          <span className="text-stone-400 text-xs uppercase tracking-wider font-bold">Programme week</span>
           <span className="font-digits font-extrabold text-stone-100 text-lg">{week}</span>
         </div>
         <button aria-label="Next week" onClick={()=>setWeek(week+1)} className="w-11 h-11 bg-stone-900 border border-stone-800 rounded-xl text-stone-400 flex items-center justify-center tap-scale shrink-0"><Icons.Plus size={18}/></button>
       </div>
 
-      <button className="mb-3 text-sm text-orange-300 underline" onClick={()=>setWeek(TrainingCore.isoWeek().week)}>Jump to current week</button>
+      <button className="mb-3 text-sm text-orange-300 underline" onClick={()=>setData(TrainingCore.selectCurrentWeek(data,new Date(),true))}>Jump to current week</button>
       {/* Action row */}
       <div className="grid grid-cols-2 gap-2 mb-5">
         <button onClick={()=>fileRef.current.click()} className="bg-stone-900 border border-stone-800 rounded-xl h-11 text-stone-200 flex items-center justify-center gap-2 tap-scale font-semibold text-sm">
@@ -1659,7 +1663,7 @@ function App() {
         if (cancelled) return;
         const local = loadData(profile);
         const jobs=outbox?.list()||[];
-        const merged_data=TrainingCore.reconcile(local,snap,jobs);
+        const merged_data=TrainingCore.selectCurrentWeek(TrainingCore.reconcile(local,snap,jobs));
         saveData(profile,merged_data);setDataRaw(merged_data);
         const known=new Set((snap.results||[]).map(r=>r.id));
         const previouslyKnown=new Set(local._serverResultIds||[]);
@@ -1690,7 +1694,7 @@ function App() {
     try {
       await outbox?.flush();
       const snap=await cloud.snapshot(),local=loadData(profile);
-      if(setData(TrainingCore.reconcile(local,snap,outbox?.list()||[]))===false)return;
+      if(setData(TrainingCore.selectCurrentWeek(TrainingCore.reconcile(local,snap,outbox?.list()||[])))===false)return;
       setSync(outbox?.list().length?'offline':'synced');
       alert(`Resynced ${meta.name} from cloud.`);
     } catch (e) {
