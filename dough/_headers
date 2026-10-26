@@ -20,3 +20,8 @@
 
 /version.json
   Cache-Control: no-store
+
+/pizzalovers.js
+  Cache-Control: no-cache
+/pizzalovers.css
+  Cache-Control: no-cache
