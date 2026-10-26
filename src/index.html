@@ -1192,6 +1192,31 @@ const ProgrammingView = ({ data, setData, openTimer, cloudActions }) => {
         <summary className="text-sm text-stone-300 font-semibold cursor-pointer">Programme guidance &amp; safety</summary>
         <p className="text-sm text-stone-400 whitespace-pre-line mt-3">{weekNotes.shared}</p>
       </details>}
+      {Number(week) >= 2 && Number(week) <= 24 && Object.values(programmeWeek).some(d => d.date >= '2026-10-26' && d.date <= '2027-03-31' && d.blocks?.some(b => /_triple_/.test(b.id))) && (
+        <section aria-label="Winter training overview" className="mb-4 rounded-2xl border border-orange-900/50 bg-stone-900/40 p-4 text-sm text-stone-300">
+          <h2 className="font-bold text-stone-100">Winter · Triple AMRAPs, focused strength</h2>
+          <p className="text-xs text-stone-400 mt-1">26 October 2026 – 31 March 2027 · Europe/Zurich</p>
+          <ul className="mt-3 space-y-1">
+            <li>Monday: 60 minutes total · 5 easy + 50 steady + 5 easy.</li>
+            <li>Tuesday: upper strength. Thursday: lower strength + core.</li>
+            <li>Wednesday / Friday: 12 min A → 3 easy → 12 min B → 3 easy → 12 min C.</li>
+            <li>42-minute WOD + 10 warm-up + 5 cooldown = 57 minutes. No recovery after C.</li>
+            <li>Repeat only the current AMRAP’s two movements; log A, B and C separately.</li>
+            <li>Saturday / Sunday: rest. Final week ends Wednesday 31 March.</li>
+          </ul>
+          <details key={'winter-'+week} className="mt-3">
+            <summary className="cursor-pointer font-semibold text-orange-300">Progression, scaling &amp; readiness</summary>
+            <div className="mt-3 space-y-3 text-xs leading-relaxed text-stone-400">
+              <p>Main lifts: bench, strict pull-up, squat and Romanian deadlift. Build weeks alternate controlled triples / 120 sec rest and lighter fives / 90 sec. Keep separate triple and five loads; never automatically copy the triple load to fives. Retain about 2 good reps (2–3 in entry week). After two successful non-deload exposures at that target and rest, add roughly 2–5% to that target only; keep the load if the available increment is too large. Reduce load or extend recovery if quality deteriorates. These shorter rests are a requested adaptation, not Galpin’s original 3–5-minute default.</p>
+              <p>Easy weeks: 4, 8, 12, 16, 20 and 24. First four strength exercises only, 2 lighter sets; main lifts use fives / 90 sec, roughly 10–15% below usual five-rep load, with at least 4 good reps left. They do not advance the build-week alternation or count toward load progression. Entry week 2 and March weeks 21–23 use the reduced set counts shown in each card.</p>
+              <p>Assistance keeps its own reps and rests, including both sides before resting. Weeks 2–6 and 13–18 use the base assistance; weeks 7–12 and 19–24 rotate to low-incline DB press, ring row, supinated curl, supported DB split squat, loaded glute bridge and reverse crunch. Lateral / calf raises stay. Follow the card’s reduced set counts. Build to the top of the accessory rep range at 2–3 reps in reserve, then add a small load; fixed 8-rep lunges / split squats increase after two controlled exposures.</p>
+              <p>Wednesday: 5–6/10. Friday: 6–7/10 (entry about 6; March 5–6). Recovery WODs: 3–4/10, same clock, easier movements; recovery Mondays 2–3/10. Improve pacing or work at the same effort, not weight, reps and speed together. Keep scales consistent for comparisons. Low unloaded steps; step-back burpees without a jump, with a stable bench if needed; more upright ring rows, incline push-ups, or marching instead of rope. Unavailable machines may become comfortable cycling / walking for similar time and effort, not assumed calorie equivalence. Follow the specific alternatives in each card.</p>
+              <p>Loaded work and vigorous conditioning require appropriate assessment and return-to-training guidance. If an earlier injury remains unresolved or unassessed, use only comfortable easy activity within current guidance. Stop injury-provoking movement; substitutions are not medical clearance. Shorten or stop if fatigue, illness or symptoms require it. Reduce Wednesday density if it compromises Thursday; scale Friday after leg fatigue. Do not double missed sessions; after a week away, return easier. A hard CrossFit class replaces a WOD. In April, one WOD may become longer outdoor easy cardio while retaining two strength days.</p>
+            </div>
+          </details>
+          <p className="mt-3 text-[10px] text-stone-500">Adapted from Andy Galpin's strength principles and CrossFit training principles; not an official or personally prescribed programme.</p>
+        </section>
+      )}
       {/* Action row */}
       <div className="grid grid-cols-2 gap-2 mb-5">
         <button onClick={()=>fileRef.current.click()} className="bg-stone-900 border border-stone-800 rounded-xl h-11 text-stone-200 flex items-center justify-center gap-2 tap-scale font-semibold text-sm">
