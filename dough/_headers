@@ -32,3 +32,8 @@
   Cache-Control: no-cache
 /hamelman.css
   Cache-Control: no-cache
+
+/hamelman-sourdough.js
+  Cache-Control: no-cache
+/hamelman-sourdough.json
+  Cache-Control: no-cache
