@@ -37,3 +37,10 @@
   Cache-Control: no-cache
 /hamelman-sourdough.json
   Cache-Control: no-cache
+
+/access.js
+  Cache-Control: no-cache
+/access.css
+  Cache-Control: no-cache
+/owner-auth.js
+  Cache-Control: no-cache

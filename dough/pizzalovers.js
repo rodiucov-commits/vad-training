@@ -66,11 +66,11 @@ function instructions(s,r){
     ['Bulk fermentation',`Cover for 1–2 h at ${room}.`],['Shape',balls],['Final proof','Proof for 4–6 h at room temperature, or refrigerate overnight and warm for 2 h before baking.'],['Bake',`Bake at ${p.oven} for 60–120 seconds.`]
   ];
 }
-export function mountPizzaLovers(recipe,{toast}){
-  const host=document.querySelector('#app'),all=load();let state=validState(recipe.preset,all[recipe.preset]?.state),note=typeof all[recipe.preset]?.note==='string'?all[recipe.preset].note:'';
-  const q=location.hash.split('?')[1];if(q){const params=new URLSearchParams(q),raw={};for(const k of Object.keys(limits))if(params.has(k))raw[k]=Number(params.get(k));for(const k of ['y','w'])if(params.has(k))raw[k]=params.get(k);state=validState(recipe.preset,raw);history.replaceState(null,'','#recipe/'+recipe.id)}
+export function mountPizzaLovers(recipe,{toast,readOnly=false}){
+  const host=document.querySelector('#app'),all=readOnly?{}:load();let state=validState(recipe.preset,all[recipe.preset]?.state),note=typeof all[recipe.preset]?.note==='string'?all[recipe.preset].note:'';
+  const q=location.hash.split('?')[1];if(q&&!readOnly){const params=new URLSearchParams(q),raw={};for(const k of Object.keys(limits))if(params.has(k))raw[k]=Number(params.get(k));for(const k of ['y','w'])if(params.has(k))raw[k]=params.get(k);state=validState(recipe.preset,raw);history.replaceState(null,'','#recipe/'+recipe.id)}
   const p=presets[recipe.preset];
-  const save=()=>{all[recipe.preset]={state,note};try{localStorage.setItem(key,JSON.stringify(all))}catch{toast('Storage unavailable. Export the pizza backup to keep your changes.')}};
+  const save=()=>{if(readOnly)return;all[recipe.preset]={state,note};try{localStorage.setItem(key,JSON.stringify(all))}catch{toast('Storage unavailable. Export the pizza backup to keep your changes.')}};
   const shareURL=()=>location.origin+location.pathname+'#recipe/'+recipe.id+'?'+new URLSearchParams(Object.entries(state).filter(([k])=>k!=='p'));
   const input=(k,label,step=1)=>`<label class="field" for="pl-${k}">${label}<input id="pl-${k}" data-pl-input="${k}" type="number" min="${limits[k][0]}" max="${limits[k][1]}" step="${step}" value="${state[k]}" required></label>`;
   function shell(){

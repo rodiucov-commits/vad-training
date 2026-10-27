@@ -36,10 +36,10 @@ export function calculate(r,s){
   return {total,mass,basis,water,hydration:basis?water/basis*100:0,other:mass-basis-water,basisPercent:total.filter(i=>r.basis.includes(i.name)).reduce((a,i)=>a+i.percent,0),builds,final:finalRows,finalMass,complete,ready:complete&&!negative.length,warnings};
 }
 function load(){try{const data=JSON.parse(localStorage.getItem(key)||'{}');return data&&typeof data==='object'&&!Array.isArray(data)?data:{}}catch{return {}}}
-export function mountHamelman(recipe,{toast}){
-  const r=recipe.record,host=document.querySelector('#app'),all=load();let state=validState(r,all[r.id]?.state),note=typeof all[r.id]?.note==='string'?all[r.id].note:'';
-  const query=location.hash.split('?')[1];if(query){const q=new URLSearchParams(query),raw={};if(q.has('f'))raw.flour=Number(q.get('f'));if(q.has('n'))raw.pieces=Number(q.get('n'));if(q.has('p'))raw.pref=q.get('p')===''?null:Number(q.get('p'));if(q.has('pc'))raw.percent=q.get('pc').split(',').map(Number);state=validState(r,raw);history.replaceState(null,'','#recipe/'+r.id)}
-  const save=()=>{all[r.id]={state,note};try{localStorage.setItem(key,JSON.stringify(all))}catch{toast('Storage unavailable. Export a Hamelman backup to keep your changes.')}};
+export function mountHamelman(recipe,{toast,readOnly=false}){
+  const r=recipe.record,host=document.querySelector('#app'),all=readOnly?{}:load();let state=validState(r,all[r.id]?.state),note=typeof all[r.id]?.note==='string'?all[r.id].note:'';
+  const query=location.hash.split('?')[1];if(query&&!readOnly){const q=new URLSearchParams(query),raw={};if(q.has('f'))raw.flour=Number(q.get('f'));if(q.has('n'))raw.pieces=Number(q.get('n'));if(q.has('p'))raw.pref=q.get('p')===''?null:Number(q.get('p'));if(q.has('pc'))raw.percent=q.get('pc').split(',').map(Number);state=validState(r,raw);history.replaceState(null,'','#recipe/'+r.id)}
+  const save=()=>{if(readOnly)return;all[r.id]={state,note};try{localStorage.setItem(key,JSON.stringify(all))}catch{toast('Storage unavailable. Export a Hamelman backup to keep your changes.')}};
   const shareURL=()=>location.origin+location.pathname+'#recipe/'+r.id+(r.overall.length?'?'+new URLSearchParams({f:state.flour,n:state.pieces,p:state.pref??'',pc:state.percent.join(',')}):'');
   const field=(id,label,value,min,max,step='any')=>`<label class="field">${label}<input id="hm-${id}" data-hm-field="${id}" type="number" min="${min}" max="${max}" step="${step}" value="${value??''}"></label>`;
   function shell(){
