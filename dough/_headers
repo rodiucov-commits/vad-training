@@ -25,3 +25,10 @@
   Cache-Control: no-cache
 /pizzalovers.css
   Cache-Control: no-cache
+
+/hamelman.js
+  Cache-Control: no-cache
+/hamelman.json
+  Cache-Control: no-cache
+/hamelman.css
+  Cache-Control: no-cache
