@@ -8,4 +8,4 @@ for(const withPreferment of [false,true])for(const actual of [20,24,28])for(cons
  const water=doughTemperature(values).value;
  assert.ok(Math.abs(doughTemperature({...values,water,mode:'friction'}).value-friction)<1e-10);
 }
-console.log('PASS 162 reverse-calibration cases; hidden inactive fields do not block valid calculations');
+console.log('PASS 54 reverse-calibration cases; hidden inactive fields do not block valid calculations');
