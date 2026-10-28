@@ -1,12 +1,12 @@
-import {isOwner,publicView,initAccess} from './access.js?v=public-ddt-1';
+import {isOwner,publicView,initAccess} from './access.js?v=public-ddt-2';
 import {Workbook,column,letters} from './engine.js';
-import {recipes as workbookRecipes} from './recipes.js?v=public-ddt-1';
+import {recipes as workbookRecipes} from './recipes.js?v=public-ddt-2';
 import {pizzaLoversRecipes,mountPizzaLovers} from './pizzalovers.js';
-import {loadHamelman,mountHamelman} from './hamelman.js?v=public-ddt-1';
+import {loadHamelman,mountHamelman} from './hamelman.js?v=public-ddt-2';
 const recipes=[...workbookRecipes,...pizzaLoversRecipes];
 import {createPizzaSheets,seedBuild} from './pizza.js';
-import {mountDDT} from './ddt.js?v=public-ddt-1';
-const APP_RELEASE='public-ddt-1';
+import {mountDDT} from './ddt.js?v=public-ddt-2';
+const APP_RELEASE='public-ddt-2';
 const $=s=>document.querySelector(s), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let sheets,book,current,filter='All',query='',scales={},notes={},storageOK=true;
 const key='dough-co-v1';let saved={};if(isOwner)try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch{storageOK=false}

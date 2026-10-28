@@ -247,3 +247,22 @@ The browser fixture starts on the prior release with real browser caching and it
 service worker, then upgrades without clearing storage, exercises both factor
 methods/calibration, warnings, sharing, persistence, mobile layout and offline
 reload, and checks private notes/settings and the recipe access boundary.
+
+### DDT preferment and spiral-mixer update
+
+Release `public-ddt-2` (SW v17): the preferment temperature field is always visible
+and is disabled (with an explanation) only when the user selects straight dough.
+New/reset settings default to using a preferment. The mixer selector offers an
+editable spiral-mixer starting estimate of 14°C or a custom/calibrated factor.
+The estimate is not claimed as a universal specification: Hamelman's DDT appendix
+quotes a general mixer friction range of roughly 13–16°C for 3 minutes slow plus
+3–4 minutes fast mixing, and calls for calibration with actual mixing conditions.
+Temperature differences are converted as differences, not absolute temperatures.
+
+Saved custom/calibrated factors are retained. The first DDT release's unlabelled
+6°C placeholder migrates to the spiral estimate; all other saved inputs and explicit
+straight/preferment selection remain intact. Settings now record their version
+and whether friction is a spiral estimate, custom entry or calibrated result.
+The browser upgrade fixture starts on `public-ddt-1` and verifies this migration,
+visible/disabled preferment behavior, direct preferment temperature effects, mixer
+preset/custom persistence, and unchanged private notes/Owner settings.

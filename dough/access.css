@@ -2,3 +2,5 @@
 @media(max-width:560px){nav .owner-nav{max-width:65px;white-space:normal;line-height:1.4}}
 
 .ddt-nav{font-size:12px;text-decoration:none;color:var(--green);align-self:center;white-space:nowrap}@media(max-width:560px){header{flex-wrap:wrap}nav{flex-wrap:wrap}.ddt-nav{font-size:11px}}@media print{.ddt-nav{display:none}}
+
+.ddt-calculator .field.wide select{width:270px;max-width:100%}.ddt-calculator input:disabled{opacity:.6;background:#eee;cursor:not-allowed}
