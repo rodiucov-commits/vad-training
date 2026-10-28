@@ -121,7 +121,7 @@ configuration is modified. Original book tables are required to complete missing
 `tests/owner-access.mjs` checks all supplied methods and available build/reference
 sections across all 109 entries, mobile width, read-only state and owner isolation.
 
-## Original Hamelman book restoration (hamelman-book-1)
+## Original Hamelman book restoration (hamelman-book-2)
 
 All 109 existing Hamelman routes now use `hamelman-book.json` and
 `hamelman-book.js`, restored from the original 514-page PDF. There are 301 original
@@ -174,5 +174,11 @@ procedure and scaled row, mobile width, private notes, print, targets/pieces, in
 percentage edits, both backup versions and the protected pizza calculators. Existing
 engine/pizza/Pizzalovers/temperature and transcription preservation tests still apply;
 the old transcription-specific Hamelman browser fixture is historical, not the book UI.
-Release/SW v13 must be published together. Deploy only dough/. All assets, recipes and
+Release/SW v14 must be published together. Deploy only dough/. All assets, recipes and
 original procedures must be checked again on dc.rodiucov.com before claiming completion.
+
+Mutable public runtime responses explicitly revalidate in the advanced-mode Worker;
+per-file `_headers` alone did not prevent a four-hour browser cache. Version the
+Hamelman module import and its book module/JSON dependencies as well as the entry,
+and precache both canonical/versioned URLs. This fixes returning clients without
+clearing notes or any other local storage; owner authorization logic is unchanged.

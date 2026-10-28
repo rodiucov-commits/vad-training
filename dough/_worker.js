@@ -27,6 +27,8 @@ export default {
    const html=(await asset.text()).replace('<head>','<head><base href="/"><meta name="dough-owner" content="true">');
    return new Response(html,{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'private, no-store','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'same-origin','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'"}});
   }
-  return env.ASSETS.fetch(request);
+  const asset=await env.ASSETS.fetch(request);
+  if(url.pathname==='/'||/\.(?:js|json|css|html)$/.test(url.pathname)){const headers=new Headers(asset.headers);headers.set('Cache-Control',url.pathname==='/version.json'?'no-store':'public, max-age=0, must-revalidate');return new Response(asset.body,{status:asset.status,statusText:asset.statusText,headers})}
+  return asset;
  }
 };
