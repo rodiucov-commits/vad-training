@@ -266,3 +266,51 @@ and whether friction is a spiral estimate, custom entry or calibrated result.
 The browser upgrade fixture starts on `public-ddt-1` and verifies this migration,
 visible/disabled preferment behavior, direct preferment temperature effects, mixer
 preset/custom persistence, and unchanged private notes/Owner settings.
+
+## Owner password sign-in (supersedes the Access email-code flow)
+
+Release `owner-password-2` / SW v18 keeps all public recipes and the public DDT
+calculator unchanged. `/owner/login` accepts the single approved Owner email and
+password; `/owner/setup#token=…` is a private, expiring, one-use enrollment/recovery
+link. `/owner/account` changes the password after verifying the current password.
+There is no public signup and no new recipe-publishing API. Notes and calculator
+variations remain browser-local under their original keys.
+
+`DOUGH_AUTH_DB` is a dedicated authentication-only D1 database. It must never be
+bound to the training database. Only salted PBKDF2-SHA256 password hashes, setup
+and session token hashes, expiry timestamps and throttling records are stored.
+Raw passwords and tokens must not enter source, application logs or browser storage.
+Eight-hour sessions use a Secure, HttpOnly, SameSite=Strict `__Host-` cookie; every
+Owner document/API checks the database, and password changes/recovery revoke old
+sessions. Logout revokes the current token. Mutation APIs reject foreign/missing
+Origins and non-JSON requests. Setup tokens are atomically consumed and valid
+recovery links work even after password-attempt lockout.
+
+The server source is `scripts/dough-password-auth.mjs` and
+`scripts/dough-password-handler.mjs`; rebuild the standalone Pages `_worker.js`
+with `node scripts/build-dough-password-worker.mjs`. The HTML/JS/CSS login form is
+served with no-store/no-referrer controls. Owner documents are not service-worker
+cached, so offline use cannot recreate authorization. Sign-in static assets are
+public, while the raw login HTML asset and server/test paths are not directly served.
+Public calculator preferences and all legacy Owner notes are preserved.
+
+Tests:
+
+- `node --test dough/tests/owner-password.mjs` — real SQLite-backed auth and gateway.
+- `PLAYWRIGHT_PATH=/absolute/path/playwright-core node dough/tests/owner-password-browser.mjs`
+  — real HTTPS fixture, redirects, one-time setup, secure cookies, reload, password
+  change, logout, ordinary login/deep links and retained notes. Test certs are synthetic.
+- `PLAYWRIGHT_PATH=/absolute/path/playwright-core node dough/tests/owner-access.mjs`
+  — all 109 public and 109 password-authenticated Owner recipe views.
+- `PLAYWRIGHT_PATH=/absolute/path/playwright-core node dough/tests/ddt-browser.mjs`
+  — public DDT remains usable without sign-in, including cached-client upgrades.
+
+Platform backups and raw setup links belong only in private agent storage outside
+this repository. Enroll/recover by writing a fresh random 256-bit token's SHA-256
+hash and a 48-hour expiry into the dedicated D1 Owner row, then send the raw token
+only as a fragment on a private setup link. Enrollment does not change the password
+until the owner uses the link; never test by consuming a live enrollment token.
+Only the dedicated former Dough Access app is parked on an unused legacy path for
+rollback; unrelated Access applications and policies are preserved. Rollback means
+restoring its exact original domain/destinations plus the prior source deployment;
+keep the new auth database and private notes intact for recovery.

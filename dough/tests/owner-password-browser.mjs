@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';import {createRequire} from 'node:module';
-import worker from '../_worker.js';import {fixtureDB,fixtureToken,fixturePassword,origin,assets} from './owner-password-fixture.mjs';
+import worker from '../_worker.js';import {fixtureDB,fixtureToken,fixturePassword,assets,fixtureServer} from './owner-password-fixture.mjs';
 const require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_PATH||'playwright-core');
-const env={DOUGH_AUTH_DB:await fixtureDB(),ASSETS:assets()},browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
+const env={DOUGH_AUTH_DB:await fixtureDB(),ASSETS:assets()},server=await fixtureServer(env),origin=server.origin,browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true,args:['--host-resolver-rules=MAP dc.test 127.0.0.1','--no-proxy-server']});
 try{
- const context=await browser.newContext({viewport:{width:390,height:844},serviceWorkers:'block'}),errors=[],requests=[];
- await context.route('**/*',async route=>{const req=route.request();assert.equal(new URL(req.url()).origin,origin);requests.push(req.url());const response=await worker.fetch(new Request(req.url(),{method:req.method(),headers:await req.allHeaders(),...(req.postDataBuffer()?{body:req.postDataBuffer()}:{})}),env);await route.fulfill({status:response.status,headers:Object.fromEntries(response.headers),body:Buffer.from(await response.arrayBuffer())});});
+ const context=await browser.newContext({viewport:{width:390,height:844},serviceWorkers:'block',ignoreHTTPSErrors:true}),errors=[],requests=[];
+ context.on('request',request=>{requests.push(request.url());assert.equal(new URL(request.url()).origin,origin);});
  await context.addInitScript(()=>{if(!localStorage.getItem('auth-fixture-initialized')){localStorage.setItem('dough-hamelman-v1',JSON.stringify({'hamelman-vermont-sourdough':{note:'RETAINED PRIVATE NOTE',state:{flour:9000,pieces:9}}}));localStorage.setItem('dough-owner','true');localStorage.setItem('auth-fixture-initialized','yes');}});
  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
  await page.goto(origin+'/owner#recipe/hamelman-vermont-sourdough');await page.waitForURL('**/owner/login#recipe/**');assert.equal(await page.locator('#title').innerText(),'Owner sign-in');
@@ -17,4 +17,4 @@ try{
  await page.locator('.owner-nav').click();await page.waitForURL(origin+'/');assert.equal((await context.cookies()).some(c=>c.name==='__Host-dough_owner'),false);assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('dough-hamelman-v1'))['hamelman-vermont-sourdough'].note),'RETAINED PRIVATE NOTE');
  await page.goto(origin+'/owner#recipe/hamelman-vermont-sourdough');await page.waitForURL('**/owner/login#recipe/**');await page.locator('#password').fill('Changed fixture password 2026!');await page.locator('#submit').click();await page.waitForURL(origin+'/owner#recipe/hamelman-vermont-sourdough');await page.locator('#hm-notes').waitFor();assert.equal(await page.locator('#hm-notes').inputValue(),'RETAINED PRIVATE NOTE');
  assert(!requests.some(url=>url.includes(fixtureToken)));assert.deepEqual(errors,[]);console.log('PASS actual gateway browser: forged local state denied; private fragment setup; password confirmation; HttpOnly session; reload; retained notes; one-time token; password change; logout; standard login with recipe deep link; no token in requests; mobile width; no browser errors');
-}finally{await browser.close();}
+}finally{await browser.close();await server.close();}
