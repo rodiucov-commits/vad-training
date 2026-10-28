@@ -102,3 +102,21 @@ Public `/` pages now render published defaults as read-only outputs; search, fil
 Run `PLAYWRIGHT_PATH=/absolute/path/to/playwright-core node tests/owner-access.mjs`: real RS256-signed fixture tokens and the actual Worker handler test correct/wrong identity, issuer, audience, algorithm, expiry/tampering, anonymous denial and non-cacheable private HTML; an isolated browser tests all 136 public pages, default quantities, input-link bypass denial, hidden/preserved old private notes, a forged local owner marker, actual owner controls for all three calculator families and loss of access after cookie removal. Fixture keys/tokens are synthetic and never used in production. Existing pure formula/mass-balance suites remain passing. Production verification must check anonymous public pages, custom-domain Access redirect, direct pages.dev owner denial, private/source path denial and the configured email-only policy; completing a real owner email-code sign-in remains an owner action unless explicitly tested.
 
 Private platform IDs/rollback are in the agent workspace evidence/cloudflare-owner-access.json, outside published assets. Roll back only the owner-access commit and delete only the newly created Dough owner Access application; retain unrelated existing Access apps. The prior deployment is commit 8fa8a31. Private local browser data must never be deleted during rollback.
+
+## Formula completeness and public visibility
+
+Release `formula-visibility-1` / SW v12 makes ingredient-data completeness explicit on
+Hamelman cards and recipe headings. Of 109 entries, 34 lack a usable overall formula
+and 17 more have unresolved build allocations or conflicting quantities. The remaining
+58 have a ready ingredient/mixing calculation; this is not a claim that all prose is complete.
+This source-data limitation affects public and owner views alike, not the Access policy.
+
+Reference-only entries now expose available transcribed ingredient/stage percentages
+in an expanded, clearly unverified table, including the malformed Three-Stage Rye
+records (pp218/221/224). They are not summed or assigned invented gram weights.
+Their original source is expanded too. Overall formulas missing a preferment table
+show a dedicated missing-preferment section. Complete builds remain visible publicly,
+with calculator edits still owner-only. No formula, dataset, private storage or auth
+configuration is modified. Original book tables are required to complete missing data.
+`tests/owner-access.mjs` checks all supplied methods and available build/reference
+sections across all 109 entries, mobile width, read-only state and owner isolation.
