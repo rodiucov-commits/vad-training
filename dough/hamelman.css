@@ -11,3 +11,8 @@
 @media print{.hb-calculator .hm-batch input{border:0}.hb-calculator .actions,.hb-calculator .hm-jumps,.hb-calculator textarea,.hb-calculator section:has(textarea){display:none}.hb-calculator .hb-original-page{overflow:visible}.hb-calculator .hb-original-page pre{min-width:0;white-space:pre-wrap;font-size:8px}.hb-calculator .hb-table{break-inside:auto}}
 .hb-calculator .hb-correction{display:block;font-size:11px;line-height:1.6;margin-top:8px;color:var(--accent)}.hb-calculator .hb-illustration{width:100%;height:auto;display:block;margin:14px 0}
 @media print{.hb-calculator details[open]{display:block}.hb-calculator section:has(#hm-notes){display:none}}
+
+.hb-calculator .hb-loaf-controls{grid-template-columns:repeat(3,minmax(0,1fr))}.hb-calculator .hb-loaf-controls output{display:block;font-size:24px;font-weight:700;color:var(--green);padding:10px 0}.hb-calculator .hm-guidance li h3,.hb-calculator .hb-reference-methods li h3{font-size:18px;color:var(--green);margin:0 0 9px}.hb-calculator .hm-guidance li p,.hb-calculator .hb-reference-methods li p,.hb-calculator .hb-recipe-note{font-size:14px;line-height:1.85;margin:0 0 14px;white-space:normal}.hb-calculator .hb-reference-methods{padding-left:24px}.hb-calculator .hb-reference-methods li{margin-bottom:24px}.hb-calculator .hb-piece-instruction,.hb-calculator .hb-dividing-note{background:#edf0e6;padding:14px;line-height:1.75}.hb-calculator .hb-advanced{margin-top:12px}
+@media(max-width:760px){.hb-calculator .hb-loaf-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.hb-calculator .hb-loaf-controls>.field:last-child{grid-column:1/-1}}
+
+.hb-calculator .hb-recipe-note{white-space:pre-line}

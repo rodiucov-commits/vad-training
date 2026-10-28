@@ -1,7 +1,7 @@
 // The server supplies this marker only after validating Cloudflare Access JWT.
 export const isOwner=typeof document!=='undefined'&&location.pathname==='/owner'&&document.querySelector('meta[name="dough-owner"]')?.content==='true';
 export function publicView(host){
- if(isOwner)return;
+ if(isOwner||host.querySelector('.hb-calculator'))return;
  for(const notes of host.querySelectorAll('textarea'))notes.closest('section')?.remove();
  for(const input of host.querySelectorAll('input,select')){
   if(input.type==='file'){input.remove();continue}

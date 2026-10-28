@@ -183,3 +183,32 @@ Cloudflare browser-TTL policy still changes max-age to 14,400 seconds. Per-file
 Hamelman module import and its book module/JSON dependencies as well as the entry,
 and precache both canonical/versioned URLs. This fixes returning clients without
 clearing notes or any other local storage; owner authorization logic is unchanged.
+
+## Metric loaf planning (metric-loaves-1 / SW v15)
+
+Hamelman public pages now explicitly allow two ephemeral batch-design inputs: dough
+weight per loaf/piece and loaf/piece count. This supersedes the earlier blanket read-only
+calculator presentation only for those batch controls. Public percentage edits, private
+notes and saved Owner variations remain unavailable; no Access policy/API changes.
+Count changes preserve piece weight; piece-weight changes preserve count. All ingredient
+weights, starter transfers, subtotals and dividing callouts update together before blur.
+Unknown-mass recipes label the inputs as known weighed ingredients per portion and keep
+that limitation explicit. Owner-only advanced scale/flour/total and percentage controls
+remain available. Public adjustments do not write to private storage.
+
+`hamelman-metric.js` is a presentation adapter, not a rewrite of the source data or
+calculation engine. It fixes PDF small-cap casing, formats method headings/paragraphs,
+converts Fahrenheit absolute temperatures separately from temperature differences,
+and converts weights, dimensions, fractions and volumes without inventing densities.
+Original notes, variations and full procedures remain; optional flatbread fillings are
+listed clearly. No U.S./Home table links, raw PDF page dumps, page citations or production
+footers are rendered. Final tables are two-column publicly, with original metric amounts
+and metric-only source details available only in Owner view.
+
+Run `node tests/hamelman-metric.mjs`, `node tests/hamelman-book.mjs` and
+`PLAYWRIGHT_PATH=/absolute/path/playwright-core node tests/owner-access.mjs`. These
+check all109 metric presentations/719methods, source-data preservation,109 public +109
+Owner routes,2public batch inputs,owner-only source columns,loaf500g×4→2000g,
+count6preserving500g→3000g,live dividing instructions,private notes,backups and print.
+Version the access module import as well as Hamelman dependencies so returning browsers
+do not reapply the previous blanket public-input conversion.
