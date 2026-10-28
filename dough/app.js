@@ -1,12 +1,12 @@
-import {isOwner,publicView,initAccess} from './access.js?v=metric-loaves-1';
+import {isOwner,publicView,initAccess} from './access.js?v=owner-password-1';
 import {Workbook,column,letters} from './engine.js';
 import {recipes as workbookRecipes} from './recipes.js';
 import {pizzaLoversRecipes,mountPizzaLovers} from './pizzalovers.js';
-import {loadHamelman,mountHamelman} from './hamelman.js?v=metric-loaves-1';
+import {loadHamelman,mountHamelman} from './hamelman.js?v=owner-password-1';
 const recipes=[...workbookRecipes,...pizzaLoversRecipes];
 import {createPizzaSheets,seedBuild} from './pizza.js';
 import {doughTemperature,toC,fromC} from './temperature.js';
-const APP_RELEASE='metric-loaves-1';
+const APP_RELEASE='owner-password-1';
 const $=s=>document.querySelector(s), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let sheets,book,current,filter='All',query='',scales={},notes={},storageOK=true;
 const key='dough-co-v1';let saved={};if(isOwner)try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch{storageOK=false}

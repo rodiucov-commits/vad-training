@@ -1,34 +1,81 @@
-const OWNER={issuer:'https://rodiucov.cloudflareaccess.com',audience:'d9cdbfcad5836f48bdad41910ec5e42b87633534bc4dc0c1b69917cd3488bd69',email:'rodiucov@gmail.com'};
-let certCache;
-const decode=s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
-async function verifyOwnerJWT(token,config=OWNER,get=fetch,now=Date.now()/1000){
- try{
-  if(!token||token.length>16000||config.audience==='PENDING')return null;
-  const parts=token.split('.');if(parts.length!==3)return null;
-  const header=JSON.parse(new TextDecoder().decode(decode(parts[0]))),claims=JSON.parse(new TextDecoder().decode(decode(parts[1])));
-  if(header.alg!=='RS256'||typeof header.kid!=='string'||claims.iss!==config.issuer||!Array.isArray(claims.aud)||!claims.aud.includes(config.audience)||claims.email?.toLowerCase()!==config.email||!Number.isFinite(claims.exp)||claims.exp<=now||claims.nbf&&claims.nbf>now+30)return null;
-  if(!certCache||certCache.issuer!==config.issuer||certCache.until<now||!certCache.keys.some(k=>k.kid===header.kid)){const response=await get(config.issuer+'/cdn-cgi/access/certs');if(!response.ok)return null;const data=await response.json();certCache={issuer:config.issuer,keys:data.keys||[],until:now+300}}
-  const jwk=certCache.keys.find(k=>k.kid===header.kid);if(!jwk)return null;
-  const key=await crypto.subtle.importKey('jwk',jwk,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['verify']);
-  return await crypto.subtle.verify('RSASSA-PKCS1-v1_5',key,decode(parts[2]),new TextEncoder().encode(parts[0]+'.'+parts[1]))?claims:null;
- }catch{return null}
-}
-function accessToken(request){return request.headers.get('Cf-Access-Jwt-Assertion')||request.headers.get('Cookie')?.split(';').map(x=>x.trim()).find(x=>x.startsWith('CF_Authorization='))?.slice(17)||''}
-
-export default {
- async fetch(request,env){
-  const url=new URL(request.url);
-  if(url.pathname==='/_worker.js'||url.pathname==='/owner-auth.js'||url.pathname.startsWith('/tests/')||url.pathname.startsWith('/scripts/'))return new Response('Not found',{status:404});
-  if(url.pathname.startsWith('/owner')){
-   const claims=await verifyOwnerJWT(accessToken(request));
-   if(!claims)return new Response('Owner sign-in required.',{status:401,headers:{'Cache-Control':'no-store','Content-Type':'text/plain; charset=utf-8'}});
-   if(url.pathname!=='/owner'){url.pathname='/owner';return Response.redirect(url.href,302)}
-   const source=new URL('/',url);const asset=await env.ASSETS.fetch(new Request(source,request));
-   const html=(await asset.text()).replace('<head>','<head><base href="/"><meta name="dough-owner" content="true">');
-   return new Response(html,{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'private, no-store','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'same-origin','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'"}});
-  }
-  const asset=await env.ASSETS.fetch(request);
-  if(url.pathname==='/'||/\.(?:js|json|css|html)$/.test(url.pathname)){const headers=new Headers(asset.headers);headers.set('Cache-Control',url.pathname==='/version.json'?'no-store':'public, max-age=0, must-revalidate');return new Response(asset.body,{status:asset.status,statusText:asset.statusText,headers})}
-  return asset;
+// Password authentication for Dough only. Deploy by bundling this module into _worker.js.
+// DOUGH_AUTH_DB is a separate D1 database, never the training database.
+const OWNER_EMAIL='rodiucov@gmail.com';
+const OWNER_COOKIE='__Host-dough_owner';
+const SESSION_MS=8*60*60*1000, BLOCK_MS=10*60*1000;
+const encode=new TextEncoder();
+const randomToken=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
+async function tokenHash(value){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',encode.encode(value))),b=>b.toString(16).padStart(2,'0')).join('');}
+async function derive(password,salt){const key=await crypto.subtle.importKey('raw',encode.encode(password),'PBKDF2',false,['deriveBits']);return Array.from(new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',iterations:100000,salt:encode.encode(salt)},key,256)),b=>b.toString(16).padStart(2,'0')).join('');}
+function equal(a,b){if(typeof a!=='string'||typeof b!=='string'||a.length!==b.length)return false;let d=0;for(let i=0;i<a.length;i++)d|=a.charCodeAt(i)^b.charCodeAt(i);return d===0;}
+function json(body,status=200,headers={}){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff',...headers}});}
+function rawCookie(req){return (req.headers.get('Cookie')||'').split(';').map(s=>s.trim()).find(s=>s.startsWith(OWNER_COOKIE+'='))?.slice(OWNER_COOKIE.length+1);}
+const cookie=(raw,age=SESSION_MS/1000)=>`${OWNER_COOKIE}=${raw}; Path=/; Max-Age=${age}; HttpOnly; Secure; SameSite=Strict`;
+const AUTH_SCHEMA=`CREATE TABLE IF NOT EXISTS dough_owner (id INTEGER PRIMARY KEY CHECK(id=1), password_hash TEXT, salt TEXT, setup_hash TEXT, setup_expires INTEGER);
+CREATE TABLE IF NOT EXISTS dough_sessions (token_hash TEXT PRIMARY KEY, salt TEXT NOT NULL, expires INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS dough_attempts (attempt_key TEXT PRIMARY KEY, failures INTEGER NOT NULL, blocked_until INTEGER NOT NULL);
+INSERT OR IGNORE INTO dough_owner (id) VALUES (1);`;
+function createPasswordAuth(){
+ let initialized;
+ async function ready(db){if(!db)throw Error('Missing auth database');if(!initialized)initialized=Promise.resolve(db.exec(AUTH_SCHEMA)).catch(e=>{initialized=null;throw e;});return initialized;}
+ async function session(req,db){await ready(db);const raw=rawCookie(req);if(!raw||!/^[a-f0-9]{64}$/.test(raw))return null;return db.prepare('SELECT s.token_hash FROM dough_sessions s JOIN dough_owner u ON u.id=1 AND u.salt=s.salt WHERE s.token_hash=? AND s.expires>?').bind(await tokenHash(raw),Date.now()).first();}
+ async function issue(db,salt){const raw=randomToken();await db.prepare('INSERT INTO dough_sessions (token_hash,salt,expires) VALUES (?,?,?)').bind(await tokenHash(raw),salt,Date.now()+SESSION_MS).run();await db.prepare('DELETE FROM dough_sessions WHERE expires<=?').bind(Date.now()).run();return json({ok:true,email:OWNER_EMAIL},200,{'Set-Cookie':cookie(raw)});}
+ async function api(req,db){
+  try{
+   const url=new URL(req.url),path=url.pathname;
+   if(path==='/owner/api/session'&&req.method==='GET')return await session(req,db)?json({ok:true,email:OWNER_EMAIL}):json({error:'Sign in required'},401);
+   if(req.method!=='POST')return json({error:'Method not allowed'},405,{'Allow':'POST'});
+   if(req.headers.get('Origin')!==url.origin||req.headers.get('Sec-Fetch-Site')==='cross-site')return json({error:'Request origin not allowed'},403);
+   if(!/^application\/json(?:;|$)/i.test(req.headers.get('Content-Type')||''))return json({error:'JSON required'},415);
+   await ready(db);
+   if(path==='/owner/api/logout'){const raw=rawCookie(req);if(raw&&/^[a-f0-9]{64}$/.test(raw))await db.prepare('DELETE FROM dough_sessions WHERE token_hash=?').bind(await tokenHash(raw)).run();return json({ok:true},200,{'Set-Cookie':cookie('',0)});}
+   if(!['/owner/api/login','/owner/api/setup','/owner/api/change-password'].includes(path))return json({error:'Not found'},404);
+   if(Number(req.headers.get('Content-Length')||0)>4096)return json({error:'Request too large'},413);
+   // Stream cap avoids reading unbounded chunked bodies before validation.
+   const reader=req.body?.getReader();let text='',length=0;if(reader){const decoder=new TextDecoder();for(;;){const {done,value}=await reader.read();if(done)break;length+=value.byteLength;if(length>4096){await reader.cancel();return json({error:'Request too large'},413);}text+=decoder.decode(value,{stream:true});}text+=decoder.decode();}
+   let body;try{body=JSON.parse(text);if(!body||typeof body!=='object'||Array.isArray(body))throw 0;}catch{return json({error:'Invalid request'},400);}
+   const setup=path.endsWith('/setup'),changing=path.endsWith('/change-password');
+   if(changing&&!await session(req,db))return json({error:'Sign in required'},401);
+   const user=await db.prepare('SELECT * FROM dough_owner WHERE id=1').first();
+   const validSetup=setup&&typeof body.token==='string'&&/^[a-f0-9]{64}$/.test(body.token)&&user?.setup_expires>Date.now()&&equal(await tokenHash(body.token),user.setup_hash);
+   const ipKey=await tokenHash(req.headers.get('CF-Connecting-IP')||'unknown');
+   const keys=[ipKey,'account'];const attempts=await Promise.all(keys.map(k=>db.prepare('SELECT failures,blocked_until FROM dough_attempts WHERE attempt_key=?').bind(k).first()));
+   if(attempts.some(a=>a?.blocked_until>Date.now())&&!validSetup)return json({error:'Too many attempts. Try again in 10 minutes.'},429,{'Retry-After':'600'});
+   const password=changing?body.oldPassword:body.password;
+   const newPassword=changing?body.newPassword:body.password;
+   if((setup||changing)&&(typeof newPassword!=='string'||newPassword.length<12||newPassword.length>256))return json({error:'Use a password of 12–256 characters.'},400);
+   let valid=validSetup;
+   if(!setup){const candidate=await derive(typeof password==='string'&&password.length<=256?password:'',user?.salt||'unconfigured-account');valid=typeof password==='string'&&password.length<=256&&equal(candidate,user?.password_hash)&&typeof body.email==='string'&&body.email.trim().toLowerCase()===OWNER_EMAIL;}
+   if(!valid){for(const [i,k]of keys.entries()){const prior=attempts[i],n=(prior?.blocked_until&&prior.blocked_until<=Date.now()?0:prior?.failures||0)+1;await db.prepare('INSERT INTO dough_attempts (attempt_key,failures,blocked_until) VALUES (?,?,?) ON CONFLICT(attempt_key) DO UPDATE SET failures=CASE WHEN blocked_until>0 AND blocked_until<=? THEN 1 ELSE failures+1 END,blocked_until=CASE WHEN blocked_until>0 AND blocked_until<=? THEN 0 WHEN failures+1>=? THEN ? ELSE blocked_until END').bind(k,n,n>=(i?25:5)?Date.now()+BLOCK_MS:0,Date.now(),Date.now(),i?25:5,Date.now()+BLOCK_MS).run();}return json({error:'Invalid email, password or setup link.'},401);}
+   let salt=user.salt;
+   if(setup||changing){salt=randomToken();const hash=await derive(newPassword,salt);const result=setup?await db.prepare('UPDATE dough_owner SET password_hash=?,salt=?,setup_hash=NULL,setup_expires=NULL WHERE id=1 AND setup_hash=? AND setup_expires>?').bind(hash,salt,user.setup_hash,Date.now()).run():await db.prepare('UPDATE dough_owner SET password_hash=?,salt=?,setup_hash=NULL,setup_expires=NULL WHERE id=1 AND salt=?').bind(hash,salt,user.salt).run();if(!result.meta?.changes)return json({error:'This link or session is no longer valid.'},401);await db.prepare('DELETE FROM dough_sessions WHERE salt<>?').bind(salt).run();}
+   await db.prepare('DELETE FROM dough_attempts WHERE attempt_key=? OR attempt_key=?').bind(ipKey,'account').run();return issue(db,salt);
+  }catch{return json({error:'Sign-in is temporarily unavailable. Please try again later.'},503);}
  }
-};
+ return {session,api};
+}
+
+const auth=createPasswordAuth();
+const privateHeaders={'Content-Type':'text/html; charset=utf-8','Cache-Control':'private, no-store','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"};
+export default {async fetch(request,env){
+ const url=new URL(request.url),p=url.pathname;
+ if(p==='/_worker.js'||p==='/owner-auth.js'||p.startsWith('/tests/')||p.startsWith('/scripts/')||p==='/owner-login.html')return new Response('Not found',{status:404});
+ if(p.startsWith('/owner')){
+  if(!['dc.rodiucov.com','dough-calculator-2nr.pages.dev','dc.test'].includes(url.hostname))return new Response('Not found',{status:404});
+  if(p.startsWith('/owner/api/'))return auth.api(request,env.DOUGH_AUTH_DB);
+  let signedIn=false;try{signedIn=!!await auth.session(request,env.DOUGH_AUTH_DB);}catch{if(!['/owner/login','/owner/setup'].includes(p))return new Response('Sign-in is temporarily unavailable.',{status:503,headers:privateHeaders});}
+  if(p==='/owner/login'||p==='/owner/setup'||p==='/owner/account'){
+   if(p==='/owner/account'&&!signedIn)return new Response(null,{status:303,headers:{Location:'/owner/login','Cache-Control':'no-store'}});
+   const source=new URL('/owner-login.html',url),asset=await env.ASSETS.fetch(new Request(source));
+   if(!asset.ok)return new Response('Sign-in is temporarily unavailable.',{status:503,headers:privateHeaders});return new Response(asset.body,{headers:privateHeaders});
+  }
+  if(!signedIn)return new Response(null,{status:303,headers:{Location:'/owner/login','Cache-Control':'no-store'}});
+  if(p!=='/owner')return new Response(null,{status:303,headers:{Location:'/owner','Cache-Control':'no-store'}});
+  const asset=await env.ASSETS.fetch(new Request(new URL('/',url)));
+  if(!asset.ok)return new Response('Temporarily unavailable.',{status:503,headers:privateHeaders});
+  return new Response((await asset.text()).replace('<head>','<head><base href="/"><meta name="dough-owner" content="true">'),{headers:privateHeaders});
+ }
+ const asset=await env.ASSETS.fetch(request);
+ if(p==='/'||/\.(?:js|json|css|html)$/.test(p)){const headers=new Headers(asset.headers);headers.set('Cache-Control',p==='/version.json'?'no-store':'public, max-age=0, must-revalidate');return new Response(asset.body,{status:asset.status,statusText:asset.statusText,headers});}
+ return asset;
+}};

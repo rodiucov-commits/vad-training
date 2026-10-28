@@ -1,4 +1,4 @@
-// The server supplies this marker only after validating Cloudflare Access JWT.
+// The server supplies this marker only after validating a server-side Owner session.
 export const isOwner=typeof document!=='undefined'&&location.pathname==='/owner'&&document.querySelector('meta[name="dough-owner"]')?.content==='true';
 export function publicView(host){
  if(isOwner||host.querySelector('.hb-calculator'))return;
@@ -15,7 +15,8 @@ export function publicView(host){
  host.oninput=host.onchange=host.onclick=null;
 }
 export function initAccess(){
- const nav=document.querySelector('nav');const link=document.createElement('a');link.className='owner-nav';link.textContent=isOwner?'Owner mode · Sign out':'Owner sign-in';link.href=isOwner?'/cdn-cgi/access/logout':'/owner';nav.append(link);
+ const nav=document.querySelector('nav');const link=document.createElement('a');link.className='owner-nav';link.textContent=isOwner?'Owner mode · Sign out':'Owner sign-in';link.href=isOwner?'/owner/login':'/owner';nav.append(link);
+ if(isOwner){const account=document.createElement('a');account.textContent='Password settings';account.href='/owner/account';nav.append(account);link.addEventListener('click',async e=>{e.preventDefault();try{const response=await fetch('/owner/api/logout',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}',credentials:'same-origin'});if(!response.ok)throw Error('Sign-out failed');location.replace('/'+location.hash);}catch{alert('Could not sign out. Check your connection and try again.');}});}
  if(!isOwner)document.querySelector('#calculator-nav').hidden=true;
  document.addEventListener('click',e=>{if(e.target.closest('[data-public-print]'))window.print();const jump=e.target.closest('[data-hm-scroll]')?.dataset.hmScroll;if(jump&&!isOwner)document.getElementById(jump)?.scrollIntoView({behavior:'smooth'})});
 }
