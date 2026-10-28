@@ -177,8 +177,9 @@ the old transcription-specific Hamelman browser fixture is historical, not the b
 Release/SW v14 must be published together. Deploy only dough/. All assets, recipes and
 original procedures must be checked again on dc.rodiucov.com before claiming completion.
 
-Mutable public runtime responses explicitly revalidate in the advanced-mode Worker;
-per-file `_headers` alone did not prevent a four-hour browser cache. Version the
+The advanced-mode Worker requests public runtime revalidation, but the production
+Cloudflare browser-TTL policy still changes max-age to 14,400 seconds. Per-file
+`_headers` alone did not prevent that four-hour browser cache; do not rely on headers alone. Version the
 Hamelman module import and its book module/JSON dependencies as well as the entry,
 and precache both canonical/versioned URLs. This fixes returning clients without
 clearing notes or any other local storage; owner authorization logic is unchanged.
