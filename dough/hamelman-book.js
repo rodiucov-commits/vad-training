@@ -1,4 +1,4 @@
-import {metricText,methodParts,readableMethods,recipeNotes} from './hamelman-metric.js?v=owner-style-1';
+import {metricText,methodParts,readableMethods,recipeNotes} from './hamelman-metric.js?v=owner-manage-1';
 // Original book metric tables are the weight oracle. No guessed seed hydration or yeast conversion.
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=(v,d=2)=>new Intl.NumberFormat('en',{maximumFractionDigits:d}).format(v),g=v=>num(v)+' g';

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';import fs from 'node:fs';import path fro
 import worker from '../_worker.js';import {calculateBook,defaultBookState} from '../hamelman-book.js';import {readableMethods,methodParts} from '../hamelman-metric.js';
 import {fixtureDB,fixtureToken,fixturePassword,email,assets,fixtureServer} from './owner-password-fixture.mjs';
 const require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_PATH||'playwright-core');
-const root=path.resolve(import.meta.dirname,'..'),env={ASSETS:assets(),DOUGH_AUTH_DB:await fixtureDB()},server=await fixtureServer(env),origin=server.origin;
+const root=path.resolve(import.meta.dirname,'..'),env={ASSETS:assets(),DOUGH_AUTH_DB:await fixtureDB(),DOUGH_RECIPES_DB:await fixtureDB()},server=await fixtureServer(env),origin=server.origin;
 assert.equal((await worker.fetch(new Request(origin+'/owner'),env)).status,303);
 const enrollment=await worker.fetch(new Request(origin+'/owner/api/setup',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({token:fixtureToken,password:fixturePassword})}),env);assert.equal(enrollment.status,200);const good=enrollment.headers.get('Set-Cookie').split(';')[0].split('=')[1];
 const privateResponse=await worker.fetch(new Request(origin+'/owner',{headers:{Cookie:'__Host-dough_owner='+good}}),env);assert.match(privateResponse.headers.get('Cache-Control'),/no-store/);assert.match(await privateResponse.text(),/name="dough-owner" content="true"/);assert.ok(!(await(await worker.fetch(new Request(origin+'/'),env)).text()).includes('name="dough-owner"'));

@@ -4,15 +4,15 @@ export function publicView(host){
  if(isOwner||host.querySelector('.hb-calculator,.ddt-calculator'))return;
  for(const notes of host.querySelectorAll('textarea'))notes.closest('section')?.remove();
  for(const input of host.querySelectorAll('input,select')){
-  if(input.type==='file'){input.remove();continue}
-  const out=document.createElement('output');out.className='public-value';out.textContent=input.tagName==='SELECT'?input.selectedOptions[0]?.textContent:input.type==='checkbox'?(input.checked?'Yes':'No'):input.value||'—';input.replaceWith(out);
+  if(['pizza-count','pizza-ball-weight','pl-n','pl-g'].includes(input.id)){input.dataset.publicBatch='';continue}if(input.type==='file'){input.remove();continue}
+  const out=document.createElement('output');if(input.dataset.cell){out.dataset.publicCell=input.dataset.cell;out.dataset.publicPct=input.dataset.pct||'0';}out.className='public-value';out.textContent=input.tagName==='SELECT'?input.selectedOptions[0]?.textContent:input.type==='checkbox'?(input.checked?'Yes':'No'):input.value||'—';input.replaceWith(out);
  }
  for(const el of host.querySelectorAll('[data-action],[data-hm-action],[data-pl-action]'))el.remove();
  for(const details of host.querySelectorAll('#worksheet'))details.remove();
  for(const p of host.querySelectorAll('.local-note'))p.textContent='Public recipe · read-only. Owner sign-in is required to use the calculator or save personal variations.';
  for(const p of host.querySelectorAll('.muted')){if(p.closest('#hm-guidance'))continue;if(/^(Edit the outlined|Edit percentages|Every recipe is ready to scale)/.test(p.textContent))p.textContent='These are the published recipe defaults. Sign in as the owner to adjust calculator inputs.'}
  const actions=host.querySelector('.detail-heading .actions');if(actions){actions.innerHTML='<a class="btn primary" href="/owner'+location.hash.split('?')[0]+'">Owner sign-in</a><button class="btn" data-public-print>Print recipe</button>'}
- host.oninput=host.onchange=host.onclick=null;
+ if(!host.querySelector('.pl-calculator'))host.oninput=host.onchange=host.onclick=null;
 }
 export function initAccess(){
  const nav=document.querySelector('nav');const ddt=document.createElement('a');ddt.className='ddt-nav';ddt.textContent='DDT calculator';ddt.href='#recipe/dough-temperature';nav.append(ddt);const link=document.createElement('a');link.className='owner-nav';link.textContent=isOwner?'Owner mode · Sign out':'Owner sign-in';link.href=isOwner?'/owner/login':'/owner';nav.append(link);

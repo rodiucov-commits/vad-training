@@ -314,3 +314,41 @@ Only the dedicated former Dough Access app is parked on an unused legacy path fo
 rollback; unrelated Access applications and policies are preserved. Rollback means
 restoring its exact original domain/destinations plus the prior source deployment;
 keep the new auth database and private notes intact for recovery.
+
+## Owner navigation, recipe deletion, and public pizza batches
+
+Release `owner-manage-1` / SW v20 fixes fragment-link navigation by injecting
+`<base href="/owner">` without a trailing slash. Hash links now remain on the
+Owner document while relative assets still resolve at the root. Tests click real
+recipe cards/back links and use the new Owner recipe selector rather than only
+navigating directly to preconstructed `/owner#recipe/…` URLs. Existing eight-hour
+sessions are unchanged; switching recipes must not require another sign-in.
+
+Owner recipe tools include Choose a recipe, Delete recipe, and Deleted recipes.
+Deleting is a reversible, shared visibility change: online public listings, direct
+recipe views and preset links exclude deleted recipes. Restore returns them to the
+collection with their original data and local notes intact. No source formula,
+procedure, spreadsheet, private variation or note is erased. Original source JSON
+and old offline copies remain preserved; this is not a content-erasure mechanism.
+Offline clients use the last visibility state fetched on that device.
+
+`DOUGH_RECIPES_DB` is a separate D1 database holding only recipe IDs and deletion
+timestamps. `DOUGH_AUTH_DB` is preserved unchanged and remains authentication-only.
+The public no-store GET `/api/recipe-archive` returns deleted IDs, not private notes.
+Only a valid Owner session and same-origin JSON POST to
+`/owner/api/recipe-archive` can delete/restore; IDs are checked against the compiled
+catalog and calculator tools cannot be deleted. Neither API nor Owner documents
+are service-worker cached. Cloudflare project/database backups are private; no
+production recipes are deleted to test this feature.
+
+All eight original/Pizzalovers pizza presets now allow public batch scaling from
+ball/tray weight × count. Only these two inputs are public; formula percentages,
+notes and saved Owner variations remain protected. Total dough, ingredient/build
+weights and division guidance update while typing, without moving focus. Public
+batch changes do not save into private recipe storage. Mathematical formulas and
+original source tables are unchanged; tray recipes retain tray-specific labels.
+
+Run `node --test dough/tests/recipe-archive.mjs dough/tests/owner-password.mjs`, the
+real HTTPS `owner-password-browser.mjs` (navigation + shared delete/restore + notes),
+`public-pizza-batches.mjs` (all eight public presets at three batch sizes), and the
+existing full Owner recipe, DDT, pizza-source and Pizzalovers-oracle checks.

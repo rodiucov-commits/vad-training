@@ -1,0 +1,9 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRecipeArchive} from '../../scripts/dough-recipe-archive.mjs';import {fixtureDB} from './owner-password-fixture.mjs';
+test('Archive is Owner-only, same-origin and reversible; unknown recipes and tools cannot be deleted',async()=>{
+ const db=await fixtureDB(),api=createRecipeArchive(['bread-one','bread-two']),env={DOUGH_RECIPES_DB:db};
+ const request=(id,deleted,extra={})=>new Request('https://dc.test/owner/api/recipe-archive',{method:'POST',headers:{Origin:extra.origin||'https://dc.test','Content-Type':'application/json'},body:JSON.stringify({id,deleted})});
+ const list=async()=>{const r=await api.fetch(new Request('https://dc.test/api/recipe-archive'),env,async()=>false);assert.equal(r.headers.get('Cache-Control'),'no-store');return (await r.json()).deleted;};
+ assert.deepEqual(await list(),[]);assert.equal((await api.fetch(request('bread-one',true),env,async()=>false)).status,401);assert.equal((await api.fetch(request('bread-one',true,{origin:'https://evil.invalid'}),env,async()=>true)).status,403);assert.equal((await api.fetch(request('dough-temperature',true),env,async()=>true)).status,400);assert.equal((await api.fetch(request('not-a-recipe',true),env,async()=>true)).status,400);assert.equal((await api.fetch(request('bread-one','true'),env,async()=>true)).status,400);
+ assert.equal((await api.fetch(request('bread-one',true),env,async()=>true)).status,200);assert.deepEqual(await list(),['bread-one']);assert.equal((await api.fetch(request('bread-one',true),env,async()=>true)).status,200);assert.equal(db.raw.prepare('SELECT count(*) AS n FROM recipe_archive').get().n,1);
+ assert.equal((await api.fetch(request('bread-one',false),env,async()=>true)).status,200);assert.deepEqual(await list(),[]);assert.equal(db.raw.prepare('SELECT count(*) AS n FROM dough_owner').get().n,1);
+});

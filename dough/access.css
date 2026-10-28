@@ -4,3 +4,9 @@
 .ddt-nav{font-size:12px;text-decoration:none;color:var(--green);align-self:center;white-space:nowrap}@media(max-width:560px){header{flex-wrap:wrap}nav{flex-wrap:wrap}.ddt-nav{font-size:11px}}@media print{.ddt-nav{display:none}}
 
 .ddt-calculator .field.wide select{width:270px;max-width:100%}.ddt-calculator input:disabled{opacity:.6;background:#eee;cursor:not-allowed}
+
+.owner-recipe-tools{max-width:1200px;margin:20px auto 0;padding:0 5%;display:flex;gap:14px;align-items:end;flex-wrap:wrap}.owner-recipe-tools label{display:grid;gap:7px;font-size:12px;color:var(--muted)}.owner-recipe-tools select{font:inherit;font-size:14px;padding:11px;max-width:100%;width:360px;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--ink)}.owner-recipe-tools .recipe-delete{color:#8c3d2e;border-color:#bd8a7a}.owner-recipe-tools button:disabled{opacity:.45;cursor:not-allowed}.recipe-trash{list-style:none;padding:0}.recipe-trash li{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:15px 0;border-bottom:1px solid var(--line)}@media(max-width:560px){.owner-recipe-tools label{width:100%}.owner-recipe-tools select{width:100%}.recipe-trash li{align-items:start;flex-direction:column}}@media print{.owner-recipe-tools{display:none}}
+
+.pizza-batch output{display:block;min-height:44px;padding:10px 0;font-size:18px;color:var(--green)}
+
+.owner-archive h1{font:clamp(32px,5vw,48px)/1.1 var(--serif);font-weight:400}

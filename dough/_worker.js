@@ -55,13 +55,40 @@ function createPasswordAuth(){
  return {session,api};
 }
 
+// Recipe visibility only. Immutable source formulas and browser notes are never deleted.
+function createRecipeArchive(allowedIds){
+ const allowed=new Set(allowedIds);let ready;
+ async function schema(db){if(!db)throw Error('Missing recipe state database');if(!ready)ready=Promise.resolve(db.exec('CREATE TABLE IF NOT EXISTS recipe_archive (recipe_id TEXT PRIMARY KEY, deleted_at INTEGER NOT NULL);')).catch(e=>{ready=null;throw e;});return ready;}
+ const reply=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
+ async function list(db){await schema(db);const rows=await db.prepare('SELECT recipe_id FROM recipe_archive ORDER BY recipe_id').all();return rows.results.map(r=>r.recipe_id).filter(id=>allowed.has(id));}
+ return {async fetch(req,env,isOwner){
+  try{
+   const url=new URL(req.url);if(req.method==='GET'&&url.pathname==='/api/recipe-archive')return reply({deleted:await list(env.DOUGH_RECIPES_DB)});
+   if(req.method!=='POST'||url.pathname!=='/owner/api/recipe-archive')return reply({error:'Not found'},404);
+   if(!await isOwner(req))return reply({error:'Sign in required'},401);
+   if(req.headers.get('Origin')!==url.origin||req.headers.get('Sec-Fetch-Site')==='cross-site')return reply({error:'Request origin not allowed'},403);
+   if(!/^application\/json(?:;|$)/i.test(req.headers.get('Content-Type')||''))return reply({error:'JSON required'},415);
+   const reader=req.body?.getReader();let length=0,text='';if(reader){const decoder=new TextDecoder();for(;;){const {done,value}=await reader.read();if(done)break;length+=value.byteLength;if(length>2048){await reader.cancel();return reply({error:'Request too large'},413);}text+=decoder.decode(value,{stream:true});}text+=decoder.decode();}
+   let body;try{body=JSON.parse(text);}catch{return reply({error:'Invalid request'},400);}
+   if(!body||!allowed.has(body.id)||typeof body.deleted!=='boolean')return reply({error:'Choose a valid recipe and action'},400);
+   await schema(env.DOUGH_RECIPES_DB);
+   if(body.deleted)await env.DOUGH_RECIPES_DB.prepare('INSERT INTO recipe_archive (recipe_id,deleted_at) VALUES (?,?) ON CONFLICT(recipe_id) DO UPDATE SET deleted_at=excluded.deleted_at').bind(body.id,Date.now()).run();
+   else await env.DOUGH_RECIPES_DB.prepare('DELETE FROM recipe_archive WHERE recipe_id=?').bind(body.id).run();
+   return reply({ok:true,deleted:await list(env.DOUGH_RECIPES_DB)});
+  }catch{return reply({error:'Recipe management is temporarily unavailable'},503);}
+ }};
+}
+
+const recipeArchive=createRecipeArchive(["rye-70","vermont","vermont-small","caraway","miche","lithuanian","lodeve","ciabatta","khachapuri","khachapuri-working","pizza-sourdough","pizza-biga","waffles","pretzels","khinkali","pita","scald-hamelman","scald-gost","pizzalovers-contemporanea","pizzalovers-classica","pizzalovers-teglia","pizzalovers-romana","pizzalovers-biga","pizzalovers-poolish","hamelman-baguettes-with-poolish","hamelman-baguettes-with-pate-fermentee","hamelman-ciabatta-with-stiff-biga","hamelman-ciabatta-with-poolish","hamelman-ciabatta-with-olive-oil-and-wheat-germ","hamelman-pain-rustique","hamelman-country-bread","hamelman-rustic-bread","hamelman-roasted-potato-bread","hamelman-potato-bread-with-roasted-onions","hamelman-honey-spelt-bread","hamelman-whole-wheat-bread","hamelman-whole-wheat-bread-with-hazelnuts-and-currants","hamelman-whole-wheat-bread-with-a-multigrain-soaker","hamelman-brown-rice-bread","hamelman-five-grain-bread-with-pate-fermentee","hamelman-cracked-wheat-bread","hamelman-sunflower-seed-bread-with-pate-fermentee","hamelman-golden-raisin-and-walnut-bread","hamelman-buttermilk-bread","hamelman-semolina-durum-bread","hamelman-semolina-durum-bread-with-a-whole-grain-soaker","hamelman-corn-bread","hamelman-vermont-sourdough","hamelman-vermont-sourdough-with-whole-wheat","hamelman-vermont-sourdough-with-increased-whole-grain","hamelman-pain-au-levain","hamelman-pain-au-levain-with-whole-wheat-flour","hamelman-pain-au-levain-with-mixed-sourdough-starters","hamelman-miche-pointe-a-calliere","hamelman-mixed-flour-miche","hamelman-whole-wheat-levain","hamelman-whole-wheat-multigrain","hamelman-semolina-bread","hamelman-durum-bread","hamelman-sourdough-baguettes","hamelman-golden-raisin-bread","hamelman-walnut-raisin-ciabatta","hamelman-five-grain-levain","hamelman-hazelnut-and-fig-levain","hamelman-sourdough-seed-bread","hamelman-olive-levain","hamelman-cheese-bread","hamelman-normandy-apple-bread","hamelman-roasted-garlic-levain","hamelman-harvest-bread","hamelman-carrot-and-walnut-bread","hamelman-roasted-hazelnut-and-prune-bread","hamelman-40-percent-caraway-rye","hamelman-whole-rye-and-whole-wheat-bread","hamelman-deli-rye-bread","hamelman-sourdough-rye-with-walnuts","hamelman-three-stage-90-percent-sourdough-rye","hamelman-three-stage-80-percent-sourdough-rye","hamelman-three-stage-70-percent-sourdough-rye","hamelman-sourdough-rye-with-raisins-and-walnuts","hamelman-quarkbrot","hamelman-66-percent-sourdough-rye","hamelman-flaxseed-bread","hamelman-80-percent-sourdough-rye-with-a-rye-flour-soaker","hamelman-70-percent-rye-with-a-rye-soaker-and-whole-wheat-flour","hamelman-vollkornbrot","hamelman-vollkornbrot-with-flaxseeds","hamelman-vollkornbrot-with-currants","hamelman-horst-bandel-s-black-pumpernickel","hamelman-flaxseed-rye-with-an-old-bread-soaker","hamelman-black-bread","hamelman-five-grain-sourdough-with-rye-sourdough","hamelman-sunflower-seed-bread-with-rye-sourdough","hamelman-beer-bread","hamelman-65-percent-sourdough-rye-with-rye-sourdough","hamelman-65-percent-sourdough-rye-with-firm-white-levain","hamelman-hand-mixed-white-bread","hamelman-unkneaded-six-fold-french-bread","hamelman-baguettes-de-tradition","hamelman-slow-rise","hamelman-french-bread","hamelman-oatmeal-bread","hamelman-oatmeal-bread-with-cinnamon-and-raisins","hamelman-five-grain-bread","hamelman-challah","hamelman-berne-brot","hamelman-pullman-bread","hamelman-whey-bread","hamelman-semolina-bread-with-a-soaker-and-fennel-seed","hamelman-whole-wheat-with-pecans-and-golden-raisins","hamelman-hazelnut-and-fig-bread-with-fennel-seeds-and-rosemary","hamelman-german-farmer-s-bread","hamelman-toast-bread","hamelman-brioche","hamelman-swiss-farmhouse-bread","hamelman-sesame-bread-sticks","hamelman-grissini","hamelman-soft-butter-rolls","hamelman-bagels","hamelman-simits","hamelman-bialys","hamelman-irish-soda-bread","hamelman-traditional-english-hot-cross-buns","hamelman-pretzels","hamelman-pizza-dough","hamelman-tarte-flambee","hamelman-pissaladiere","hamelman-fougasse-with-olives","hamelman-focaccia","hamelman-rosemary-crackers-with-olive-oil","hamelman-lavash","hamelman-whole-wheat-flat-bread","hamelman-lebkuchen"]);
 const auth=createPasswordAuth();
 const privateHeaders={'Content-Type':'text/html; charset=utf-8','Cache-Control':'private, no-store','X-Robots-Tag':'noindex, nofollow','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"};
 export default {async fetch(request,env){
  const url=new URL(request.url),p=url.pathname;
  if(p==='/_worker.js'||p==='/owner-auth.js'||p.startsWith('/tests/')||p.startsWith('/scripts/')||p==='/owner-login.html')return new Response('Not found',{status:404});
+ if(p==='/api/recipe-archive')return recipeArchive.fetch(request,env,async()=>false);
  if(p==='/owner'||p.startsWith('/owner/')){
   if(!['dc.rodiucov.com','dough-calculator-2nr.pages.dev','dc.test'].includes(url.hostname))return new Response('Not found',{status:404});
+  if(p==='/owner/api/recipe-archive')return recipeArchive.fetch(request,env,r=>auth.session(r,env.DOUGH_AUTH_DB));
   if(p.startsWith('/owner/api/'))return auth.api(request,env.DOUGH_AUTH_DB);
   let signedIn=false;try{signedIn=!!await auth.session(request,env.DOUGH_AUTH_DB);}catch{if(!['/owner/login','/owner/setup'].includes(p))return new Response('Sign-in is temporarily unavailable.',{status:503,headers:privateHeaders});}
   if(p==='/owner/login'||p==='/owner/setup'||p==='/owner/account'){
@@ -73,7 +100,7 @@ export default {async fetch(request,env){
   if(p!=='/owner')return new Response(null,{status:303,headers:{Location:'/owner','Cache-Control':'no-store'}});
   const asset=await env.ASSETS.fetch(new Request(new URL('/',url)));
   if(!asset.ok)return new Response('Temporarily unavailable.',{status:503,headers:privateHeaders});
-  return new Response((await asset.text()).replace('<head>','<head><base href="/"><meta name="dough-owner" content="true">'),{headers:privateHeaders});
+  return new Response((await asset.text()).replace('<head>','<head><base href="/owner"><meta name="dough-owner" content="true">'),{headers:privateHeaders});
  }
  const asset=await env.ASSETS.fetch(request);
  if(p==='/'||/\.(?:js|json|css|html)$/.test(p)){const headers=new Headers(asset.headers);headers.set('Cache-Control',p==='/version.json'?'no-store':'public, max-age=0, must-revalidate');return new Response(asset.body,{status:asset.status,statusText:asset.statusText,headers});}
