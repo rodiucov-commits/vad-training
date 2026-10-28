@@ -44,3 +44,8 @@
   Cache-Control: no-cache
 /owner-auth.js
   Cache-Control: no-cache
+
+/hamelman-book.js
+  Cache-Control: no-cache
+/hamelman-book.json
+  Cache-Control: no-cache

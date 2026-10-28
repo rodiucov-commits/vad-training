@@ -120,3 +120,59 @@ with calculator edits still owner-only. No formula, dataset, private storage or 
 configuration is modified. Original book tables are required to complete missing data.
 `tests/owner-access.mjs` checks all supplied methods and available build/reference
 sections across all 109 entries, mobile width, read-only state and owner isolation.
+
+## Original Hamelman book restoration (hamelman-book-1)
+
+All 109 existing Hamelman routes now use `hamelman-book.json` and
+`hamelman-book.js`, restored from the original 514-page PDF. There are 301 original
+book tables plus the explicitly linked Focaccia dough/oil list, 719 procedure
+blocks, complete original page texts, and the original Brioche/Pretzel illustrations.
+Old JSON transcriptions and pure calculation functions remain independently preserved;
+they are not the live weight oracle. New book state is `dough-hamelman-book-v1`.
+Old `dough-hamelman-v1` notes/variations remain intact, notes are reused, version-1
+backups remain importable and version-2 exports contain both data sets. Old numerical
+variations are deliberately not applied to the corrected book formulas.
+
+The metric ingredient rows drive scaling. Original percentages and U.S./Home measures
+are retained separately because the book rounds them independently and may use fresh
+yeast in one column and instant dry in another. Final dough is the sum of the explicit
+final-addition rows, with ripe builds counted once and retained starter excluded.
+Vermont at a 1,000 g basis is 368 g prepared levain, 338 g transferred and 30 g held
+back, finishing at 1,669 g—not the previous inferred 1,699 g. Three-Stage 90% Rye
+has 24 g Freshening → 202 g Basic Sour → 742 g Full Sour, of which 738 g enters
+1,815 g final dough. These are direct metric-column weights, not silently recalculated
+from the book's rounded percentages. Build and soaker percentage denominators differ
+from the overall denominator. Oil/juice/milk/eggs are not treated as pure water.
+
+104 recipes have fully weighed final lists and support actual dough/piece targets.
+Five contain counts, ranges or volume/to-taste quantities: those scale in their own
+units and expose only a known weighed subtotal, never an invented complete dough mass.
+Overall percentage variations change matching fresh final additions only; build ratios
+remain the source ratios. Wholly build-allocated ingredients are read-only. Negative
+final additions and flour-basis imbalance are flagged before blur without replacing
+the active field. Source defaults remain immutable and public pages read-only.
+
+Editorial arithmetic is explicit, with all original source rows preserved:
+- p93 Poolish prints 6.067 kg transfer although the prepared build is 6.607 kg and says
+  “all of above”; the calculator transfers the actual full build and labels the correction.
+- p94 pâte fermentée's rounded rows sum to 4.205 kg versus its 4.210 kg printed yield;
+  “all of above” transfers its weighed ingredient sum, not an unprepared extra 5 g.
+- p126 Brown Rice final yield repeats the 5.016 kg preferment; the final rows sum to
+  19.855 kg and agree with its overall formula.
+- p264 has a horizontally misaligned culture row; the explicit .7 kg seed is used.
+- p338 Crossing Paste prints milk as .228 g versus 8 oz: the editorial kg-unit correction
+  is 228 g, clearly labelled, with .228 g retained in the original reference.
+- Other small metric-row/printed-total rounding differences remain visible; targets use
+  the weighed ingredient sum. Raisin-soak liquid is drained, not a whole-soaker transfer.
+
+Checks: `node tests/hamelman-book.mjs` covers every table/recipe at four scales, explicit
+book oracles, starter reserves, chained transfers, source corrections, unit/count scaling,
+percent variations and all known actual targets. Optionally set `SOURCE_PDF` for SHA256.
+`PLAYWRIGHT_PATH=/absolute/path/playwright-core node tests/owner-access.mjs` verifies
+all 109 public and all 109 real-RSA-authenticated owner recipe views, every original
+procedure and scaled row, mobile width, private notes, print, targets/pieces, in-focus
+percentage edits, both backup versions and the protected pizza calculators. Existing
+engine/pizza/Pizzalovers/temperature and transcription preservation tests still apply;
+the old transcription-specific Hamelman browser fixture is historical, not the book UI.
+Release/SW v13 must be published together. Deploy only dough/. All assets, recipes and
+original procedures must be checked again on dc.rodiucov.com before claiming completion.

@@ -6,7 +6,7 @@ import {loadHamelman,mountHamelman} from './hamelman.js';
 const recipes=[...workbookRecipes,...pizzaLoversRecipes];
 import {createPizzaSheets,seedBuild} from './pizza.js';
 import {doughTemperature,toC,fromC} from './temperature.js';
-const APP_RELEASE='formula-visibility-1';
+const APP_RELEASE='hamelman-book-1';
 const $=s=>document.querySelector(s), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let sheets,book,current,filter='All',query='',scales={},notes={},storageOK=true;
 const key='dough-co-v1';let saved={};if(isOwner)try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch{storageOK=false}
