@@ -43,7 +43,7 @@ function createPasswordAuth(){
    if(attempts.some(a=>a?.blocked_until>Date.now())&&!validSetup)return json({error:'Too many attempts. Try again in 10 minutes.'},429,{'Retry-After':'600'});
    const password=changing?body.oldPassword:body.password;
    const newPassword=changing?body.newPassword:body.password;
-   if((setup||changing)&&(typeof newPassword!=='string'||newPassword.length<12||newPassword.length>256))return json({error:'Use a password of 12–256 characters.'},400);
+   if((setup||changing)&&(typeof newPassword!=='string'||newPassword.length<10||newPassword.length>256))return json({error:'Use a password of 10–256 characters.'},400);
    let valid=validSetup;
    if(!setup){const candidate=await derive(typeof password==='string'&&password.length<=256?password:'',user?.salt||'unconfigured-account');valid=typeof password==='string'&&password.length<=256&&equal(candidate,user?.password_hash)&&typeof body.email==='string'&&body.email.trim().toLowerCase()===OWNER_EMAIL;}
    if(!valid){for(const [i,k]of keys.entries()){const prior=attempts[i],n=(prior?.blocked_until&&prior.blocked_until<=Date.now()?0:prior?.failures||0)+1;await db.prepare('INSERT INTO dough_attempts (attempt_key,failures,blocked_until) VALUES (?,?,?) ON CONFLICT(attempt_key) DO UPDATE SET failures=CASE WHEN blocked_until>0 AND blocked_until<=? THEN 1 ELSE failures+1 END,blocked_until=CASE WHEN blocked_until>0 AND blocked_until<=? THEN 0 WHEN failures+1>=? THEN ? ELSE blocked_until END').bind(k,n,n>=(i?25:5)?Date.now()+BLOCK_MS:0,Date.now(),Date.now(),i?25:5,Date.now()+BLOCK_MS).run();}return json({error:'Invalid email, password or setup link.'},401);}
