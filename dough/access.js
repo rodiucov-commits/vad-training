@@ -1,7 +1,7 @@
 // The server supplies this marker only after validating Cloudflare Access JWT.
 export const isOwner=typeof document!=='undefined'&&location.pathname==='/owner'&&document.querySelector('meta[name="dough-owner"]')?.content==='true';
 export function publicView(host){
- if(isOwner||host.querySelector('.hb-calculator'))return;
+ if(isOwner||host.querySelector('.hb-calculator,.ddt-calculator'))return;
  for(const notes of host.querySelectorAll('textarea'))notes.closest('section')?.remove();
  for(const input of host.querySelectorAll('input,select')){
   if(input.type==='file'){input.remove();continue}
@@ -15,7 +15,7 @@ export function publicView(host){
  host.oninput=host.onchange=host.onclick=null;
 }
 export function initAccess(){
- const nav=document.querySelector('nav');const link=document.createElement('a');link.className='owner-nav';link.textContent=isOwner?'Owner mode · Sign out':'Owner sign-in';link.href=isOwner?'/cdn-cgi/access/logout':'/owner';nav.append(link);
+ const nav=document.querySelector('nav');const ddt=document.createElement('a');ddt.className='ddt-nav';ddt.textContent='DDT calculator';ddt.href='#recipe/dough-temperature';nav.append(ddt);const link=document.createElement('a');link.className='owner-nav';link.textContent=isOwner?'Owner mode · Sign out':'Owner sign-in';link.href=isOwner?'/cdn-cgi/access/logout':'/owner';nav.append(link);
  if(!isOwner)document.querySelector('#calculator-nav').hidden=true;
  document.addEventListener('click',e=>{if(e.target.closest('[data-public-print]'))window.print();const jump=e.target.closest('[data-hm-scroll]')?.dataset.hmScroll;if(jump&&!isOwner)document.getElementById(jump)?.scrollIntoView({behavior:'smooth'})});
 }

@@ -1,7 +1,7 @@
 const bread=(id,sheet,title,tag,description)=>({id,sheet,title,tag,description,bread:true});
 const section=(title,label,amount,start,end,unit='g')=>({title,label,amount,rows:Array.from({length:end-start+1},(_,i)=>i+start),unit});
 export const recipes=[
- {id:'dough-temperature',title:'Dough temperature',tag:'Calculator',description:'Calculate your mixing-water temperature, or calibrate mixer friction from your last bake.',temperature:true},
+ {id:'dough-temperature',title:'DDT · Dough temperature',tag:'Calculator',description:'Free for everyone: calculate mixing-water temperature from your DDT, or calibrate mixer friction. Celsius, with or without preferment.',temperature:true},
  bread('rye-70','70% 3stage Rye','70% three-stage rye','Rye','A rye-forward loaf with a sourdough levain. Pair with the Detmolder build.'),
  bread('vermont','Vermont Sour','Vermont sourdough','Sourdough','The original Vermont formula, with an 80 / 20 flour blend.'),
  bread('vermont-small','Small Vermont Sour','Small Vermont sourdough','Sourdough','A smaller bake with a 60 / 40 flour blend.'),

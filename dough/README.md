@@ -212,3 +212,38 @@ Owner routes,2public batch inputs,owner-only source columns,loaf500g×4→2000g,
 count6preserving500g→3000g,live dividing instructions,private notes,backups and print.
 Version the access module import as well as Hamelman dependencies so returning browsers
 do not reapply the previous blanket public-input conversion.
+
+## Public DDT calculator
+
+Release `public-ddt-1` (SW v16) makes `/#recipe/dough-temperature` available to
+all visitors without Owner sign-in. The navigation and Calculator collection card
+link to it. `ddt.js` owns its inputs/actions; `publicView` exempts only this trusted
+DDT mount and the existing public loaf-planning mount. All other recipe-editing,
+private notes and Access JWT authorization remain unchanged.
+
+The tool uses the standard bakery factor method in Celsius:
+
+- Straight dough: water = 3 × DDT − room − flour − friction.
+- With preferment: water = 4 × DDT − room − flour − preferment − friction.
+- Calibration reverses the same equation using measured final dough and water.
+
+The displayed 6°C friction default is explicitly an estimate, not a measured rise.
+Calibration can be applied directly to the next mix. Results update while typing
+without losing focus, with invalid-input, subfreezing-water and warm-water messages.
+The explanation distinguishes post-mix dough temperature from proofing/oven heat
+and notes the factor method's limits. No recipe formula or fermentation schedule
+is changed. Active-mode validation ignores hidden/inactive inputs.
+
+Public preferences use `dough-ddt-public-v1`; Owner keeps `dough-temp-v1`.
+Existing settings contain Celsius values internally, so old Fahrenheit-display
+preferences migrate to a Celsius display without altering the measurements.
+Share copies only the public tool URL; reset affects only the current role's DDT
+settings. Recipe notes/storage are untouched. Versioned runtime dependencies are
+pre-cached for offline use and returning-browser upgrades.
+
+Verify with `node tests/temperature.mjs` and
+`PLAYWRIGHT_PATH=/absolute/path/playwright-core node tests/ddt-browser.mjs`.
+The browser fixture starts on the prior release with real browser caching and its
+service worker, then upgrades without clearing storage, exercises both factor
+methods/calibration, warnings, sharing, persistence, mobile layout and offline
+reload, and checks private notes/settings and the recipe access boundary.
