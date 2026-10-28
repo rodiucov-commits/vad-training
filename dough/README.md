@@ -212,3 +212,57 @@ Owner routes,2public batch inputs,owner-only source columns,loaf500g×4→2000g,
 count6preserving500g→3000g,live dividing instructions,private notes,backups and print.
 Version the access module import as well as Hamelman dependencies so returning browsers
 do not reapply the previous blanket public-input conversion.
+
+## Public DDT calculator
+
+Release `public-ddt-1` (SW v16) makes `/#recipe/dough-temperature` available to
+all visitors without Owner sign-in. The navigation and Calculator collection card
+link to it. `ddt.js` owns its inputs/actions; `publicView` exempts only this trusted
+DDT mount and the existing public loaf-planning mount. All other recipe-editing,
+private notes and Access JWT authorization remain unchanged.
+
+The tool uses the standard bakery factor method in Celsius:
+
+- Straight dough: water = 3 × DDT − room − flour − friction.
+- With preferment: water = 4 × DDT − room − flour − preferment − friction.
+- Calibration reverses the same equation using measured final dough and water.
+
+The displayed 6°C friction default is explicitly an estimate, not a measured rise.
+Calibration can be applied directly to the next mix. Results update while typing
+without losing focus, with invalid-input, subfreezing-water and warm-water messages.
+The explanation distinguishes post-mix dough temperature from proofing/oven heat
+and notes the factor method's limits. No recipe formula or fermentation schedule
+is changed. Active-mode validation ignores hidden/inactive inputs.
+
+Public preferences use `dough-ddt-public-v1`; Owner keeps `dough-temp-v1`.
+Existing settings contain Celsius values internally, so old Fahrenheit-display
+preferences migrate to a Celsius display without altering the measurements.
+Share copies only the public tool URL; reset affects only the current role's DDT
+settings. Recipe notes/storage are untouched. Versioned runtime dependencies are
+pre-cached for offline use and returning-browser upgrades.
+
+Verify with `node tests/temperature.mjs` and
+`PLAYWRIGHT_PATH=/absolute/path/playwright-core node tests/ddt-browser.mjs`.
+The browser fixture starts on the prior release with real browser caching and its
+service worker, then upgrades without clearing storage, exercises both factor
+methods/calibration, warnings, sharing, persistence, mobile layout and offline
+reload, and checks private notes/settings and the recipe access boundary.
+
+### DDT preferment and spiral-mixer update
+
+Release `public-ddt-2` (SW v17): the preferment temperature field is always visible
+and is disabled (with an explanation) only when the user selects straight dough.
+New/reset settings default to using a preferment. The mixer selector offers an
+editable spiral-mixer starting estimate of 14°C or a custom/calibrated factor.
+The estimate is not claimed as a universal specification: Hamelman's DDT appendix
+quotes a general mixer friction range of roughly 13–16°C for 3 minutes slow plus
+3–4 minutes fast mixing, and calls for calibration with actual mixing conditions.
+Temperature differences are converted as differences, not absolute temperatures.
+
+Saved custom/calibrated factors are retained. The first DDT release's unlabelled
+6°C placeholder migrates to the spiral estimate; all other saved inputs and explicit
+straight/preferment selection remain intact. Settings now record their version
+and whether friction is a spiral estimate, custom entry or calibrated result.
+The browser upgrade fixture starts on `public-ddt-1` and verifies this migration,
+visible/disabled preferment behavior, direct preferment temperature effects, mixer
+preset/custom persistence, and unchanged private notes/Owner settings.
