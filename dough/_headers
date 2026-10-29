@@ -52,3 +52,14 @@
 
 /recipe-stages.js
   Cache-Control: no-cache
+
+/recipe-content.js
+  Cache-Control: no-cache
+/recipe-editor.js
+  Cache-Control: no-cache
+/recipe-model.js
+  Cache-Control: no-cache
+/recipe-catalog.json
+  Cache-Control: no-cache
+/recipe-content.css
+  Cache-Control: no-cache

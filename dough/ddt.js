@@ -1,4 +1,4 @@
-import {doughTemperature} from './temperature.js?v=preferment-builds-1';
+import {doughTemperature} from './temperature.js?v=recipe-db-1';
 const defaults={desired:26,room:22,flour:22,preferment:24,friction:14,frictionSource:'spiral',settingsVersion:2,water:25,actual:26,withPreferment:true,mode:'water',unit:'C'};
 const numbers=['desired','room','flour','preferment','friction','water','actual'];
 const fmt=n=>new Intl.NumberFormat('en',{maximumFractionDigits:1}).format(n);

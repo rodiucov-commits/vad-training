@@ -58,3 +58,11 @@ build rows/weights, live scaling without focus loss, mobile and simple-stage fee
 method blocks in both roles. Pizza source/oracle and public batch checks remain
 separate. `tests/preferment-upgrade.mjs` verifies real browser cache migration and
 offline use without clearing private notes/inputs.
+
+## Implemented migration
+
+The recommended migration is implemented in release `recipe-db-1`; the earlier
+sections describe the pre-migration system and design rationale. See
+[recipe-database.md](recipe-database.md) for the current schema, APIs, UI, storage
+boundaries, compatibility routes, tests and rollback. The existing recipe-content
+D1 binding is expanded with additive versioned tables; authentication stays isolated.

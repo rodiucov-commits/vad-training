@@ -27,7 +27,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const num=(v,d=2)=>new Intl.NumberFormat('en',{maximumFractionDigits:d}).format(v),g=v=>num(v)+' g';
 const tools={spiral:{name:'Spiral mixer',max:80,knead:'Knead on low speed for 10–15 minutes until smooth and releasing from the bowl.'},machine:{name:'Stand mixer',max:72,knead:'Use a dough hook on low speed for 12–18 minutes, scraping the bowl as needed.'},hand:{name:'By hand',max:65,knead:'Knead by hand for 15–20 minutes until smooth and elastic.'}};
 function load(){try{const x=JSON.parse(localStorage.getItem(key)||'{}');return x&&typeof x==='object'&&!Array.isArray(x)?x:{}}catch{return {}}}
-function instructions(s,r){
+export function instructions(s,r){
   const p=presets[s.p],pl=r.plan,yn=s.y==='dry'?'dry yeast':'fresh yeast',mix=tools[s.w].knead,room=s.rt+' °C',cold=pl.fridge?` Then refrigerate for ${pl.fridge} h at ${s.kt} °C.`:'',balls=`Divide into ${s.n} pieces of ${s.g} g and round gently.`,proof=`Proof for ${pl.proof} h at ${room}, until soft and well risen.`;
   if(s.p==='contemporanea')return [
     ['Combine flour and yeast',`Mix ${g(r.flour)} flour and ${g(r.yeast)} ${yn}.`],

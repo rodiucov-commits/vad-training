@@ -369,3 +369,13 @@ Run `node dough/tests/preferment-builds.mjs` from the repository root; with
 `PLAYWRIGHT_PATH` set, run `preferment-builds-browser.mjs` and
 `preferment-upgrade.mjs` in `dough/tests/`, plus existing source-oracle, book browser
 and pizza batch tests. The tests use synthetic authentication, never a live setup token.
+
+## Database-backed recipes
+
+Release `recipe-db-1` / SWv22 migrates 134 recipe records into the existing
+content-only `DOUGH_RECIPES_DB` with immutable source revisions, saved drafts,
+publication history and rollback. All recipes use the shared stage template;
+Owner mode → **Edit published recipe** opens the structured editor. Save draft,
+preview and publish are separate actions. Batch/private-note changes remain local.
+Original calculators and saved variations remain at each recipe's `#source/…` link;
+DDT and the blank master remain independent. See [database and verification details](docs/recipe-database.md).

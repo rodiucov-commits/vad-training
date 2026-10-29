@@ -4,7 +4,7 @@ export async function createRecipeManager(recipes,{owner,toast,onChange}){
  let deleted=new Set(),online=false,busy=false;const cacheKey='dough-recipe-archive-v1';
  function update(ids){deleted=new Set(ids.filter(id=>catalog.has(id)));try{localStorage.setItem(cacheKey,JSON.stringify([...deleted]));}catch{}}
  try{const saved=JSON.parse(localStorage.getItem(cacheKey)||'[]');if(Array.isArray(saved))deleted=new Set(saved.filter(id=>catalog.has(id)));}catch{}
- try{const r=await fetch('/api/recipe-archive',{cache:'no-store'});if(!r.ok)throw 0;const data=await r.json();if(!Array.isArray(data.deleted))throw 0;update(data.deleted);online=true;}catch{}
+ try{const r=await fetch('/api/recipe-archive',{cache:'no-store',signal:AbortSignal.timeout(4000)});if(!r.ok)throw 0;const data=await r.json();if(!Array.isArray(data.deleted))throw 0;update(data.deleted);online=true;}catch{}
  const toolbar=owner?document.createElement('section'):null;
  if(toolbar){toolbar.className='owner-recipe-tools';toolbar.id='owner-recipe-tools';document.querySelector('main').before(toolbar);toolbar.addEventListener('change',e=>{if(e.target.id==='owner-recipe-picker'&&e.target.value)location.hash='recipe/'+e.target.value;});toolbar.addEventListener('click',e=>{if(e.target.closest('[data-delete-recipe]'))mutate(toolbar.dataset.active,true);});}
  async function mutate(id,remove){
@@ -24,5 +24,6 @@ export async function createRecipeManager(recipes,{owner,toast,onChange}){
   host.onclick=e=>{const id=e.target.closest('[data-restore-recipe]')?.dataset.restoreRecipe;if(id)mutate(id,false);};
  }
  function filterLinks(host){for(const a of host.querySelectorAll('a[href^="#recipe/"]')){const id=a.getAttribute('href').slice(8).split('?')[0];if(deleted.has(id)){if(a.closest('.pl-presets'))a.remove();else a.replaceWith(document.createTextNode(a.textContent));}}}
- return {get deleted(){return deleted;},setActive,renderDeleted,filterLinks};
+ async function refresh(){try{const response=await fetch('/api/recipe-archive',{cache:'no-store',signal:AbortSignal.timeout(4000)});if(!response.ok)throw 0;const data=await response.json();if(!Array.isArray(data.deleted))throw 0;update(data.deleted);online=true;}catch{online=false;}}
+ return {refresh,get deleted(){return deleted;},setActive,renderDeleted,filterLinks};
 }
