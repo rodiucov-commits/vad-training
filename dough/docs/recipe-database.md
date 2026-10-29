@@ -78,7 +78,7 @@ publishing or modifying them. New private notes and batch preferences use
 `dough-recipe-private-v1`; per-recipe private export/import is separate from shared
 recipe backup. Public batch controls never write Owner storage or server recipes.
 
-Release recipe-db-1 / SWv22 versions the full dependency graph. A no-store catalogue
+Release recipe-db-2 / SWv23 versions the full dependency graph. A no-store catalogue
 read supplies published revisions; a validated last-known snapshot supports offline
 use, falling back to the frozen baseline. A fresh online navigation rechecks shared
 content and collection visibility. Offline copies are not content-erasure mechanisms.
@@ -103,3 +103,8 @@ No production recipe changes are made just to demonstrate the editor.
 - Live checks compare all imported records to the frozen source import, verify
   template/ingredient/method/scale behavior, cookie/anonymous boundaries, served
   asset parity, unchanged archive rows/bindings and no live testing publications.
+
+Compatibility follow-up: legacy #recipe URLs with saved calculator query inputs
+continue to the preserved original calculator. Normal recipe links use the shared
+template. Duplicate inherited warning panels are suppressed without removing source
+conflict or unknown-hydration information. Frozen import sourceVersion stays unchanged.

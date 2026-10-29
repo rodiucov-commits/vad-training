@@ -1,4 +1,4 @@
-import {validateRecipe} from './recipe-model.js?v=recipe-db-1';import {recipeContents,esc,num} from './recipe-content.js?v=recipe-db-1';
+import {validateRecipe} from './recipe-model.js?v=recipe-db-2';import {recipeContents,esc,num} from './recipe-content.js?v=recipe-db-2';
 export async function mountRecipeEditor(id,{content,toast,host=document.querySelector('#app'),onPublished}={}){
  host.innerHTML='<section class="panel"><h1>Opening recipe editor…</h1></section>';let state,record,dirty=false,busy=false;
  const request=async body=>{const response=await fetch('/owner/api/recipes?id='+encodeURIComponent(id),{cache:'no-store',credentials:'same-origin',...(body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{})}),data=await response.json();if(!response.ok)throw Error([data.error,...(data.errors||[])].join('\n'));return data;};

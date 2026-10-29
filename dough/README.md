@@ -379,3 +379,6 @@ Owner mode → **Edit published recipe** opens the structured editor. Save draft
 preview and publish are separate actions. Batch/private-note changes remain local.
 Original calculators and saved variations remain at each recipe's `#source/…` link;
 DDT and the blank master remain independent. See [database and verification details](docs/recipe-database.md).
+
+Compatibility release `recipe-db-2` / SWv23 also preserves legacy shared calculator
+query links; the frozen database import and original revision records are unchanged.
