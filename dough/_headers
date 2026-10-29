@@ -49,3 +49,6 @@
   Cache-Control: no-cache
 /hamelman-book.json
   Cache-Control: no-cache
+
+/recipe-stages.js
+  Cache-Control: no-cache

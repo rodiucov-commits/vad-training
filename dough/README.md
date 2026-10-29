@@ -352,3 +352,20 @@ Run `node --test dough/tests/recipe-archive.mjs dough/tests/owner-password.mjs`,
 real HTTPS `owner-password-browser.mjs` (navigation + shared delete/restore + notes),
 `public-pizza-batches.mjs` (all eight public presets at three batch sizes), and the
 existing full Owner recipe, DDT, pizza-source and Pizzalovers-oracle checks.
+
+## Preferment build completeness
+
+Release `preferment-builds-1` / SW v21 renders all enabled workbook bread build
+stages through `recipe-stages.js`, using original G/I ingredient quantities. The
+previous pizza-only template guard omitted 9 build tables across 8 bread recipes.
+Small Vermont now explicitly labels its inoculum “Sourdough starter”, not commercial
+yeast. Source formulas, original JSON, saved inputs/notes and pizza seed accounting
+are unchanged. Missing inoculum quantities and source timing are identified rather
+than guessed. Build tables update while typing batch/hydration edits in Owner mode.
+See [recipe data/template architecture](docs/recipe-data-model.md) for the existing
+structured sources and recommended canonical-schema/database editing architecture.
+
+Run `node dough/tests/preferment-builds.mjs` from the repository root; with
+`PLAYWRIGHT_PATH` set, run `preferment-builds-browser.mjs` and
+`preferment-upgrade.mjs` in `dough/tests/`, plus existing source-oracle, book browser
+and pizza batch tests. The tests use synthetic authentication, never a live setup token.
