@@ -109,7 +109,7 @@ continue to the preserved original calculator. Normal recipe links use the share
 template. Duplicate inherited warning panels are suppressed without removing source
 conflict or unknown-hydration information. Frozen import sourceVersion stays unchanged.
 
-## Consistent percentages (overall-percent-1 / SWv24)
+## Consistent percentages (overall-percent-2 / SWv24)
 
 `recipeFlourWater` recursively traces ingredients actually transferred into final
 dough, prorating prepared builds for retained reserves and chained transfers. It

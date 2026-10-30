@@ -15,6 +15,7 @@ const c=recipeFlourWater(chain);close(c.flour,570);close(c.water,280);assert.dee
 const drained=structuredClone(chain);drained.stages[2].rows[0].drained=true;assert(!recipeFlourWater(drained).available);assert.throws(()=>finalWaterForPercent(drained,'water',70));
 assert.throws(()=>finalWaterForPercent(chain,'water',1),/already contain more water/);
 const mixed=structuredClone(chain);mixed.stages[0].rows[1].quantity=null;assert(!recipeFlourWater(mixed).available);
+const milk=structuredClone(chain);milk.stages[2].rows.push({kind:'other',name:'Milk',quantity:100,unit:'g'});assert.deepEqual(recipeFlourWater(milk).unknownWaterComponents,['Milk']);close(recipeFlourWater(milk).water,280);
 const beforeMass=recipeMass(chain);recipeFlourWater(chain);close(beforeMass,recipeMass(chain));
 let available=0,waterControls=0,unavailable=0;
 for(const r of recipes){const b=recipeFlourWater(r);if(!b.available){unavailable++;continue;}available++;const final=r.stages.find(s=>s.id===r.finalStageId);for(const row of final.rows.filter(row=>row.kind==='water'&&row.unit==='g'&&row.quantity!==null&&row.quantity>=0)){

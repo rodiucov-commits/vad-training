@@ -63,7 +63,7 @@ function knownMass(r){return r.stages.find(s=>s.id===r.finalStageId).rows.every(
 // Trace only the material transferred into the finished dough. Prepared reserves,
 // original reference tables and fillings are not additional dough ingredients.
 function recipeFlourWater(r){
- const reasons=new Set(),unknownSeeds=new Set(),active=new Set();
+ const reasons=new Set(),unknownSeeds=new Set(),unknownWaterComponents=new Set(),active=new Set();
  function visit(stage,factor=1){
   if(!stage||active.has(stage.id)){reasons.add('Missing or circular build');return {flour:0,water:0};}
   active.add(stage.id);const result={flour:0,water:0};
@@ -73,6 +73,8 @@ function recipeFlourWater(r){
     const build=r.stages.find(s=>s.id===row.fromStage),mass=build?sumGrams(build):0;
     if(row.drained||!build||mass<=0||row.quantity===null||row.unit!=='g'||build.rows.some(v=>v.quantity===null||v.unit!=='g')){reasons.add('Build composition cannot be determined: '+row.name);continue;}
     const part=visit(build,factor*row.quantity/mass);result.flour+=part.flour;result.water+=part.water;
+   }else if(row.kind==='other'&&/milk|buttermilk|eggs?|yog[hu]rt|kefir|cream|juice|whey|butter|honey|syrup|puree|purée/i.test(row.name||'')){
+    unknownWaterComponents.add(row.name);
    }else if(['flour','water','starter'].includes(row.kind)){
     if(row.quantity===null||row.unit!=='g'){reasons.add('Unweighed flour, water or starter: '+row.name);continue;}
     const quantity=row.quantity*factor;
@@ -87,7 +89,7 @@ function recipeFlourWater(r){
  const values=visit(r.stages.find(s=>s.id===r.finalStageId));
  if(r.component)reasons.add('Base-dough composition is held in a separate recipe');
  if(values.flour<=0)reasons.add('No positive known flour basis');
- return {...values,available:reasons.size===0,reasons:[...reasons],unknownSeeds:[...unknownSeeds]};
+ return {...values,available:reasons.size===0,reasons:[...reasons],unknownSeeds:[...unknownSeeds],unknownWaterComponents:[...unknownWaterComponents]};
 }
 function finalWaterForPercent(r,rowId,percent){
  const row=r.stages.find(s=>s.id===r.finalStageId)?.rows.find(v=>v.id===rowId),basis=recipeFlourWater(r);

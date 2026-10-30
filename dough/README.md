@@ -383,7 +383,7 @@ DDT and the blank master remain independent. See [database and verification deta
 Compatibility release `recipe-db-2` / SWv23 also preserves legacy shared calculator
 query links; the frozen database import and original revision records are unchanged.
 
-### Consistent overall water percentage (overall-percent-1)
+### Consistent overall water percentage (overall-percent-2)
 
 The shared Owner editor uses total counted recipe flour for final-stage percentages.
 Its final-water percentage is overall water, including transferred build water;
