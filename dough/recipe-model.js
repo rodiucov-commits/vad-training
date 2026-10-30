@@ -3,6 +3,42 @@
 export const sumGrams=stage=>stage.rows.reduce((sum,r)=>sum+(r.unit==='g'&&typeof r.quantity==='number'?r.quantity:0),0);
 export function recipeMass(r){return sumGrams(r.stages.find(s=>s.id===r.finalStageId));}
 export function knownMass(r){return r.stages.find(s=>s.id===r.finalStageId).rows.every(v=>v.unit==='g'&&v.quantity!==null);}
+// Trace only the material transferred into the finished dough. Prepared reserves,
+// original reference tables and fillings are not additional dough ingredients.
+export function recipeFlourWater(r){
+ const reasons=new Set(),unknownSeeds=new Set(),active=new Set();
+ function visit(stage,factor=1){
+  if(!stage||active.has(stage.id)){reasons.add('Missing or circular build');return {flour:0,water:0};}
+  active.add(stage.id);const result={flour:0,water:0};
+  for(const row of stage.rows){
+   if(row.quantity===0)continue;
+   if(row.kind==='transfer'){
+    const build=r.stages.find(s=>s.id===row.fromStage),mass=build?sumGrams(build):0;
+    if(row.drained||!build||mass<=0||row.quantity===null||row.unit!=='g'||build.rows.some(v=>v.quantity===null||v.unit!=='g')){reasons.add('Build composition cannot be determined: '+row.name);continue;}
+    const part=visit(build,factor*row.quantity/mass);result.flour+=part.flour;result.water+=part.water;
+   }else if(['flour','water','starter'].includes(row.kind)){
+    if(row.quantity===null||row.unit!=='g'){reasons.add('Unweighed flour, water or starter: '+row.name);continue;}
+    const quantity=row.quantity*factor;
+    if(row.kind==='starter'){
+     if(row.seedHydration===undefined){unknownSeeds.add(row.name);continue;}
+     const flour=quantity/(1+row.seedHydration/100);result.flour+=flour;result.water+=quantity-flour;
+    }else result[row.kind]+=quantity;
+   }
+  }
+  active.delete(stage.id);return result;
+ }
+ const values=visit(r.stages.find(s=>s.id===r.finalStageId));
+ if(r.component)reasons.add('Base-dough composition is held in a separate recipe');
+ if(values.flour<=0)reasons.add('No positive known flour basis');
+ return {...values,available:reasons.size===0,reasons:[...reasons],unknownSeeds:[...unknownSeeds]};
+}
+export function finalWaterForPercent(r,rowId,percent){
+ const row=r.stages.find(s=>s.id===r.finalStageId)?.rows.find(v=>v.id===rowId),basis=recipeFlourWater(r);
+ if(!basis.available||row?.kind!=='water'||row.unit!=='g'||row.quantity===null||!Number.isFinite(percent)||percent<0)throw Error('Overall water percentage is unavailable');
+ const quantity=basis.flour*percent/100-(basis.water-row.quantity);
+ if(quantity<-.000001)throw Error('Builds already contain more water than the requested overall percentage');
+ return Math.max(0,quantity);
+}
 export function scaledRecipe(r,factor){if(!Number.isFinite(factor)||factor<=0||factor>1e6)throw Error('Invalid batch scale');return {...r,stages:r.stages.map(s=>({...s,rows:s.rows.map(v=>({...v,quantity:v.quantity===null?null:v.quantity*factor,...(v.retained!==undefined?{retained:v.retained*factor}:{})}))}))};}
 export function validateRecipe(r,{publication=false}={}){
  const errors=[],warnings=[];const str=(v,max=2000)=>typeof v==='string'&&v.length<=max;const id=v=>str(v,100)&&/^[a-z0-9][a-z0-9-]*$/.test(v);

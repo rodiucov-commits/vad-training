@@ -1,18 +1,18 @@
-import {loadRecipeContent,mountRecipeContent,refreshRecipeContent} from './recipe-content.js?v=recipe-db-2';
-import {mountRecipeEditor} from './recipe-editor.js?v=recipe-db-2';
+import {loadRecipeContent,mountRecipeContent,refreshRecipeContent} from './recipe-content.js?v=overall-percent-1';
+import {mountRecipeEditor} from './recipe-editor.js?v=overall-percent-1';
 let recipeContent,sourceView=false;
-import {isOwner,publicView,initAccess} from './access.js?v=recipe-db-2';
+import {isOwner,publicView,initAccess} from './access.js?v=overall-percent-1';
 import {Workbook,column,letters} from './engine.js';
-import {recipes as workbookRecipes} from './recipes.js?v=recipe-db-2';
-import {pizzaLoversRecipes,mountPizzaLovers} from './pizzalovers.js?v=recipe-db-2';
-import {loadHamelman,mountHamelman} from './hamelman.js?v=recipe-db-2';
+import {recipes as workbookRecipes} from './recipes.js?v=overall-percent-1';
+import {pizzaLoversRecipes,mountPizzaLovers} from './pizzalovers.js?v=overall-percent-1';
+import {loadHamelman,mountHamelman} from './hamelman.js?v=overall-percent-1';
 const recipes=[...workbookRecipes,...pizzaLoversRecipes];
-import {createRecipeManager} from './recipe-manager.js?v=recipe-db-2';
+import {createRecipeManager} from './recipe-manager.js?v=overall-percent-1';
 let recipeManager;
 import {createPizzaSheets,seedBuild} from './pizza.js';
-import {workbookBuilds} from './recipe-stages.js?v=recipe-db-2';
-import {mountDDT} from './ddt.js?v=recipe-db-2';
-const APP_RELEASE='recipe-db-2';
+import {workbookBuilds} from './recipe-stages.js?v=overall-percent-1';
+import {mountDDT} from './ddt.js?v=overall-percent-1';
+const APP_RELEASE='overall-percent-1';
 const $=s=>document.querySelector(s), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let sheets,book,current,filter='All',query='',scales={},notes={},storageOK=true;
 const key='dough-co-v1';let saved={};if(isOwner)try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch{storageOK=false}

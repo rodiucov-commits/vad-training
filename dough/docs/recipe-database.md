@@ -56,7 +56,7 @@ including ripe transfers once—not overall references, fillings or prepared res
 recipes use loaf/ball/tray weight × count; mixed-unit recipes use batch multipliers
 and explicitly label known gram subtotals as incomplete weights. Original percentages
 remain in read-only reference tables with their original denominator; the Owner
-editor's optional feed percentages explicitly use that stage's fresh-flour weight.
+editor's build/component feed percentages explicitly use that stage's fresh-flour weight. Final-stage percentages instead use the shared counted flour basis across the entire dough; the final water control represents overall counted water, subtracting the water already carried in transferred builds and any other final water rows.
 Changing a build requires reconciling transfers; the editor provides a recalculation
 button using prepared minus retained amounts. Unknown starter composition is never
 silently decomposed or normalized. Seed hydration edits alone do not silently change
@@ -108,3 +108,32 @@ Compatibility follow-up: legacy #recipe URLs with saved calculator query inputs
 continue to the preserved original calculator. Normal recipe links use the shared
 template. Duplicate inherited warning panels are suppressed without removing source
 conflict or unknown-hydration information. Frozen import sourceVersion stays unchanged.
+
+## Consistent percentages (overall-percent-1 / SWv24)
+
+`recipeFlourWater` recursively traces ingredients actually transferred into final
+dough, prorating prepared builds for retained reserves and chained transfers. It
+excludes source-reference tables and separate components; known starter hydration
+is decomposed into flour/water once. Unknown starter composition is never guessed:
+these records explicitly show a known-ingredient/source-accounting percentage,
+not verified complete hydration. Drained builds, unweighed flour/water or base dough
+held in a separate recipe disable overall-percent editing rather than inventing a
+basis. Water-only percentages do not treat milk, eggs or oil as water.
+
+All applicable final-stage water controls now mean total counted water / total
+counted flour. Setting one computes required final addition = target total water
+minus all other counted water, including transferred builds. Other final additions
+use that same total-flour denominator; build/component feed percentages remain
+separately labelled local build ratios. These explicit formula edits change the
+source-sized recipe, not a fixed target batch; piece weight × count scales it later.
+
+Small Vermont source oracle: 1,047.120419 g flour; 732.984293 g water at70%;
+209.424084 g build water; 523.560209 g final water. A586.387435 g final addition
+corresponds to76% by this source-accounting basis, not70%. The source negative
+starter correction and unknown seed hydration remain disclosed and unchanged.
+
+Regression commands: `node dough/tests/recipe-percent.mjs` and, with PLAYWRIGHT_PATH,
+`node dough/tests/recipe-percent-browser.mjs`. All134 editors are inspected, with114
+eligible final-water controls exercised without changing production data. Existing
+source engines, 134public+134Owner shared views, isolated editor writes and a real
+previous-release cache/offline upgrade are checked independently.
