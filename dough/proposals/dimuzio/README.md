@@ -145,3 +145,9 @@ Ripening hours and editable bulk/rest/shaping/proof/baking/cooling minutes feed 
 Unknown source timings stay blank and block a complete schedule, including explicit autolyse=0 when absent. One-preferment source timings are from printed p.167; p.169 supplies no procedure. Ripening, shaping allowance and cooling are user settings. Calendar output uses browser-local time, elapsed durations, date rollover and range labels. This estimates a work plan, not biological readiness.
 
 Verified: 54 independent Decimal mass/composition cases; browser checks for section balances, parallel-build clock vector (12h readiness + subsequent stages = 17h18–17h54), overnight rollover, missing/negative duration rejection, live-linked notes, scaling without resetting the schedule, and 390/768/1440px layouts. Existing collection and shared engines untouched.
+
+
+### Action-plan endpoint: baked bread
+The timeline now finishes at oven exit, not cooling. Cooling is removed from inputs, required stages, elapsed duration, recipe timing summaries and milestones. The start-date/time field updates the action plan automatically; its summary leads with the dated oven-finish time and elapsed duration. Main actions are preferment preparation/readiness, mixing, start bulk, divide/rest, shape, proof, oven entry and baked bread. Mixer speeds and rest still contribute internally, without separate micro-milestones.
+
+The independent parallel-build vector now ends after 978–1014 minutes (16h18–16h54), exactly 60 minutes earlier than the former cooling-inclusive vector. Tests cover completing the planner with no cooling field, changing the start date, clearing/recovering the start field, final baked-bread milestone, date rollover and interval output. These changes supersede the cooling endpoint described above.
