@@ -124,3 +124,14 @@ accounting/recovery, combined preferments, single total, absence of blank/footer
 rows, build order, process links and390/768/1440layouts.54independent Decimal
 seed oracles now also compare mass-share and baker's-percent outputs. Existing
 collection engines and records are not changed.
+
+## Overall formula reference added
+
+Assettagdimuzio-overall-8: show overall baker's formula immediately after count /
+pieceweight / targetmass, before01Preparethepreferments. Four reference rows:
+whole-recipe flour100%, wateroverall%,salt%,instantyeast0.4%,withscaledgrams and
+one table total. Flour/water include all starter and preferment components; do not
+add levain/spongemass again to this reference. Final-mix table and explicit build
+feed/seed ledgers remain unchanged. Invalid states hide/clear this table too.
+Browser tests verify position,100%flour andwaterbasis,livehydration/scaling and
+unknownseed recovery.54independent Decimal model cases remain passing.
