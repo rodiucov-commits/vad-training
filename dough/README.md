@@ -431,3 +431,10 @@ checks parallel/chained timing and the 55-minute offset. `tests/template-browser
 checks common fonts, contrast, action-plan placement, timing edits, scaling-state
 preservation and desktop/tablet/mobile layouts. The production domain must serve
 the reviewed assets and unchanged publications before rollout is complete.
+
+## Artisan Bread · DiMuzio (dimuzio-artisan-1 / SWv27)
+
+Added17 requested DiMuzio formulas under **Artisan Bread**, available at
+`/#artisan-bread`: all4baguettes on199–202 and the13other selected recipes through233,
+with their procedure continuations. Existing134 recipe records remain unchanged.
+See [source mapping, accounting/corrections and additive import](docs/dimuzio-artisan.md).

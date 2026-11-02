@@ -1,0 +1,3231 @@
+{
+  "schemaVersion": 1,
+  "sourceVersion": "dimuzio-artisan-v1",
+  "bookSha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+  "recipes": [
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-baguettes-direct",
+      "title": "Baguettes · direct method",
+      "description": "Daniel T. DiMuzio · p. 199 · Direct-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-baguettes-direct",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "p. 199"
+      },
+      "basePieces": 5,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 1000,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 700,
+              "unit": "g",
+              "kind": "water",
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 3,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 1000,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 700,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 70,
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2,
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 3,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.3,
+              "id": "r3"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Dough temperature and yeast choice",
+          "body": "Target dough temperature: 25°C. The 3 g yeast in this 1× formula is for short mixing. If choosing improved mixing, the book instead recommends 0.4% yeast (4 g per 1,000 g flour); intensive mixing uses about 0.7% (7 g). These are alternative formulas, not extra yeast to add to the listed amount. (DiMuzio, p. 199.)"
+        },
+        {
+          "heading": "Choose the mixing method",
+          "body": "Short mix: 12–15 minutes on Speed 1. Improved mix: 5 minutes on Speed 1, then 3–5 on Speed 2. Intensive mix: 5 minutes on Speed 1, then 8–15 on Speed 2. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Bulk fermentation and folds",
+          "body": "Short mix: allow 3–4 hours with a preferment or 4–5 hours without one; fold every 15–20 minutes at least 4–5 times. Improved mix: allow 1–2 hours with a preferment or up to 3 hours without one, folding after 20–30 minutes. Intensive mix: about 30 minutes with a preferment or up to 60 minutes without; folds should not be necessary. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Divide and shape",
+          "body": "Baguettes: about 350 g; parisiennes: 500 g; ficelles: 175 g. Shape using the baguette technique referenced in Chapter 6. These are portion options, not extra recipe variants. (DiMuzio, p. 196; Chapter 6.)"
+        },
+        {
+          "heading": "Shape the baguettes",
+          "body": "Let the pre-shaped cylinder relax sufficiently. Pat gently without fully deflating; fold the far and near edges to the middle, press a shallow hinge, then fold lengthwise and seal the seam with the heel of the hand. Turn seam-down. Tighten and narrow the centre with one or two controlled back-and-forth motions, then work adjoining sections toward the ends. Do not push outward or repeatedly work one spot: this can tear the skin and close the crumb. The length increases as the skin is drawn toward the seam. Put seam-down in a floured pleated couche and keep covered. (DiMuzio, pp. 86–88.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "Proof seam-side down on a floured couche, pleated between loaves. Allow 60–90 minutes for the yeast-assisted baguettes, with a proofer near 27°C and 80% humidity. Covered boards can be used when no proofer is available. (DiMuzio, pp. 196–197.)"
+        },
+        {
+          "heading": "Score and bake",
+          "body": "Load and score appropriately, steam before and after loading. Deck oven: 240–250°C (the book’s rounded Celsius range); aim for 22–25 minutes. For convection/rack ovens reduce the setting by approximately 14–22°C. (DiMuzio, p. 197.)"
+        },
+        {
+          "heading": "Cool",
+          "body": "Cool on a wire rack without crowding the loaves. (DiMuzio, p. 198.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed p. 199. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale."
+      ],
+      "warnings": [],
+      "component": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-baguettes-liquid-levain",
+      "title": "Baguettes with liquid levain",
+      "description": "Daniel T. DiMuzio · p. 200 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-baguettes-liquid-levain",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "p. 200"
+      },
+      "basePieces": 5,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Liquid levain",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 100,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 100,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 100,
+              "id": "r1"
+            },
+            {
+              "name": "Ripe starter levain",
+              "quantity": 66,
+              "unit": "g",
+              "kind": "starter",
+              "sourcePercent": 66,
+              "id": "r2"
+            }
+          ],
+          "timing": "12 hours at 21.1°C, covered but slightly vented."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 900,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 580,
+              "unit": "g",
+              "kind": "water",
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 7,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Ripe liquid levain",
+              "quantity": 200,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 66,
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 1000,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 680,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 68,
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2,
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 7,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.7,
+              "id": "r3"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the liquid levain",
+          "body": "Mix the build ingredients and hold covered but slightly vented at 21.1°C for 12 hours. Retain the weighed seed-equivalent portion from the ripe build; use 200 g in the 1× final dough. Target finished dough temperature: 25°C. (DiMuzio, p. 200.)"
+        },
+        {
+          "heading": "Choose the mixing method",
+          "body": "Short mix: 12–15 minutes on Speed 1. Improved mix: 5 minutes on Speed 1, then 3–5 on Speed 2. Intensive mix: 5 minutes on Speed 1, then 8–15 on Speed 2. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Bulk fermentation and folds",
+          "body": "Short mix: allow 3–4 hours with a preferment or 4–5 hours without one; fold every 15–20 minutes at least 4–5 times. Improved mix: allow 1–2 hours with a preferment or up to 3 hours without one, folding after 20–30 minutes. Intensive mix: about 30 minutes with a preferment or up to 60 minutes without; folds should not be necessary. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Divide and shape",
+          "body": "Baguettes: about 350 g; parisiennes: 500 g; ficelles: 175 g. Shape using the baguette technique referenced in Chapter 6. These are portion options, not extra recipe variants. (DiMuzio, p. 196; Chapter 6.)"
+        },
+        {
+          "heading": "Shape the baguettes",
+          "body": "Let the pre-shaped cylinder relax sufficiently. Pat gently without fully deflating; fold the far and near edges to the middle, press a shallow hinge, then fold lengthwise and seal the seam with the heel of the hand. Turn seam-down. Tighten and narrow the centre with one or two controlled back-and-forth motions, then work adjoining sections toward the ends. Do not push outward or repeatedly work one spot: this can tear the skin and close the crumb. The length increases as the skin is drawn toward the seam. Put seam-down in a floured pleated couche and keep covered. (DiMuzio, pp. 86–88.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "Proof seam-side down on a floured couche, pleated between loaves. Allow 60–90 minutes for the yeast-assisted baguettes, with a proofer near 27°C and 80% humidity. Covered boards can be used when no proofer is available. (DiMuzio, pp. 196–197.)"
+        },
+        {
+          "heading": "Score and bake",
+          "body": "Load and score appropriately, steam before and after loading. Deck oven: 240–250°C (the book’s rounded Celsius range); aim for 22–25 minutes. For convection/rack ovens reduce the setting by approximately 14–22°C. (DiMuzio, p. 197.)"
+        },
+        {
+          "heading": "Cool",
+          "body": "Cool on a wire rack without crowding the loaves. (DiMuzio, p. 198.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed p. 200. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "The straight-dough alternative on p. 200 reduces instant yeast to about 0.3% and allows roughly 4–5 hours of bulk fermentation. The saved recipe uses the printed prefermented version."
+      ],
+      "warnings": [
+        "The source gives a weighed starter but not its hydration. The starter is included in the build; 66 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+      ],
+      "component": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-baguettes-old-dough",
+      "title": "Baguettes with old dough",
+      "description": "Daniel T. DiMuzio · p. 201 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-baguettes-old-dough",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "p. 201"
+      },
+      "basePieces": 5,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Old dough",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 250,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 170,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 68,
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 5,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2,
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 2,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.7,
+              "id": "r3"
+            }
+          ],
+          "timing": "3 hours at room temperature; alternative: 1 hour, then refrigerate until use."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 750,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 510,
+              "unit": "g",
+              "kind": "water",
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 15,
+              "unit": "g",
+              "kind": "other",
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 5,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Ripe old dough",
+              "quantity": 427,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 0,
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 1000,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 680,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 68,
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2,
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 7,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.7,
+              "id": "r3"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "printed0",
+          "name": "Printed adjusted dough · before arithmetic transfer correction",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 750,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 510,
+              "unit": "g",
+              "kind": "water",
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 15,
+              "unit": "g",
+              "kind": "other",
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 5,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Old dough · printed transfer",
+              "quantity": 420,
+              "unit": "g",
+              "kind": "other",
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the old dough",
+          "body": "Mix the old-dough ingredients; ferment 3 hours at room temperature, or 1 hour at room temperature followed by refrigeration until use. Final dough target: 25°C. (DiMuzio, p. 201.)"
+        },
+        {
+          "heading": "Choose the mixing method",
+          "body": "Short mix: 12–15 minutes on Speed 1. Improved mix: 5 minutes on Speed 1, then 3–5 on Speed 2. Intensive mix: 5 minutes on Speed 1, then 8–15 on Speed 2. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Bulk fermentation and folds",
+          "body": "Short mix: allow 3–4 hours with a preferment or 4–5 hours without one; fold every 15–20 minutes at least 4–5 times. Improved mix: allow 1–2 hours with a preferment or up to 3 hours without one, folding after 20–30 minutes. Intensive mix: about 30 minutes with a preferment or up to 60 minutes without; folds should not be necessary. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Divide and shape",
+          "body": "Baguettes: about 350 g; parisiennes: 500 g; ficelles: 175 g. Shape using the baguette technique referenced in Chapter 6. These are portion options, not extra recipe variants. (DiMuzio, p. 196; Chapter 6.)"
+        },
+        {
+          "heading": "Shape the baguettes",
+          "body": "Let the pre-shaped cylinder relax sufficiently. Pat gently without fully deflating; fold the far and near edges to the middle, press a shallow hinge, then fold lengthwise and seal the seam with the heel of the hand. Turn seam-down. Tighten and narrow the centre with one or two controlled back-and-forth motions, then work adjoining sections toward the ends. Do not push outward or repeatedly work one spot: this can tear the skin and close the crumb. The length increases as the skin is drawn toward the seam. Put seam-down in a floured pleated couche and keep covered. (DiMuzio, pp. 86–88.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "Proof seam-side down on a floured couche, pleated between loaves. Allow 60–90 minutes for the yeast-assisted baguettes, with a proofer near 27°C and 80% humidity. Covered boards can be used when no proofer is available. (DiMuzio, pp. 196–197.)"
+        },
+        {
+          "heading": "Score and bake",
+          "body": "Load and score appropriately, steam before and after loading. Deck oven: 240–250°C (the book’s rounded Celsius range); aim for 22–25 minutes. For convection/rack ovens reduce the setting by approximately 14–22°C. (DiMuzio, p. 197.)"
+        },
+        {
+          "heading": "Cool",
+          "body": "Cool on a wire rack without crowding the loaves. (DiMuzio, p. 198.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed p. 201. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "Printed alternative: using only the straight-dough ingredients requires a longer bulk fermentation, around 4–5 hours, and the book recommends reducing instant yeast to about 0.3%. This is an alternative, not an additional yeast dose for the saved prefermented version."
+      ],
+      "warnings": [
+        "Printed p. 201 conflicts: the 1× old dough weighs 427 g, but its adjusted transfer prints 420 g; the overall 4× flour prints 400 g; the hydration box prints 100% although 170/250 = 68%. The working formula transfers all 427 g, reconciling the 1,707 g total; the printed 420 g transfer is retained below as reference."
+      ],
+      "component": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-baguettes-poolish",
+      "title": "Baguettes with poolish",
+      "description": "Daniel T. DiMuzio · p. 202 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-baguettes-poolish",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "p. 202"
+      },
+      "basePieces": 5,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Poolish",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 200,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 200,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 100,
+              "id": "r1"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 0.1,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.04,
+              "id": "r2"
+            }
+          ],
+          "timing": "12 hours at 21.1°C, covered but slightly vented."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 800,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 480,
+              "unit": "g",
+              "kind": "water",
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 7,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Ripe poolish",
+              "quantity": 400.1,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 0.0,
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 1000,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 680,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 68,
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2,
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 7,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.7,
+              "id": "r3"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the poolish",
+          "body": "Mix the poolish ingredients; hold covered but slightly vented at 21.1°C for 12 hours. Target final dough temperature: 25°C. (DiMuzio, p. 202.)"
+        },
+        {
+          "heading": "Choose the mixing method",
+          "body": "Short mix: 12–15 minutes on Speed 1. Improved mix: 5 minutes on Speed 1, then 3–5 on Speed 2. Intensive mix: 5 minutes on Speed 1, then 8–15 on Speed 2. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Bulk fermentation and folds",
+          "body": "Short mix: allow 3–4 hours with a preferment or 4–5 hours without one; fold every 15–20 minutes at least 4–5 times. Improved mix: allow 1–2 hours with a preferment or up to 3 hours without one, folding after 20–30 minutes. Intensive mix: about 30 minutes with a preferment or up to 60 minutes without; folds should not be necessary. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Divide and shape",
+          "body": "Baguettes: about 350 g; parisiennes: 500 g; ficelles: 175 g. Shape using the baguette technique referenced in Chapter 6. These are portion options, not extra recipe variants. (DiMuzio, p. 196; Chapter 6.)"
+        },
+        {
+          "heading": "Shape the baguettes",
+          "body": "Let the pre-shaped cylinder relax sufficiently. Pat gently without fully deflating; fold the far and near edges to the middle, press a shallow hinge, then fold lengthwise and seal the seam with the heel of the hand. Turn seam-down. Tighten and narrow the centre with one or two controlled back-and-forth motions, then work adjoining sections toward the ends. Do not push outward or repeatedly work one spot: this can tear the skin and close the crumb. The length increases as the skin is drawn toward the seam. Put seam-down in a floured pleated couche and keep covered. (DiMuzio, pp. 86–88.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "Proof seam-side down on a floured couche, pleated between loaves. Allow 60–90 minutes for the yeast-assisted baguettes, with a proofer near 27°C and 80% humidity. Covered boards can be used when no proofer is available. (DiMuzio, pp. 196–197.)"
+        },
+        {
+          "heading": "Score and bake",
+          "body": "Load and score appropriately, steam before and after loading. Deck oven: 240–250°C (the book’s rounded Celsius range); aim for 22–25 minutes. For convection/rack ovens reduce the setting by approximately 14–22°C. (DiMuzio, p. 197.)"
+        },
+        {
+          "heading": "Cool",
+          "body": "Cool on a wire rack without crowding the loaves. (DiMuzio, p. 198.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed p. 202. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "The printed poolish yeast percentage is 0.04%; the 1× metric dose of 0.1 g per 200 g flour calculates to 0.05%. The weighed dose is preserved. Original transfer: 400 g; exact working build transfer: 400.1 g.",
+        "Printed alternative: using only the straight-dough ingredients requires a longer bulk fermentation, around 4–5 hours, and the book recommends reducing instant yeast to about 0.3%. This is an alternative, not an additional yeast dose for the saved prefermented version."
+      ],
+      "warnings": [
+        "Arithmetic adaptation: transfer the full 400.1 g prepared build, including its trace yeast. The printed transfer/subtotal is rounded; the final total here is the sum of the actual additions."
+      ],
+      "component": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-brioche-liquid-levain",
+      "title": "Brioche with liquid levain",
+      "description": "Daniel T. DiMuzio · pp. 204–205 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-brioche-liquid-levain",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "pp. 204–205"
+      },
+      "basePieces": 4,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Liquid levain",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 75,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 75,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 100,
+              "id": "r1"
+            },
+            {
+              "name": "Ripe starter levain",
+              "quantity": 38,
+              "unit": "g",
+              "kind": "starter",
+              "sourcePercent": 50,
+              "id": "r2"
+            }
+          ],
+          "timing": "12 hours at 21.1°C."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 675,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Whole eggs",
+              "quantity": 390,
+              "unit": "g",
+              "kind": "other",
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 0,
+              "unit": "g",
+              "kind": "water",
+              "id": "r2"
+            },
+            {
+              "name": "Sugar",
+              "quantity": 113,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "id": "r4"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 14,
+              "unit": "g",
+              "kind": "other",
+              "id": "r5"
+            },
+            {
+              "name": "Unsalted butter",
+              "quantity": 308,
+              "unit": "g",
+              "kind": "other",
+              "id": "r6"
+            },
+            {
+              "name": "Ripe liquid levain",
+              "quantity": 150,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 38,
+              "id": "r7"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 750,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Whole eggs",
+              "quantity": 390,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 52,
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 75,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 10,
+              "id": "r2"
+            },
+            {
+              "name": "Sugar",
+              "quantity": 113,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 15,
+              "id": "r3"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2.6,
+              "id": "r4"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 14,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.8,
+              "id": "r5"
+            },
+            {
+              "name": "Unsalted butter",
+              "quantity": 308,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 41,
+              "id": "r6"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the levain",
+          "body": "Hold the levain covered but slightly vented at 21.1°C for 12 hours. Use 150 g in the 1× dough and retain 38 g. Target finished dough: 25°C. (DiMuzio, p. 204.)"
+        },
+        {
+          "heading": "Develop the dough; add sugar in stages",
+          "body": "Hold back all butter and about two-thirds of the sugar. Mix the other ingredients 5 minutes on Speed 1. Add half the remaining sugar and mix 4 minutes on Speed 2. Add the rest of the sugar and continue 4–8 minutes, giving 8–12 minutes total on Speed 2, until developed. (DiMuzio, pp. 204–205.)"
+        },
+        {
+          "heading": "Incorporate the butter",
+          "body": "When a windowpane can be formed, add sliced/broken butter and incorporate on Speed 1 only until evenly absorbed. Temporary separation is normal; do not add extra flour to fix it. (DiMuzio, p. 205.)"
+        },
+        {
+          "heading": "Bulk ferment and refrigerate",
+          "body": "Place in a lightly floured covered tub. Ferment 1 hour, then cover well and refrigerate 12 hours or overnight. If dough exceeds the target by more than about 1.1°C, shorten the warm fermentation. (DiMuzio, p. 205.)"
+        },
+        {
+          "heading": "Divide",
+          "body": "Pan loaves or grande tête: 400–450 g. For grande tête reserve 20–25% for the topknot. Petite brioche: 50–60 g. (DiMuzio, p. 205.)"
+        },
+        {
+          "heading": "Shape",
+          "body": "Pan loaves: braid 3 strands, or round 6 pieces and stagger in the pan; a simple log also works for sandwich loaves. Grande tête: round both portions, taper the small one into a cone and pull its tail through a central hole in the large round before placing seam-side down in a greased fluted mold. Petite brioche: round, form a neck one-third below the crown, make a hole near the base and push the topknot through into a fluted mold. (DiMuzio, p. 205.)"
+        },
+        {
+          "heading": "Proof",
+          "body": "Give only about a three-quarter proof. Pan loaves: 1½–2 hours or more when very cold. Grande tête: 2–2½ hours. Petite brioche: around 1 hour, longer if cold. (DiMuzio, p. 205.)"
+        },
+        {
+          "heading": "Bake and cool",
+          "body": "Egg-wash gently. Rolls: 204.4°C for 10–15 minutes. Loaves of 400–450 g: 182.2–190.6°C for 30–35 minutes. Convection/rack settings: approximately 14–28°C lower. Check side browning and thorough interior baking before removing the whole batch; exterior colour can develop before the centre is done. Unmold and cool spaced apart on a wire rack. (DiMuzio, p. 205.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed pp. 204–205. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "Options, not included in the saved weights: honey may replace some/all sugar, with its approximately 20% water deducted as the book directs; further adjustments may be needed. Butter may rise to 45–50%, but eggs/flour may need adjustment.",
+        "This is a multi-day method. Include the 12-hour cold hold and butter incorporation in any manually entered elapsed process plan.",
+        "DiMuzio p. 204 permits water adjustment as necessary for a firm, supple—not crumbly—dough. Any extra water is a recorded variation, not an unweighed change to the displayed total."
+      ],
+      "warnings": [
+        "The printed 1× total is 1,668 g, but both metric ingredient lists sum to 1,670 g. The site uses the summed additions. The 4× seed/subtotal also conflicts; scaling is from the inspected 1× column.",
+        "The source gives a weighed starter but not its hydration. The starter is included in the build; 38 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+      ],
+      "component": null,
+      "processPlan": {
+        "extraStages": [
+          {
+            "id": "cold-bulk",
+            "after": "bulk",
+            "label": "Refrigerated bulk hold · source 12 hours or overnight"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-ciabatta-biga",
+      "title": "Ciabatta with biga",
+      "description": "Daniel T. DiMuzio · pp. 210–211 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-ciabatta-biga",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "pp. 210–211"
+      },
+      "basePieces": 3,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Biga",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 315,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 189,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 60,
+              "id": "r1"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 0.3,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.1,
+              "id": "r2"
+            }
+          ],
+          "timing": "24 hours at 21.1°C."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 585,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 531,
+              "unit": "g",
+              "kind": "water",
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 18,
+              "unit": "g",
+              "kind": "other",
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 4,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Ripe biga",
+              "quantity": 504.3,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 0.0,
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 900,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 720,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 80,
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 18,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2,
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 4,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.4,
+              "id": "r3"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the biga",
+          "body": "Hold covered but slightly vented at 21.1°C for 24 hours. Target dough: 25°C. (DiMuzio, p. 210.)"
+        },
+        {
+          "heading": "Hand-mixing option",
+          "body": "Cut biga into small pieces and soften by squeezing in some formula water. Add the other ingredients; mix by hand until homogeneous. Keep the wet consistency, without extra flour. Cover and rest 15 minutes, then fold; repeat the rests and folds 4–5 times until more elastic and less fluid. (DiMuzio, p. 210.)"
+        },
+        {
+          "heading": "Machine short-mix option",
+          "body": "Mix 12–15 minutes on Speed 1; cover in a lightly floured tub. Bulk ferment 3 hours, folding every 15–20 minutes, 4–5 sets. (DiMuzio, p. 210.)"
+        },
+        {
+          "heading": "Machine improved-mix option",
+          "body": "Hold back 10–15% of total formula water. Mix about 5 minutes on Speed 1 and 3–5 on Speed 2. Add held-back water on Speed 1 only, taking roughly 2–4 additional minutes. Bulk ferment 2–3 hours, folding about every 15 minutes for 3–4 sets. (DiMuzio, p. 210.)"
+        },
+        {
+          "heading": "Divide gently",
+          "body": "Empty onto a well-floured bench and form an even rectangle. Cut strips to width and then to length; keep portions rectangular and covered on floured boards. Loaves: 450–525 g; ciabatta rolls: 90–120 g. (DiMuzio, p. 211.)"
+        },
+        {
+          "heading": "Shape and proof",
+          "body": "Stretch rather than tightly shape, into rectangles about 20.3–25.4 cm long. Place on a well-floured couche with pleats between rows. Small scraps can remain on top because the loaves will be inverted for baking. Proof about 45 minutes at 26.7°C and 80% humidity; cover the boards if no proofer is available. (DiMuzio, p. 211.)"
+        },
+        {
+          "heading": "Bake and cool",
+          "body": "Deck oven: use the book’s 245–260°C range. Flip upside-down onto the loader to expose the floured underside; steam briefly, with no scoring. Loaves: 25–30 minutes; rolls: 12–15 minutes. Vent after 10 minutes. Cool spaced apart on wire shelves. (DiMuzio, p. 211.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed pp. 210–211. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "Printed transfer/subtotal: 504 g. Exact working transfer including 0.3 g yeast: 504.3 g.",
+        "Printed alternative: using only the straight-dough ingredients requires a longer bulk fermentation, around 4–5 hours, and the book recommends reducing instant yeast to about 0.3%. This is an alternative, not an additional yeast dose for the saved prefermented version."
+      ],
+      "warnings": [
+        "Arithmetic adaptation: transfer the full 504.3 g prepared build, including its trace yeast. The printed transfer/subtotal is rounded; the final total here is the sum of the actual additions."
+      ],
+      "component": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-croissants-liquid-levain",
+      "title": "Croissants with liquid levain",
+      "description": "Daniel T. DiMuzio · pp. 212–213 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-croissants-liquid-levain",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "pp. 212–213"
+      },
+      "basePieces": 24,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Liquid levain",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 75,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 75,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 100,
+              "id": "r1"
+            },
+            {
+              "name": "Ripe starter levain",
+              "quantity": 38,
+              "unit": "g",
+              "kind": "starter",
+              "sourcePercent": 50,
+              "id": "r2"
+            }
+          ],
+          "timing": "12 hours at 21.1°C."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 675,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Milk",
+              "quantity": 390,
+              "unit": "g",
+              "kind": "other",
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 0,
+              "unit": "g",
+              "kind": "water",
+              "id": "r2"
+            },
+            {
+              "name": "Sugar",
+              "quantity": 75,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Butter · mixed into dough",
+              "quantity": 30,
+              "unit": "g",
+              "kind": "other",
+              "id": "r4"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "id": "r5"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 7,
+              "unit": "g",
+              "kind": "other",
+              "id": "r6"
+            },
+            {
+              "name": "Butter block · for lamination",
+              "quantity": 375,
+              "unit": "g",
+              "kind": "other",
+              "id": "r7"
+            },
+            {
+              "name": "Ripe liquid levain",
+              "quantity": 150,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 38,
+              "id": "r8"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 750,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Milk",
+              "quantity": 390,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 52,
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 75,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 10,
+              "id": "r2"
+            },
+            {
+              "name": "Sugar",
+              "quantity": 75,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 10,
+              "id": "r3"
+            },
+            {
+              "name": "Butter · mixed into dough",
+              "quantity": 30,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 4,
+              "id": "r4"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2.6,
+              "id": "r5"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 8,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1,
+              "id": "r6"
+            },
+            {
+              "name": "Butter block · for lamination",
+              "quantity": 375,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 50,
+              "id": "r7"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the levain",
+          "body": "Hold covered but slightly vented at 21.1°C for 12 hours; transfer 150 g to the 1× final dough and retain 38 g. Target dough temperature: 25°C. (DiMuzio, p. 212.)"
+        },
+        {
+          "heading": "Mix the base dough",
+          "body": "Keep the 375 g butter block separate; it is for lamination, not the mixer. Mix the other ingredients about 5 minutes on Speed 1 and 2–3 minutes on Speed 2 to light development. (DiMuzio, p. 212.)"
+        },
+        {
+          "heading": "Ferment and chill",
+          "body": "Form a square, or place in a square-bottomed container. Ferment covered 1 hour at room temperature; label and refrigerate overnight. (DiMuzio, p. 212.)"
+        },
+        {
+          "heading": "Enclose the butter block",
+          "body": "Roll the base dough into a square. Set the butter square on it at a 45-degree angle, with its corners just inside the dough edges. Fold the dough corners inward so they overlap and completely enclose the butter; seal the seams. (DiMuzio, p. 145.)"
+        },
+        {
+          "heading": "Single- or double-fold technique",
+          "body": "For a single fold, roll to about 8.5 mm thick and roughly 2½ times as long as wide; fold one end third over the centre, then the other third over it. For a double fold, roll to about 3–3½ times as long as wide; bring the short ends together slightly off centre, then fold the package in half. Keep edges square and brush away excess flour before folding. (DiMuzio, pp. 146–147.)"
+        },
+        {
+          "heading": "Turns and long rest",
+          "body": "This croissant formula calls for 3 sets of single turns or 2 sets of double turns. Rest 15–20 minutes between sets as needed; generally no more than two sets can be completed without a rest. Wrap completely after turning and chill at least 12 hours or overnight before final sheeting. The formula-specific turn count is retained rather than substituting a generic puff-pastry turn count. (DiMuzio, pp. 212–213.)"
+        },
+        {
+          "heading": "Sheet, cut and shape",
+          "body": "Roll to approximately 5–7 mm thickness. Cut triangles or rectangles, commonly 50–80 g. Roll triangles into crescents; fill rectangles and roll into cylinders. Allow about 12 average-sized pieces per parchment-lined tray. (DiMuzio, p. 213.)"
+        },
+        {
+          "heading": "Proof without melting butter",
+          "body": "Proof 45–60 minutes around 25.6–26.7°C and 80% humidity, longer if pastries enter cold. Keep below about 26.7°C rather than allowing the proofer to overheat and melt the butter layers. (DiMuzio, p. 213.)"
+        },
+        {
+          "heading": "Egg-wash, bake and cool",
+          "body": "Egg-wash just before baking without flooding the cut edges. Bake 20–25 minutes at 204.4–218.3°C conventionally; double-pan in a deck oven. Convection/rack settings are about 14–28°C lower. Cool on baking pans, or transfer to wire racks if space permits. (DiMuzio, p. 213.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed pp. 212–213. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "The book mentions replacing liquid levain with the same weight of poolish as a variation, but does not specify a separate poolish build dose here.",
+        "Egg wash is described in the method without a weighed dose; it is not silently included in dough mass. Laminating butter is included once in the final total but must not be mixed into the base dough.",
+        "This is a multi-day laminated process with two overnight holds. The generic planner does not supply a complete lamination schedule; include every hold in your elapsed plan or follow the written method."
+      ],
+      "warnings": [
+        "The overall 1× reference lists 8 g yeast, but the adjusted dough lists 7 g. The adjusted list sums to the printed 1,722 g; the saved mixing formula follows that list. The original 4× starter/subtotal conflicts and is not used as a scaling oracle.",
+        "The source gives a weighed starter but not its hydration. The starter is included in the build; 38 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+      ],
+      "component": null,
+      "processPlan": {
+        "extraStages": [
+          {
+            "id": "cold-base",
+            "after": "bulk",
+            "label": "Base dough refrigeration · source overnight"
+          },
+          {
+            "id": "lamination",
+            "after": "bulk",
+            "label": "Enclose, turn and rest · all lamination time"
+          },
+          {
+            "id": "cold-laminated",
+            "after": "bulk",
+            "label": "Laminated dough refrigeration · source at least 12 hours"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-focaccia-biga",
+      "title": "Focaccia with biga",
+      "description": "Daniel T. DiMuzio · pp. 219–220 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-focaccia-biga",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "pp. 219–220"
+      },
+      "basePieces": 1,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Biga",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 278,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 167,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 60,
+              "id": "r1"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 0.3,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.1,
+              "id": "r2"
+            }
+          ],
+          "timing": "24 hours at 21.1°C."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 647,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 499,
+              "unit": "g",
+              "kind": "water",
+              "id": "r1"
+            },
+            {
+              "name": "Extra-virgin olive oil",
+              "quantity": 92,
+              "unit": "g",
+              "kind": "other",
+              "id": "r2"
+            },
+            {
+              "name": "Salt",
+              "quantity": 18,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 6,
+              "unit": "g",
+              "kind": "other",
+              "id": "r4"
+            },
+            {
+              "name": "Ripe biga",
+              "quantity": 445.3,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 0.0,
+              "id": "r5"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 925,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 666,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 72,
+              "id": "r1"
+            },
+            {
+              "name": "Extra-virgin olive oil",
+              "quantity": 92,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 10,
+              "id": "r2"
+            },
+            {
+              "name": "Salt",
+              "quantity": 18,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2,
+              "id": "r3"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 6,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.7,
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the biga",
+          "body": "Hold covered but slightly vented at 21.1°C for 24 hours. Target finished dough: 25°C. (DiMuzio, p. 219.)"
+        },
+        {
+          "heading": "Mix and fold",
+          "body": "Hand mixing or short mixing is recommended. For hand mixing, cut the biga into small pieces and soften with some formula water. Mix in the rest until homogeneous; do not dry the wet dough with extra flour. Rest covered 15 minutes, then fold; repeat rests and folds 4–5 times until stronger. The short-mix alternative is referenced on pp. 195–196. (DiMuzio, p. 219.)"
+        },
+        {
+          "heading": "Short-mix alternative",
+          "body": "Mix 12–15 minutes on Speed 1; place in a lightly floured covered tub. For a prefermented short-mix dough, the referenced appendix method uses about 3–4 hours of bulk fermentation and at least 4–5 sets of folds at 15–20-minute intervals. Choose this or the hand method, not both. (DiMuzio, pp. 195–196, 219.)"
+        },
+        {
+          "heading": "Pan and top",
+          "body": "The 1× batch fits a generously oiled half-sheet pan; larger batches are divided into roughly 1,700 g rectangles. Stretch to fit. Brush with additional oil and, if desired, coarse salt and pepper. Optional toppings include thin tomato/zucchini slices, caramelized onion, pressed-in roasted garlic, or modest cheese. Topping oil and quantities are not specified as part of the dough weights. (DiMuzio, pp. 219–220.)"
+        },
+        {
+          "heading": "Proof, bake and cool",
+          "body": "Proof until puffy, roughly 45 minutes when target dough temperature was achieved. Bake 30–40 minutes in a 218.3°C deck oven; double-pan if bottom heat is excessive. Cool in the pans because the bottoms are oily. (DiMuzio, p. 220.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed pp. 219–220. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "Optional chopped rosemary, thyme or marjoram: about 0.4% of total flour. Optional additions are not included in the saved base weights.",
+        "Printed alternative: using only the straight-dough ingredients requires a longer bulk fermentation, around 4–5 hours, and the book recommends reducing instant yeast to about 0.3%. This is an alternative, not an additional yeast dose for the saved prefermented version."
+      ],
+      "warnings": [
+        "The hydration box prints 100%, but the biga ingredients calculate to 167/278 = 60.07% water, approximately 60%. The exact build weighs 445.3 g; the printed transfer is 445 g.",
+        "Arithmetic adaptation: transfer the full 445.3 g prepared build, including its trace yeast. The printed transfer/subtotal is rounded; the final total here is the sum of the actual additions."
+      ],
+      "component": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-hearty-sourdough-rye",
+      "title": "Hearty sourdough rye",
+      "description": "Daniel T. DiMuzio · pp. 220–221 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-hearty-sourdough-rye",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "pp. 220–221"
+      },
+      "basePieces": 4,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Rye sour",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Medium rye flour",
+              "quantity": 350,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 280,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 80,
+              "id": "r1"
+            },
+            {
+              "name": "Ripe starter levain",
+              "quantity": 18,
+              "unit": "g",
+              "kind": "starter",
+              "sourcePercent": 5,
+              "id": "r2"
+            }
+          ],
+          "timing": "15 hours at 21.1°C."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Medium rye flour",
+              "quantity": 160,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "High-gluten flour",
+              "quantity": 490,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 400,
+              "unit": "g",
+              "kind": "water",
+              "id": "r2"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 6,
+              "unit": "g",
+              "kind": "other",
+              "id": "r4"
+            },
+            {
+              "name": "Ripe rye sour",
+              "quantity": 630,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 18,
+              "id": "r5"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Medium rye flour",
+              "quantity": 510,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 51,
+              "id": "r0"
+            },
+            {
+              "name": "High-gluten flour",
+              "quantity": 490,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 49,
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 680,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 68,
+              "id": "r2"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2,
+              "id": "r3"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 6,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.6,
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the rye sour",
+          "body": "Mix the sour; hold covered but slightly vented at 21.1°C for 15 hours. Use 630 g in the 1× final dough and retain 18 g. Target dough temperature: about 27°C. (DiMuzio, pp. 220–221.)"
+        },
+        {
+          "heading": "Mix briefly",
+          "body": "Mix 3 minutes on Speed 1 and 3 minutes on Speed 2. Rye needs less mixing than white dough. Expect stickiness; do not correct it with extra flour. Cover in a lightly floured tub. (DiMuzio, p. 221.)"
+        },
+        {
+          "heading": "Bulk ferment",
+          "body": "Allow 30–45 minutes; the dough should gain strength. (DiMuzio, p. 221.)"
+        },
+        {
+          "heading": "Divide and shape",
+          "body": "Use boules, bâtards or boulots, not baguettes. Portion 400–650 g and relax pre-shapes for 10 minutes. Apply some tension without tearing the dough. (DiMuzio, p. 221.)"
+        },
+        {
+          "heading": "Proof",
+          "body": "Place seam-side down in couche pleats or seam-side up in baskets. Allow 45–60 minutes near 26.7°C and 80% humidity; check early because rye can proof quickly. (DiMuzio, p. 221.)"
+        },
+        {
+          "heading": "Bake and cool",
+          "body": "Deck oven: 221.1–232.2°C; convection/rack: 204.4–218.3°C. Score shallowly and steam generously. Vent after 10 minutes; lowering the setting by about 13.9°C can support the longer bake. Aim for 35–45 minutes. Cool without crowding on wire shelves. (DiMuzio, p. 221.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed pp. 220–221. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "Optional variations: caraway at 2% of total flour, or toasted walnuts at 20–30%; do not combine the walnuts with caraway. Neither is added to the base formula."
+      ],
+      "warnings": [
+        "The source gives a weighed starter but not its hydration. The starter is included in the build; 18 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+      ],
+      "component": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-pain-au-levain-firm",
+      "title": "Pain au levain with firm levain",
+      "description": "Daniel T. DiMuzio · p. 223 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-pain-au-levain-firm",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "p. 223"
+      },
+      "basePieces": 4,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Firm levain",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 300,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 180,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 60,
+              "id": "r1"
+            },
+            {
+              "name": "Ripe starter levain",
+              "quantity": 300,
+              "unit": "g",
+              "kind": "starter",
+              "sourcePercent": 100,
+              "id": "r2"
+            }
+          ],
+          "timing": "12 hours at 21.1°C."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 600,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Whole wheat flour",
+              "quantity": 100,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 500,
+              "unit": "g",
+              "kind": "water",
+              "id": "r2"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 0,
+              "unit": "g",
+              "kind": "other",
+              "id": "r4"
+            },
+            {
+              "name": "Ripe firm levain",
+              "quantity": 480,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 300,
+              "id": "r5"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 900,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 90,
+              "id": "r0"
+            },
+            {
+              "name": "Whole wheat flour",
+              "quantity": 100,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 10,
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 680,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 68,
+              "id": "r2"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2,
+              "id": "r3"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 0,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0,
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the firm levain",
+          "body": "Hold covered but slightly vented at 21.1°C for 12 hours. Transfer 480 g to the 1× dough and retain 300 g. Target dough: 25°C. (DiMuzio, p. 223.)"
+        },
+        {
+          "heading": "Choose the mixing method",
+          "body": "Short mix: 12–15 minutes on Speed 1. Improved mix: 5 minutes on Speed 1, then 3–5 on Speed 2. Do not use the intensive method for this yeast-free sourdough, despite the generic list on the recipe page. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Bulk fermentation and folds",
+          "body": "Short mix: allow 4–5 hours for a sourdough with no manufactured yeast; fold at 15–20-minute intervals at least 4–5 times. Improved mix: allow up to 3 hours; fold after 20–30 minutes, with another fold only if needed. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Divide and shape",
+          "body": "Bâtards/boulots: 400–1,000 g; boules: 200–2,000 g; rolls: 60–100 g. Choose a shape appropriate to the dough and use the shaping method in Chapter 6. (DiMuzio, p. 196; Chapter 6.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "For sourdough bâtards/boulots, allow 2–3 hours; boules 2–3½ hours; sourdough rolls 45–90 minutes. Use a proofer near 27°C and 80% humidity, or cover the boards and maintain similar conditions. (DiMuzio, pp. 196–197.)"
+        },
+        {
+          "heading": "Score and bake",
+          "body": "For boules/bâtards/boulots, use a 220–230°C deck oven for 30–35 minutes or longer as needed. Load, score appropriately and steam hearth breads. Rolls use 235–260°C for 12–18 minutes. Reduce convection/rack settings by approximately 14–22°C. (DiMuzio, p. 197.)"
+        },
+        {
+          "heading": "Cool",
+          "body": "Cool on a wire rack without crowding the loaves. (DiMuzio, p. 198.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed p. 223. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "The straight-dough alternative requires about 0.3% instant yeast and is not true pain au levain. The saved recipe remains yeast-free. The book allows an optional boost up to about 0.07% instant yeast, not included here.",
+        "Variations (pp. 224–225), not included in base weights: walnuts/hazelnuts/pecans at 25% or more, toasted and cooled, added in the last 1–2 minutes on Speed 1; drained olives at 25–35%, added near the end, optionally reducing salt to 1.5%; rosemary/thyme/herbes de Provence may accompany olives.",
+        "Cracked grains at 25% or more may be soaked a day ahead with at least their weight in water. DiMuzio treats this as separate soaker water rather than subtracting it from formula water; this is a source convention, not a claim that the soaker contains no water. Add near the end to protect gluten.",
+        "DiMuzio p. 224 describes the firm-levain version as more sharply acidic than the liquid-levain version."
+      ],
+      "warnings": [
+        "The printed 4× build subtotal, 2,554 g, conflicts with its ingredient sum of 3,120 g. Scaling uses the 1× ingredients and explicit 480 g transfer / 300 g retained amount.",
+        "The source gives a weighed starter but not its hydration. The starter is included in the build; 300 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+      ],
+      "component": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-pain-au-levain-liquid",
+      "title": "Pain au levain with liquid levain",
+      "description": "Daniel T. DiMuzio · pp. 224–225 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-pain-au-levain-liquid",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "pp. 224–225"
+      },
+      "basePieces": 4,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Liquid levain",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 200,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 200,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 100,
+              "id": "r1"
+            },
+            {
+              "name": "Ripe starter levain",
+              "quantity": 100,
+              "unit": "g",
+              "kind": "starter",
+              "sourcePercent": 50,
+              "id": "r2"
+            }
+          ],
+          "timing": "12 hours at 21.1°C."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 700,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Whole wheat flour",
+              "quantity": 100,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 480,
+              "unit": "g",
+              "kind": "water",
+              "id": "r2"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 0,
+              "unit": "g",
+              "kind": "other",
+              "id": "r4"
+            },
+            {
+              "name": "Ripe liquid levain",
+              "quantity": 400,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 100,
+              "id": "r5"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 900,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 90,
+              "id": "r0"
+            },
+            {
+              "name": "Whole wheat flour",
+              "quantity": 100,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 10,
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 680,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 68,
+              "id": "r2"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2,
+              "id": "r3"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 0,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0,
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the liquid levain",
+          "body": "Hold covered but slightly vented at 21.1°C for 12 hours. Transfer 400 g to the 1× dough and retain 100 g. Target dough: 25°C. (DiMuzio, p. 224.)"
+        },
+        {
+          "heading": "Choose the mixing method",
+          "body": "Short mix: 12–15 minutes on Speed 1. Improved mix: 5 minutes on Speed 1, then 3–5 on Speed 2. Do not use the intensive method for this yeast-free sourdough, despite the generic list on the recipe page. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Bulk fermentation and folds",
+          "body": "Short mix: allow 4–5 hours for a sourdough with no manufactured yeast; fold at 15–20-minute intervals at least 4–5 times. Improved mix: allow up to 3 hours; fold after 20–30 minutes, with another fold only if needed. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Divide and shape",
+          "body": "Bâtards/boulots: 400–1,000 g; boules: 200–2,000 g; rolls: 60–100 g. Choose a shape appropriate to the dough and use the shaping method in Chapter 6. (DiMuzio, p. 196; Chapter 6.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "For sourdough bâtards/boulots, allow 2–3 hours; boules 2–3½ hours; sourdough rolls 45–90 minutes. Use a proofer near 27°C and 80% humidity, or cover the boards and maintain similar conditions. (DiMuzio, pp. 196–197.)"
+        },
+        {
+          "heading": "Score and bake",
+          "body": "For boules/bâtards/boulots, use a 220–230°C deck oven for 30–35 minutes or longer as needed. Load, score appropriately and steam hearth breads. Rolls use 235–260°C for 12–18 minutes. Reduce convection/rack settings by approximately 14–22°C. (DiMuzio, p. 197.)"
+        },
+        {
+          "heading": "Cool",
+          "body": "Cool on a wire rack without crowding the loaves. (DiMuzio, p. 198.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed pp. 224–225. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "The straight-dough alternative requires about 0.3% instant yeast and is not true pain au levain. The saved recipe remains yeast-free. The book allows an optional boost up to about 0.07% instant yeast, not included here.",
+        "Variations (pp. 224–225), not included in base weights: walnuts/hazelnuts/pecans at 25% or more, toasted and cooled, added in the last 1–2 minutes on Speed 1; drained olives at 25–35%, added near the end, optionally reducing salt to 1.5%; rosemary/thyme/herbes de Provence may accompany olives.",
+        "Cracked grains at 25% or more may be soaked a day ahead with at least their weight in water. DiMuzio treats this as separate soaker water rather than subtracting it from formula water; this is a source convention, not a claim that the soaker contains no water. Add near the end to protect gluten.",
+        "DiMuzio p. 224 describes the firm-levain version as more sharply acidic than the liquid-levain version."
+      ],
+      "warnings": [
+        "The source gives a weighed starter but not its hydration. The starter is included in the build; 100 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+      ],
+      "component": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-pain-de-campagne",
+      "title": "Pain de campagne",
+      "description": "Daniel T. DiMuzio · p. 225 · Direct-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-pain-de-campagne",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "p. 225"
+      },
+      "basePieces": 4,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 900,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Medium rye flour",
+              "quantity": 100,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 680,
+              "unit": "g",
+              "kind": "water",
+              "id": "r2"
+            },
+            {
+              "name": "Salt",
+              "quantity": 22,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 3,
+              "unit": "g",
+              "kind": "other",
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 900,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 90,
+              "id": "r0"
+            },
+            {
+              "name": "Medium rye flour",
+              "quantity": 100,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 10,
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 680,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 68,
+              "id": "r2"
+            },
+            {
+              "name": "Salt",
+              "quantity": 22,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2.2,
+              "id": "r3"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 3,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.5,
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Target dough temperature",
+          "body": "Aim for 25°C after mixing. This saved formula is the printed direct dough. (DiMuzio, p. 225.)"
+        },
+        {
+          "heading": "Choose the mixing method",
+          "body": "Short mix: 12–15 minutes on Speed 1. Improved mix: 5 minutes on Speed 1, then 3–5 on Speed 2. Intensive mix: 5 minutes on Speed 1, then 8–15 on Speed 2. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Bulk fermentation and folds",
+          "body": "Short mix: allow 3–4 hours with a preferment or 4–5 hours without one; fold every 15–20 minutes at least 4–5 times. Improved mix: allow 1–2 hours with a preferment or up to 3 hours without one, folding after 20–30 minutes. Intensive mix: about 30 minutes with a preferment or up to 60 minutes without; folds should not be necessary. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Divide and shape",
+          "body": "Bâtards/boulots: 400–1,000 g; boules: 200–2,000 g; rolls: 60–100 g. Choose a shape appropriate to the dough and use the shaping method in Chapter 6. (DiMuzio, p. 196; Chapter 6.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "Allow 60–90 minutes for bâtards/boulots, 70–90 minutes for boules, or 30–60 minutes for rolls. Use a proofer near 27°C and 80% humidity, or cover the boards and maintain similar conditions. (DiMuzio, pp. 196–197.)"
+        },
+        {
+          "heading": "Score and bake",
+          "body": "For boules/bâtards/boulots, use a 220–230°C deck oven for 30–35 minutes or longer as needed. Load, score appropriately and steam hearth breads. Rolls use 235–260°C for 12–18 minutes. Reduce convection/rack settings by approximately 14–22°C. (DiMuzio, p. 197.)"
+        },
+        {
+          "heading": "Cool",
+          "body": "Cool on a wire rack without crowding the loaves. (DiMuzio, p. 198.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed p. 225. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "Optional prefermented-flour limits from p. 225: sponge/biga/old dough up to 35%; poolish up to 25%; firm levain around 30%; liquid levain around 18–20%. No unprinted build quantities have been invented for these options."
+      ],
+      "warnings": [
+        "The printed yeast percentage is 0.5%, but the metric 1× dose is 3 g per 1,000 g flour = 0.3%. The weighed 3 g dose is preserved."
+      ],
+      "component": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-pain-rustique-hand",
+      "title": "Pain rustique · hand method",
+      "description": "Daniel T. DiMuzio · p. 226 · Direct-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-pain-rustique-hand",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "p. 226"
+      },
+      "basePieces": 2,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 600,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 450,
+              "unit": "g",
+              "kind": "water",
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 13,
+              "unit": "g",
+              "kind": "other",
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 2,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 600,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 450,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 75,
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 13,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2.2,
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 2,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.4,
+              "id": "r3"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Hand mix",
+          "body": "Target dough: 25°C. Mix all ingredients by hand until homogeneous; keep the wet consistency without extra flour. Cover and rest about 15 minutes, then fold. Repeat rests/folds 4–5 times until more elastic and less fluid. (DiMuzio, p. 226.)"
+        },
+        {
+          "heading": "Divide and stretch",
+          "body": "Empty gently onto a well-floured bench and form an even rectangle. Cut strips and then loaf lengths, keeping the pieces rectangular and covered on boards. Use the printed metric option of 450–525 g. Stretch loaves to about 20.3–25.4 cm; place on floured couche with pleats between pairs. Scraps may remain on top because the loaves are inverted before baking. (DiMuzio, p. 226.)"
+        },
+        {
+          "heading": "Proof",
+          "body": "Around 45 minutes at 26.7°C and 80% humidity, or covered boards under similar conditions. (DiMuzio, p. 226.)"
+        },
+        {
+          "heading": "Bake and cool",
+          "body": "Deck oven: use the printed 245–260°C range. Flip the loaves upside-down onto the peel; steam briefly, with no scoring. Loaves bake 25–30 minutes; rolls 12–15 minutes. Vent after 10 minutes. Cool on wire shelves without crowding. (DiMuzio, p. 226.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed p. 226. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "The metric ingredients total 1,065 g. Their percentages are rounded in the book: salt 13/600=2.167%, yeast 2/600=0.333%; source percentage labels remain 2.2% and 0.4%.",
+        "The printed scaling line says 8–16 oz alongside 450–525 g; those units conflict. This metric page retains 450–525 g rather than silently treating the ounces as equivalent."
+      ],
+      "warnings": [],
+      "component": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-pane-pugliese-biga",
+      "title": "Pane Pugliese with biga",
+      "description": "Daniel T. DiMuzio · pp. 227–228 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-pane-pugliese-biga",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "pp. 227–228"
+      },
+      "basePieces": 2,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Biga",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 333,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 200,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 60,
+              "id": "r1"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 0.3,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.1,
+              "id": "r2"
+            }
+          ],
+          "timing": "24 hours at21.1°C."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 618,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 523,
+              "unit": "g",
+              "kind": "water",
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 19,
+              "unit": "g",
+              "kind": "other",
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 4,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Ripe biga",
+              "quantity": 533.3,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 0.0,
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 950,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 722,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 76,
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 19,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2,
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 4,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.4,
+              "id": "r3"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "printed0",
+          "name": "Printed adjusted dough · rounded transfer",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 618,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 523,
+              "unit": "g",
+              "kind": "water",
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 19,
+              "unit": "g",
+              "kind": "other",
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 4,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Biga · printed transfer",
+              "quantity": 532,
+              "unit": "g",
+              "kind": "other",
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the biga",
+          "body": "Hold covered but slightly vented at 21.1°C for 24 hours. Target final dough:25°C. (DiMuzio, p. 227.)"
+        },
+        {
+          "heading": "Double-hydration mixing",
+          "body": "Hold back 10–15% of total formula water. Mix about 5 minutes on Speed 1 and 3–5 minutes on Speed 2. Incorporate the held-back water on Speed 1 only, about 2–4 more minutes. (DiMuzio, p. 227.)"
+        },
+        {
+          "heading": "Bulk ferment",
+          "body": "Place in a lightly floured covered tub for 2–3 hours. Fold about every 15 minutes, for 3–4 sets. (DiMuzio, p. 227.)"
+        },
+        {
+          "heading": "Divide and shape",
+          "body": "Empty gently onto a well-floured bench and form an even rectangle; cut into large squares,675–900 g, keeping them covered on floured boards. Round gently with some tension. Invert seam-up, flour the seam so it will not seal, then return seam-down for proofing in floured baskets or on a floured board. (DiMuzio, p. 227.)"
+        },
+        {
+          "heading": "Proof",
+          "body": "Allow 60–75 minutes at 26.7°C and 80% humidity, or use covered boards under similar conditions. (DiMuzio, p. 227.)"
+        },
+        {
+          "heading": "Bake and cool",
+          "body": "Deck oven:220–230°C; convection/rack about 14–22°C lower. Flip upside-down onto the loader to open the floured seam; lightly score only if seams do not seem likely to open. Bake 50–70 minutes, with steam for the first 10 minutes; then vent. Cool spaced apart on wire shelves. (DiMuzio, p. 228.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed pp. 227–228. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "Printed alternative: using only the straight-dough ingredients requires a longer bulk fermentation, around 4–5 hours, and the book recommends reducing instant yeast to about 0.3%. This is an alternative, not an additional yeast dose for the saved prefermented version."
+      ],
+      "warnings": [
+        "Printed p.227 conflicts: build ingredients total 533.3 g, not the printed 532 g subtotal/transfer. The adjusted flour 618 g plus build flour 333 g totals 951 g, rather than the overall 950 g; water 523+200=723 g rather than 722 g. The working formula preserves the adjusted fresh additions and transfers the exact full 533.3 g build, giving 1,697.3 g; it does not silently force the printed 1,695 g yield.",
+        "Arithmetic adaptation: transfer the full 533.3 g prepared build, including its trace yeast. The printed transfer/subtotal is rounded; the final total here is the sum of the actual additions."
+      ],
+      "component": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-pizza-dough-biga",
+      "title": "Pizza dough with biga",
+      "description": "Daniel T. DiMuzio · pp. 228–229 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-pizza-dough-biga",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "pp. 228–229"
+      },
+      "basePieces": 8,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Biga",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 200,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 120,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 60,
+              "id": "r1"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 0.2,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.1,
+              "id": "r2"
+            }
+          ],
+          "timing": "24 hours at21.1°C."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 800,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 530,
+              "unit": "g",
+              "kind": "water",
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 22,
+              "unit": "g",
+              "kind": "other",
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 4,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Ripe biga",
+              "quantity": 320.2,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 0.0,
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 1000,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 650,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 65,
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 22,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2.2,
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 4,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.4,
+              "id": "r3"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the biga",
+          "body": "Hold covered but slightly vented at 21.1°C for 24 hours. Target dough:about 24°C. First-speed-only mixing produces less friction than second-speed mixing. (DiMuzio, p. 228.)"
+        },
+        {
+          "heading": "Mix and rest",
+          "body": "Mix 10 minutes on Speed 1. Cover in a lightly floured tub and rest 15 minutes. (DiMuzio, p. 228.)"
+        },
+        {
+          "heading": "Divide and refrigerate",
+          "body": "For the classic size, portion about 200 g for a 23–25 cm pizza; other sizes are allowed. Round and place in a lightly floured wide shallow lidded container, leaving room for growth. Refrigerate at least several hours, preferably overnight. (DiMuzio, pp. 228–229.)"
+        },
+        {
+          "heading": "Open and top",
+          "body": "Use dough directly from the refrigerator. Stretch over a clenched hand, turning and using gravity, keeping thickness even. No final proof is specified. Place on a cornmeal/semolina-covered peel; top promptly with about 57 g tomato or sauce per 200 g dough shell, then modest cheese/basil/other toppings. Load immediately to avoid sticking. Toppings are separate from dough mass. (DiMuzio, p. 229.)"
+        },
+        {
+          "heading": "Bake and serve",
+          "body": "Deck oven:315.6–371.1°C if the oven permits, otherwise 287.8°C. In a very hot oven allow 2–3 minutes; at 287.8°C allow about 5–6 minutes. Check early; bake directly on the stone and retrieve with the peel. Serve hot—no cooling is needed. (DiMuzio, p. 229.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed pp. 228–229. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "The cold hold is specified as several hours or preferably overnight, not an exact numeric duration. Include the chosen refrigerated hold in your elapsed plan; no duration is invented here."
+      ],
+      "warnings": [
+        "The printed 4× biga yeast entry is 422 g, inconsistent with the 1×0.2 g dose and 0.1% label; the page also rounds a 320.2 g build to 320 g in its transfer. The site scales the inspected 1× ingredients and transfers 320.2 g, for 1,676.2 g total.",
+        "Arithmetic adaptation: transfer the full 320.2 g prepared build, including its trace yeast. The printed transfer/subtotal is rounded; the final total here is the sum of the actual additions."
+      ],
+      "component": null,
+      "processPlan": {
+        "extraStages": [
+          {
+            "id": "cold-balls",
+            "after": "bench",
+            "label": "Refrigerated dough-ball hold · several hours or overnight"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-san-francisco-sourdough",
+      "title": "San Francisco-style sourdough bread",
+      "description": "Daniel T. DiMuzio · p. 232 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-san-francisco-sourdough",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "p. 232"
+      },
+      "basePieces": 4,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Firm levain",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 300,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 180,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 60,
+              "id": "r1"
+            },
+            {
+              "name": "Ripe starter levain",
+              "quantity": 300,
+              "unit": "g",
+              "kind": "starter",
+              "sourcePercent": 100,
+              "id": "r2"
+            }
+          ],
+          "timing": "12 hours at21.1°C."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 700,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 500,
+              "unit": "g",
+              "kind": "water",
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 0,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Ripe firm levain",
+              "quantity": 480,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 300,
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 1000,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 680,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 68,
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2,
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 0,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0,
+              "id": "r3"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "printed0",
+          "name": "Printed adjusted dough · apparent row/transfer errors",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 700,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 500,
+              "unit": "g",
+              "kind": "water",
+              "id": "r1"
+            },
+            {
+              "name": "Salt",
+              "quantity": 0,
+              "unit": "g",
+              "kind": "other",
+              "id": "r2"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 480,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Firm levain · printed transfer",
+              "quantity": 427,
+              "unit": "g",
+              "kind": "other",
+              "id": "r4"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the firm levain",
+          "body": "Hold covered but slightly vented at 21.1°C for 12 hours. Transfer 480 g and retain 300 g in the 1× batch. Target dough:25°C. (DiMuzio, p. 232.)"
+        },
+        {
+          "heading": "Choose the mixing method",
+          "body": "Short mix: 12–15 minutes on Speed 1. Improved mix: 5 minutes on Speed 1, then 3–5 on Speed 2. Do not use the intensive method for this yeast-free sourdough, despite the generic list on the recipe page. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Bulk fermentation and folds",
+          "body": "Short mix: allow 4–5 hours for a sourdough with no manufactured yeast; fold at 15–20-minute intervals at least 4–5 times. Improved mix: allow up to 3 hours; fold after 20–30 minutes, with another fold only if needed. (DiMuzio, pp. 195–196.)"
+        },
+        {
+          "heading": "Divide and shape",
+          "body": "Bâtards/boulots: 400–1,000 g; boules: 200–2,000 g; rolls: 60–100 g. Choose a shape appropriate to the dough and use the shaping method in Chapter 6. (DiMuzio, p. 196; Chapter 6.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "For sourdough bâtards/boulots, allow 2–3 hours; boules 2–3½ hours; sourdough rolls 45–90 minutes. Use a proofer near 27°C and 80% humidity, or cover the boards and maintain similar conditions. (DiMuzio, pp. 196–197.)"
+        },
+        {
+          "heading": "Score and bake",
+          "body": "For boules/bâtards/boulots, use a 220–230°C deck oven for 30–35 minutes or longer as needed. Load, score appropriately and steam hearth breads. Rolls use 235–260°C for 12–18 minutes. Reduce convection/rack settings by approximately 14–22°C. (DiMuzio, p. 197.)"
+        },
+        {
+          "heading": "Cool",
+          "body": "Cool on a wire rack without crowding the loaves. (DiMuzio, p. 198.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed p. 232. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "This dough is not recommended for baguettes, which tend to flatten. Choose another shape from the p.196 options. Optional instant yeast up to 0.07% is described, but the saved recipe has none."
+      ],
+      "warnings": [
+        "The adjusted table on p.232 is visibly misaligned/inconsistent: salt 0 g, instant yeast 480 g and firm levain 427 g, while its overall formula, build and 1,700 g yield imply salt 20 g, yeast 0 g and levain 480 g. This explicitly labelled reconstruction uses 700 g flour +500 g water +20 g salt +0 g yeast +480 g levain. The printed erroneous rows remain read-only references below.",
+        "The source gives a weighed starter but not its hydration. The starter is included in the build; 300 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+      ],
+      "component": null
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dimuzio-sicilian-semolina",
+      "title": "Sicilian semolina bread",
+      "description": "Daniel T. DiMuzio · pp. 233–234 · Preferment and final-dough formula.",
+      "tag": "Artisan Bread",
+      "source": {
+        "kind": "dimuzio",
+        "referenceId": "dimuzio-sicilian-semolina",
+        "sha256": "56ef9f6c9bdb91326c42dbf6f3adc39dadd1a01bd3362c467ad102d0b44b9f10",
+        "printedPages": "pp. 233–234"
+      },
+      "basePieces": 3,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build1",
+          "name": "Biga",
+          "role": "build",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 350,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100,
+              "id": "r0"
+            },
+            {
+              "name": "Water",
+              "quantity": 210,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 60,
+              "id": "r1"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 0.4,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.1,
+              "id": "r2"
+            }
+          ],
+          "timing": "12 hours at21.1°C."
+        },
+        {
+          "id": "final",
+          "name": "Final dough · additions only",
+          "role": "final",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 250,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r0"
+            },
+            {
+              "name": "Durum flour · finely ground semolina",
+              "quantity": 400,
+              "unit": "g",
+              "kind": "flour",
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 470,
+              "unit": "g",
+              "kind": "water",
+              "id": "r2"
+            },
+            {
+              "name": "Olive oil",
+              "quantity": 40,
+              "unit": "g",
+              "kind": "other",
+              "id": "r3"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "id": "r4"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 4,
+              "unit": "g",
+              "kind": "other",
+              "id": "r5"
+            },
+            {
+              "name": "Ripe biga",
+              "quantity": 560.4,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build1",
+              "retained": 0.0,
+              "id": "r6"
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall / straight-dough reference",
+          "role": "reference",
+          "rows": [
+            {
+              "name": "Bread flour",
+              "quantity": 600,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 60,
+              "id": "r0"
+            },
+            {
+              "name": "Durum flour · finely ground semolina",
+              "quantity": 400,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 40,
+              "id": "r1"
+            },
+            {
+              "name": "Water",
+              "quantity": 680,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 68,
+              "id": "r2"
+            },
+            {
+              "name": "Olive oil",
+              "quantity": 40,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 4,
+              "id": "r3"
+            },
+            {
+              "name": "Salt",
+              "quantity": 20,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2,
+              "id": "r4"
+            },
+            {
+              "name": "Instant yeast",
+              "quantity": 4,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.4,
+              "id": "r5"
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare the biga",
+          "body": "Hold covered but slightly vented at 21.1°C for 12 hours, as specified for this recipe—not the 24 hours used by several other bigas. Target dough:25°C. (DiMuzio, p. 233.)"
+        },
+        {
+          "heading": "Mix and autolyse",
+          "body": "Mix 3 minutes on Speed 1; cover and rest 20–30 minutes. Add water if the dough appears too dry, recording any variation. Continue 3–4 minutes on Speed 2, avoiding overmixing because semolina tolerates it poorly. For coarser semolina the book suggests a 30–45-minute rest. Cover in a lightly floured tub. (DiMuzio, p. 233.)"
+        },
+        {
+          "heading": "Bulk ferment",
+          "body": "Allow 2–3 hours. Fold after 20 minutes; add a second set only if more strength is needed. (DiMuzio, p. 233.)"
+        },
+        {
+          "heading": "Divide and shape",
+          "body": "Scale about 570 g for football-shaped loaves; pre-round and rest 15 minutes. Shape as boulots. Alternatively pre-shape cylinders, rest 15–20 minutes, extend into long strands and coil into an S. Optional: moisten the top and dip in sesame seeds before proofing; seeds are not included in the base dough weights. (DiMuzio, pp. 233–234.)"
+        },
+        {
+          "heading": "Proof",
+          "body": "Use floured pleated couche or long baskets; allow roughly 60 minutes near 26.7°C and 80% humidity, or use covered boards under similar conditions. (DiMuzio, p. 234.)"
+        },
+        {
+          "heading": "Bake and cool",
+          "body": "Deck oven:220–230°C; convection/rack about 14–22°C lower. Score as for boulots and load with ample steam. Bake 30–40 minutes, venting after 10 minutes. Cool on wire racks without crowding. (DiMuzio, p. 234.)"
+        }
+      ],
+      "notes": [
+        "Source: Daniel T. DiMuzio, Bread Baking: An Artisan’s Perspective (copyright 2010), printed pp. 233–234. Metric 1× ingredient column; temperatures are Celsius (converted where necessary).",
+        "The initial piece count is a batch-planning default, not a printed piece yield. Scale all weighed additions together; times and temperatures do not scale.",
+        "Printed alternative: using only the straight-dough ingredients requires a longer bulk fermentation, around 4–5 hours, and the book recommends reducing instant yeast to about 0.3%. This is an alternative, not an additional yeast dose for the saved prefermented version."
+      ],
+      "warnings": [
+        "The biga hydration box prints 100%, but 210/350=60%. Its ingredients total 560.4 g; the adjusted transfer prints 560 g. The working formula transfers the full 560.4 g and totals 1,744.4 g.",
+        "Arithmetic adaptation: transfer the full 560.4 g prepared build, including its trace yeast. The printed transfer/subtotal is rounded; the final total here is the sum of the actual additions."
+      ],
+      "component": null
+    }
+  ]
+}

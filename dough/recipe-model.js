@@ -47,9 +47,10 @@ export function validateRecipe(r,{publication=false}={}){
  if(!r||typeof r!=='object'||Array.isArray(r))return {errors:['Invalid recipe record'],warnings};
  if(r.schemaVersion!==1||!id(r.id))errors.push('Invalid recipe ID or schema');
  if(!str(r.title,200)||!r.title.trim()||!str(r.description)||!str(r.tag,100))errors.push('Title, description or category is invalid');
- if(!r.source||!['workbook','hamelman','pizzalovers'].includes(r.source.kind)||r.source.referenceId!==r.id||!str(r.source.sha256,64)||!/^[a-f0-9]{64}$/.test(r.source.sha256))errors.push('Invalid source provenance');
+ if(!r.source||!['workbook','hamelman','pizzalovers','dimuzio'].includes(r.source.kind)||r.source.referenceId!==r.id||!str(r.source.sha256,64)||!/^[a-f0-9]{64}$/.test(r.source.sha256))errors.push('Invalid source provenance');
  if(r.component!==null&&(!r.component||!id(r.component.id)||!str(r.component.name,200)||!Number.isFinite(r.component.grams)||r.component.grams<=0))errors.push('Invalid base-dough component');
  if(!Number.isInteger(r.basePieces)||r.basePieces<1||r.basePieces>10000)errors.push('Piece count must be 1–10,000');
+ if(r.processPlan!==undefined&&(!r.processPlan||!Array.isArray(r.processPlan.extraStages)||r.processPlan.extraStages.length>5||new Set(r.processPlan.extraStages.map(e=>e?.id)).size!==r.processPlan.extraStages.length||r.processPlan.extraStages.some(e=>!id(e?.id)||!str(e?.label,200)||!['bulk','bench','shape','proof'].includes(e?.after))))errors.push('Invalid additional process stages');
  if(!Array.isArray(r.stages)||!r.stages.length||r.stages.length>40)return {errors:[...errors,'A recipe requires 1–40 stages'],warnings};
  const ids=new Set();for(const s of r.stages){if(!s||!id(s.id)||ids.has(s.id)||!str(s.name,200)||!['build','final','component','reference'].includes(s.role)||!str(s.timing))errors.push('Invalid or duplicate stage');ids.add(s?.id);if(!Array.isArray(s?.rows)||s.rows.length>200||!s.rows.length){errors.push('Each stage needs 1–200 ingredients');continue;}
   const rowIds=new Set();for(const v of s.rows){if(!v||!id(v.id)||rowIds.has(v.id)||!str(v.name,300)||!v.name.trim()||!['g','ml','eggs','tsp','text'].includes(v.unit)||!['flour','water','starter','other','transfer'].includes(v.kind)||!str(v.display??'',2000))errors.push('Invalid ingredient');rowIds.add(v?.id);

@@ -1,0 +1,1417 @@
+[
+  {
+    "id": "dimuzio-baguettes-direct",
+    "pages": "p. 199",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        1000,
+        100
+      ],
+      [
+        "Water",
+        700,
+        70
+      ],
+      [
+        "Salt",
+        20,
+        2
+      ],
+      [
+        "Instant yeast",
+        3,
+        0.3
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 1000,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 700,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Salt",
+        "quantity": 20,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 3,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 0,
+    "build": null,
+    "workingTotal": 1723,
+    "warnings": []
+  },
+  {
+    "id": "dimuzio-baguettes-liquid-levain",
+    "pages": "p. 200",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        1000,
+        100
+      ],
+      [
+        "Water",
+        680,
+        68
+      ],
+      [
+        "Salt",
+        20,
+        2
+      ],
+      [
+        "Instant yeast",
+        7,
+        0.7
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 900,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 580,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Salt",
+        "quantity": 20,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 7,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 66,
+    "build": [
+      "Liquid levain",
+      [
+        [
+          "Bread flour",
+          100,
+          100
+        ],
+        [
+          "Water",
+          100,
+          100
+        ],
+        [
+          "Ripe starter levain",
+          66,
+          66
+        ]
+      ]
+    ],
+    "workingTotal": 1707,
+    "warnings": [
+      "The source gives a weighed starter but not its hydration. The starter is included in the build; 66 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+    ]
+  },
+  {
+    "id": "dimuzio-baguettes-old-dough",
+    "pages": "p. 201",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        1000,
+        100
+      ],
+      [
+        "Water",
+        680,
+        68
+      ],
+      [
+        "Salt",
+        20,
+        2
+      ],
+      [
+        "Instant yeast",
+        7,
+        0.7
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 750,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 510,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Salt",
+        "quantity": 15,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 5,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 0,
+    "build": [
+      "Old dough",
+      [
+        [
+          "Bread flour",
+          250,
+          100
+        ],
+        [
+          "Water",
+          170,
+          68
+        ],
+        [
+          "Salt",
+          5,
+          2
+        ],
+        [
+          "Instant yeast",
+          2,
+          0.7
+        ]
+      ]
+    ],
+    "workingTotal": 1707,
+    "warnings": [
+      "Printed p. 201 conflicts: the 1× old dough weighs 427 g, but its adjusted transfer prints 420 g; the overall 4× flour prints 400 g; the hydration box prints 100% although 170/250 = 68%. The working formula transfers all 427 g, reconciling the 1,707 g total; the printed 420 g transfer is retained below as reference."
+    ]
+  },
+  {
+    "id": "dimuzio-baguettes-poolish",
+    "pages": "p. 202",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        1000,
+        100
+      ],
+      [
+        "Water",
+        680,
+        68
+      ],
+      [
+        "Salt",
+        20,
+        2
+      ],
+      [
+        "Instant yeast",
+        7,
+        0.7
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 800,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 480,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Salt",
+        "quantity": 20,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 7,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 0,
+    "build": [
+      "Poolish",
+      [
+        [
+          "Bread flour",
+          200,
+          100
+        ],
+        [
+          "Water",
+          200,
+          100
+        ],
+        [
+          "Instant yeast",
+          0.1,
+          0.04
+        ]
+      ]
+    ],
+    "workingTotal": 1707.1,
+    "warnings": [
+      "Arithmetic adaptation: transfer the full 400.1 g prepared build, including its trace yeast. The printed transfer/subtotal is rounded; the final total here is the sum of the actual additions."
+    ]
+  },
+  {
+    "id": "dimuzio-brioche-liquid-levain",
+    "pages": "pp. 204–205",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        750,
+        100
+      ],
+      [
+        "Whole eggs",
+        390,
+        52
+      ],
+      [
+        "Water",
+        75,
+        10
+      ],
+      [
+        "Sugar",
+        113,
+        15
+      ],
+      [
+        "Salt",
+        20,
+        2.6
+      ],
+      [
+        "Instant yeast",
+        14,
+        1.8
+      ],
+      [
+        "Unsalted butter",
+        308,
+        41
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 675,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Whole eggs",
+        "quantity": 390,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Water",
+        "quantity": 0,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Sugar",
+        "quantity": 113,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Salt",
+        "quantity": 20,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 14,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Unsalted butter",
+        "quantity": 308,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 38,
+    "build": [
+      "Liquid levain",
+      [
+        [
+          "Bread flour",
+          75,
+          100
+        ],
+        [
+          "Water",
+          75,
+          100
+        ],
+        [
+          "Ripe starter levain",
+          38,
+          50
+        ]
+      ]
+    ],
+    "workingTotal": 1670,
+    "warnings": [
+      "The printed 1× total is 1,668 g, but both metric ingredient lists sum to 1,670 g. The site uses the summed additions. The 4× seed/subtotal also conflicts; scaling is from the inspected 1× column.",
+      "The source gives a weighed starter but not its hydration. The starter is included in the build; 38 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+    ]
+  },
+  {
+    "id": "dimuzio-ciabatta-biga",
+    "pages": "pp. 210–211",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        900,
+        100
+      ],
+      [
+        "Water",
+        720,
+        80
+      ],
+      [
+        "Salt",
+        18,
+        2
+      ],
+      [
+        "Instant yeast",
+        4,
+        0.4
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 585,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 531,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Salt",
+        "quantity": 18,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 4,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 0,
+    "build": [
+      "Biga",
+      [
+        [
+          "Bread flour",
+          315,
+          100
+        ],
+        [
+          "Water",
+          189,
+          60
+        ],
+        [
+          "Instant yeast",
+          0.3,
+          0.1
+        ]
+      ]
+    ],
+    "workingTotal": 1642.3,
+    "warnings": [
+      "Arithmetic adaptation: transfer the full 504.3 g prepared build, including its trace yeast. The printed transfer/subtotal is rounded; the final total here is the sum of the actual additions."
+    ]
+  },
+  {
+    "id": "dimuzio-croissants-liquid-levain",
+    "pages": "pp. 212–213",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        750,
+        100
+      ],
+      [
+        "Milk",
+        390,
+        52
+      ],
+      [
+        "Water",
+        75,
+        10
+      ],
+      [
+        "Sugar",
+        75,
+        10
+      ],
+      [
+        "Butter · mixed into dough",
+        30,
+        4
+      ],
+      [
+        "Salt",
+        20,
+        2.6
+      ],
+      [
+        "Instant yeast",
+        8,
+        1
+      ],
+      [
+        "Butter block · for lamination",
+        375,
+        50
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 675,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Milk",
+        "quantity": 390,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Water",
+        "quantity": 0,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Sugar",
+        "quantity": 75,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Butter · mixed into dough",
+        "quantity": 30,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Salt",
+        "quantity": 20,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 7,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Butter block · for lamination",
+        "quantity": 375,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 38,
+    "build": [
+      "Liquid levain",
+      [
+        [
+          "Bread flour",
+          75,
+          100
+        ],
+        [
+          "Water",
+          75,
+          100
+        ],
+        [
+          "Ripe starter levain",
+          38,
+          50
+        ]
+      ]
+    ],
+    "workingTotal": 1722,
+    "warnings": [
+      "The overall 1× reference lists 8 g yeast, but the adjusted dough lists 7 g. The adjusted list sums to the printed 1,722 g; the saved mixing formula follows that list. The original 4× starter/subtotal conflicts and is not used as a scaling oracle.",
+      "The source gives a weighed starter but not its hydration. The starter is included in the build; 38 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+    ]
+  },
+  {
+    "id": "dimuzio-focaccia-biga",
+    "pages": "pp. 219–220",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        925,
+        100
+      ],
+      [
+        "Water",
+        666,
+        72
+      ],
+      [
+        "Extra-virgin olive oil",
+        92,
+        10
+      ],
+      [
+        "Salt",
+        18,
+        2
+      ],
+      [
+        "Instant yeast",
+        6,
+        0.7
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 647,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 499,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Extra-virgin olive oil",
+        "quantity": 92,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Salt",
+        "quantity": 18,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 6,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 0,
+    "build": [
+      "Biga",
+      [
+        [
+          "Bread flour",
+          278,
+          100
+        ],
+        [
+          "Water",
+          167,
+          60
+        ],
+        [
+          "Instant yeast",
+          0.3,
+          0.1
+        ]
+      ]
+    ],
+    "workingTotal": 1707.3,
+    "warnings": [
+      "The hydration box prints 100%, but the biga ingredients calculate to 167/278 = 60.07% water, approximately 60%. The exact build weighs 445.3 g; the printed transfer is 445 g.",
+      "Arithmetic adaptation: transfer the full 445.3 g prepared build, including its trace yeast. The printed transfer/subtotal is rounded; the final total here is the sum of the actual additions."
+    ]
+  },
+  {
+    "id": "dimuzio-hearty-sourdough-rye",
+    "pages": "pp. 220–221",
+    "sourceOverall": [
+      [
+        "Medium rye flour",
+        510,
+        51
+      ],
+      [
+        "High-gluten flour",
+        490,
+        49
+      ],
+      [
+        "Water",
+        680,
+        68
+      ],
+      [
+        "Salt",
+        20,
+        2
+      ],
+      [
+        "Instant yeast",
+        6,
+        0.6
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Medium rye flour",
+        "quantity": 160,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "High-gluten flour",
+        "quantity": 490,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 400,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Salt",
+        "quantity": 20,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 6,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 18,
+    "build": [
+      "Rye sour",
+      [
+        [
+          "Medium rye flour",
+          350,
+          100
+        ],
+        [
+          "Water",
+          280,
+          80
+        ],
+        [
+          "Ripe starter levain",
+          18,
+          5
+        ]
+      ]
+    ],
+    "workingTotal": 1706,
+    "warnings": [
+      "The source gives a weighed starter but not its hydration. The starter is included in the build; 18 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+    ]
+  },
+  {
+    "id": "dimuzio-pain-au-levain-firm",
+    "pages": "p. 223",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        900,
+        90
+      ],
+      [
+        "Whole wheat flour",
+        100,
+        10
+      ],
+      [
+        "Water",
+        680,
+        68
+      ],
+      [
+        "Salt",
+        20,
+        2
+      ],
+      [
+        "Instant yeast",
+        0,
+        0
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 600,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Whole wheat flour",
+        "quantity": 100,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 500,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Salt",
+        "quantity": 20,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 0,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 300,
+    "build": [
+      "Firm levain",
+      [
+        [
+          "Bread flour",
+          300,
+          100
+        ],
+        [
+          "Water",
+          180,
+          60
+        ],
+        [
+          "Ripe starter levain",
+          300,
+          100
+        ]
+      ]
+    ],
+    "workingTotal": 1700,
+    "warnings": [
+      "The printed 4× build subtotal, 2,554 g, conflicts with its ingredient sum of 3,120 g. Scaling uses the 1× ingredients and explicit 480 g transfer / 300 g retained amount.",
+      "The source gives a weighed starter but not its hydration. The starter is included in the build; 300 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+    ]
+  },
+  {
+    "id": "dimuzio-pain-au-levain-liquid",
+    "pages": "pp. 224–225",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        900,
+        90
+      ],
+      [
+        "Whole wheat flour",
+        100,
+        10
+      ],
+      [
+        "Water",
+        680,
+        68
+      ],
+      [
+        "Salt",
+        20,
+        2
+      ],
+      [
+        "Instant yeast",
+        0,
+        0
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 700,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Whole wheat flour",
+        "quantity": 100,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 480,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Salt",
+        "quantity": 20,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 0,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 100,
+    "build": [
+      "Liquid levain",
+      [
+        [
+          "Bread flour",
+          200,
+          100
+        ],
+        [
+          "Water",
+          200,
+          100
+        ],
+        [
+          "Ripe starter levain",
+          100,
+          50
+        ]
+      ]
+    ],
+    "workingTotal": 1700,
+    "warnings": [
+      "The source gives a weighed starter but not its hydration. The starter is included in the build; 100 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+    ]
+  },
+  {
+    "id": "dimuzio-pain-de-campagne",
+    "pages": "p. 225",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        900,
+        90
+      ],
+      [
+        "Medium rye flour",
+        100,
+        10
+      ],
+      [
+        "Water",
+        680,
+        68
+      ],
+      [
+        "Salt",
+        22,
+        2.2
+      ],
+      [
+        "Instant yeast",
+        3,
+        0.5
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 900,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Medium rye flour",
+        "quantity": 100,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 680,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Salt",
+        "quantity": 22,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 3,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 0,
+    "build": null,
+    "workingTotal": 1705,
+    "warnings": [
+      "The printed yeast percentage is 0.5%, but the metric 1× dose is 3 g per 1,000 g flour = 0.3%. The weighed 3 g dose is preserved."
+    ]
+  },
+  {
+    "id": "dimuzio-pain-rustique-hand",
+    "pages": "p. 226",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        600,
+        100
+      ],
+      [
+        "Water",
+        450,
+        75
+      ],
+      [
+        "Salt",
+        13,
+        2.2
+      ],
+      [
+        "Instant yeast",
+        2,
+        0.4
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 600,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 450,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Salt",
+        "quantity": 13,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 2,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 0,
+    "build": null,
+    "workingTotal": 1065,
+    "warnings": []
+  },
+  {
+    "id": "dimuzio-pane-pugliese-biga",
+    "pages": "pp. 227–228",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        950,
+        100
+      ],
+      [
+        "Water",
+        722,
+        76
+      ],
+      [
+        "Salt",
+        19,
+        2
+      ],
+      [
+        "Instant yeast",
+        4,
+        0.4
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 618,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 523,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Salt",
+        "quantity": 19,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 4,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 0,
+    "build": [
+      "Biga",
+      [
+        [
+          "Bread flour",
+          333,
+          100
+        ],
+        [
+          "Water",
+          200,
+          60
+        ],
+        [
+          "Instant yeast",
+          0.3,
+          0.1
+        ]
+      ]
+    ],
+    "workingTotal": 1697.3,
+    "warnings": [
+      "Printed p.227 conflicts: build ingredients total533.3 g, not the printed532 g subtotal/transfer. The adjusted flour618 g plus build flour333 g totals951 g, rather than the overall950 g; water523+200=723 g rather than722 g. The working formula preserves the adjusted fresh additions and transfers the exact full533.3 g build, giving1,697.3 g; it does not silently force the printed1,695 g yield.",
+      "Arithmetic adaptation: transfer the full 533.3 g prepared build, including its trace yeast. The printed transfer/subtotal is rounded; the final total here is the sum of the actual additions."
+    ]
+  },
+  {
+    "id": "dimuzio-pizza-dough-biga",
+    "pages": "pp. 228–229",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        1000,
+        100
+      ],
+      [
+        "Water",
+        650,
+        65
+      ],
+      [
+        "Salt",
+        22,
+        2.2
+      ],
+      [
+        "Instant yeast",
+        4,
+        0.4
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 800,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 530,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Salt",
+        "quantity": 22,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 4,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 0,
+    "build": [
+      "Biga",
+      [
+        [
+          "Bread flour",
+          200,
+          100
+        ],
+        [
+          "Water",
+          120,
+          60
+        ],
+        [
+          "Instant yeast",
+          0.2,
+          0.1
+        ]
+      ]
+    ],
+    "workingTotal": 1676.2,
+    "warnings": [
+      "The printed4× biga yeast entry is422 g, inconsistent with the1×0.2 g dose and0.1% label; the page also rounds a320.2 g build to320 g in its transfer. The site scales the inspected1× ingredients and transfers320.2 g, for1,676.2 g total.",
+      "Arithmetic adaptation: transfer the full 320.2 g prepared build, including its trace yeast. The printed transfer/subtotal is rounded; the final total here is the sum of the actual additions."
+    ]
+  },
+  {
+    "id": "dimuzio-san-francisco-sourdough",
+    "pages": "p. 232",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        1000,
+        100
+      ],
+      [
+        "Water",
+        680,
+        68
+      ],
+      [
+        "Salt",
+        20,
+        2
+      ],
+      [
+        "Instant yeast",
+        0,
+        0
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 700,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 500,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Salt",
+        "quantity": 20,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 0,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 300,
+    "build": [
+      "Firm levain",
+      [
+        [
+          "Bread flour",
+          300,
+          100
+        ],
+        [
+          "Water",
+          180,
+          60
+        ],
+        [
+          "Ripe starter levain",
+          300,
+          100
+        ]
+      ]
+    ],
+    "workingTotal": 1700,
+    "warnings": [
+      "The adjusted table on p.232 is visibly misaligned/inconsistent: salt0 g, instant yeast480 g and firm levain427 g, while its overall formula, build and1,700 g yield imply salt20 g, yeast0 g and levain480 g. This explicitly labelled reconstruction uses700 g flour +500 g water +20 g salt +0 g yeast +480 g levain. The printed erroneous rows remain read-only references below.",
+      "The source gives a weighed starter but not its hydration. The starter is included in the build; 300 g of the ripe build is retained. Full physical hydration remains unverified until starter composition is known."
+    ]
+  },
+  {
+    "id": "dimuzio-sicilian-semolina",
+    "pages": "pp. 233–234",
+    "sourceOverall": [
+      [
+        "Bread flour",
+        600,
+        60
+      ],
+      [
+        "Durum flour · finely ground semolina",
+        400,
+        40
+      ],
+      [
+        "Water",
+        680,
+        68
+      ],
+      [
+        "Olive oil",
+        40,
+        4
+      ],
+      [
+        "Salt",
+        20,
+        2
+      ],
+      [
+        "Instant yeast",
+        4,
+        0.4
+      ]
+    ],
+    "sourceFinal": [
+      {
+        "name": "Bread flour",
+        "quantity": 250,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Durum flour · finely ground semolina",
+        "quantity": 400,
+        "unit": "g",
+        "kind": "flour"
+      },
+      {
+        "name": "Water",
+        "quantity": 470,
+        "unit": "g",
+        "kind": "water"
+      },
+      {
+        "name": "Olive oil",
+        "quantity": 40,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Salt",
+        "quantity": 20,
+        "unit": "g",
+        "kind": "other"
+      },
+      {
+        "name": "Instant yeast",
+        "quantity": 4,
+        "unit": "g",
+        "kind": "other"
+      }
+    ],
+    "seedRetained": 0,
+    "build": [
+      "Biga",
+      [
+        [
+          "Bread flour",
+          350,
+          100
+        ],
+        [
+          "Water",
+          210,
+          60
+        ],
+        [
+          "Instant yeast",
+          0.4,
+          0.1
+        ]
+      ]
+    ],
+    "workingTotal": 1744.4,
+    "warnings": [
+      "The biga hydration box prints100%, but210/350=60%. Its ingredients total560.4 g; the adjusted transfer prints560 g. The working formula transfers the full560.4 g and totals1,744.4 g.",
+      "Arithmetic adaptation: transfer the full 560.4 g prepared build, including its trace yeast. The printed transfer/subtotal is rounded; the final total here is the sum of the actual additions."
+    ]
+  }
+]
