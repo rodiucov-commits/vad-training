@@ -32,3 +32,17 @@ Tests independent source formula oracles, fixed-hydration allocation changes, bo
 builds, mass equality, invalid allocation rejection, focused-input recalculation,
 both presets at390/768/1440px and browser errors. Screenshots saved alongside HTML.
 No production deployment or shared recipe changes were made.
+
+
+## Requested revision 3
+
+Top row: count, piece weight, derived total dough weight only. Water/salt controls
+moved beneath the worksheet. Grand-total row includes each ripe levain/sponge
+weight with an explicit final-additions + ripe-transfers equation. Right-hand final-
+mix recipe card restored. Added speed1/speed2 minutes, autolyse rest, derived active
+mixing total and elapsed mixing-plus-rest total; blank is unknown, not zero. Added
+post-mix dough temperature, fermentation temperature and public DDT link. Speed2
+supports the printed3–4min range. Only p167's supplied process values prefill;169
+remains blank. User trial settings are separate from printed source commentary and
+are not reset when scaling ingredients. Both presets reset process fields explicitly.
+All changes remain isolated; no deployment or shared recipe writes.
