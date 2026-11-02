@@ -72,6 +72,7 @@ const close=(a,b)=>assert(Math.abs(a-b)<1e-7,`${a} != ${b}`);
   await page.locator('#start-time').fill('');assert.equal(await page.locator('#timeline li').count(),0);assert.match(await page.locator('#schedule-summary').textContent(),/valid start/);await page.locator('#start-time').fill('2026-11-02T20:00');
   assert.match(await page.locator('#cooking-method').innerText(),/60–90 min/);
   assert.equal(await page.locator('#timeline li').count(),11);
+  assert.equal(await page.locator('.mix-card .schedule').count(),1);assert(await page.locator('#cooking-method').evaluate(e=>e.compareDocumentPosition(document.querySelector('.schedule'))&Node.DOCUMENT_POSITION_FOLLOWING));
   assert.match(await page.locator('#timeline').innerText(),/Switch on the oven/);assert.equal(await page.locator('#source-note').count(),0);assert.equal(await page.locator('.below').innerText().then(t=>t.includes('The original exercises supply')),false);
   const sections=await page.locator('#overall-ledger').evaluate(e=>{let out=[],current=[];for(const row of e.rows){if(row.classList.contains('reference-section')){if(current.length)out.push(current);current=[]}else current.push(Number(row.cells[2].textContent.replace(/,/g,'')))}out.push(current);return out});
   for(const section of sections)assert(Math.abs(section.slice(0,-1).reduce((a,b)=>a+b,0)-section.at(-1))<.4,'reference section mass balance');

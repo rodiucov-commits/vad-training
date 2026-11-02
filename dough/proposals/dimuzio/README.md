@@ -157,3 +157,5 @@ The independent parallel-build vector now ends after 978–1014 minutes (16h18�
 The action plan inserts “Switch on the oven” exactly 55 minutes before the baking-start interval, sorts it chronologically alongside the other actions, and leaves the total duration and oven-exit finish unchanged. The reminder is not clamped to the plan start; a very short plan can correctly require preheating before the preferment-start time. Tests check both time-range endpoints and epoch offsets.
 
 Removed the requested long source/adaptation paragraph and source citation/error paragraph from the visible page. Underlying provenance and formula-audit details remain in repository documentation; calculation behavior is unchanged.
+
+The action plan is in the right-hand kitchen-recipe panel below the baking instructions, with sidebar-matched typography and contrasting finish time. DOM order and responsive layout are checked.
