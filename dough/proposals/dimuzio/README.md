@@ -46,3 +46,16 @@ supports the printed3–4min range. Only p167's supplied process values prefill;
 remains blank. User trial settings are separate from printed source commentary and
 are not reset when scaling ingredients. Both presets reset process fields explicitly.
 All changes remain isolated; no deployment or shared recipe writes.
+
+## Requested revision 4
+
+Unified typography (regular tabular sans-serif numbers, consistent labels and input
+sizes; serif headings only), spacing and teal palette. The right-hand panel is now
+“The kitchen recipe / Bake this bread”: live batch yield, final-mix ingredients and
+ordered cooking guidance. Baguette process uses verified p167 times; p169's missing
+method remains disclosed, not borrowed from the baguette example. Ingredient scaling,
+mixing-time edits, entered post-mix/fermentation temperatures and autolyse trial fields
+update the sidebar without HTML interpolation of user text. Autolyse placement remains
+explicitly unspecified rather than inventing an ingredient split. Tests cover sidebar
+batch/time updates, known source process, missing source method and unified numeric
+font style, in addition to existing source arithmetic/responsive checks. No deployment.
