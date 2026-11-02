@@ -135,3 +135,13 @@ add levain/spongemass again to this reference. Final-mix table and explicit buil
 feed/seed ledgers remain unchanged. Invalid states hide/clear this table too.
 Browser tests verify position,100%flour andwaterbasis,livehydration/scaling and
 unknownseed recovery.54independent Decimal model cases remain passing.
+
+
+### Sectioned reference and baking timeline · 2026-11-02
+The screenshot is a design reference only, not a new Bagels formula. The top reference now shows overall composition, each preferment’s fresh components and explicit starter, then adjusted final dough. All percentage cells use whole-recipe flour (including seed flour), clearly labelled; section yields are alternative views, never added together.
+
+Ripening hours and editable bulk/rest/shaping/proof/baking/cooling minutes feed a start-time planner. Preferments start together and run in parallel (maximum readiness interval, not sum). Subsequent duration ranges propagate endpoint-wise through mixing, fermentation, oven exit and cooling. The planner’s declared order is Speed 1 → autolyse/rest → Speed 2, an editable-method planning convention rather than a book-specified autolyse method. Oven preheating must overlap proofing; it is not added to the elapsed total.
+
+Unknown source timings stay blank and block a complete schedule, including explicit autolyse=0 when absent. One-preferment source timings are from printed p.167; p.169 supplies no procedure. Ripening, shaping allowance and cooling are user settings. Calendar output uses browser-local time, elapsed durations, date rollover and range labels. This estimates a work plan, not biological readiness.
+
+Verified: 54 independent Decimal mass/composition cases; browser checks for section balances, parallel-build clock vector (12h readiness + subsequent stages = 17h18–17h54), overnight rollover, missing/negative duration rejection, live-linked notes, scaling without resetting the schedule, and 390/768/1440px layouts. Existing collection and shared engines untouched.
