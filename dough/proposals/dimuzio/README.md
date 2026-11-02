@@ -1,7 +1,8 @@
 # Recipe-sheet design proposal · 2 November 2026
 
-Standalone `index.html`: open directly in any browser. No dependencies, accounts,
-network requests, local storage, database writes or modifications to the existing app.
+Static example: `index.html` with same-origin `worksheet.js` and `worksheet.css`.
+No external dependencies, accounts, local storage, database writes or modifications
+to the existing app. Serve this directory locally or use the live example URL.
 The external brand link goes to the existing Dough site. Do not deploy this folder
 as the production site root: it is an isolated design proposal.
 
@@ -59,3 +60,21 @@ update the sidebar without HTML interpolation of user text. Autolyse placement r
 explicitly unspecified rather than inventing an ingredient split. Tests cover sidebar
 batch/time updates, known source process, missing source method and unified numeric
 font style, in addition to existing source arithmetic/responsive checks. No deployment.
+
+## Requested revision 5 and live example
+
+Procedure-only right panel: removed “At the final mix” ingredient table, widened
+notes to approximately39% of the desktop workspace and reduced worksheet width.
+Ingredient weights remain in the worksheet; sidebar method/yield remain live-linked.
+Externalized CSS/JS so the site's existing script-src self policy stays intact.
+Direct example route: `/proposals/dimuzio/`. The collection template, existing
+published records, databases, authentication and original calculator assets are not
+modified. Screenshots are local verification outputs and not part of deployment.
+
+Predeployment checks: all134 canonical/public+Owner recipe views and source adapters,
+all134 Owner editors/114 water controls;1602 workbook formulas;15 calculation/content/
+auth suites; independent Decimal audit; live134recipe route/content scan; existing
+live publications equal the frozen originals and live model bytes match tested code.
+Partial/unknown compositions retain disclosures (85partial bases,11unavailable bases).
+Deployment adds only this example and its tests/docs. Revert the proposal commits to
+remove it; no data rollback is needed because no shared recipe writes occur.
