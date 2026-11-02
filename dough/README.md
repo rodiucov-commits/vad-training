@@ -391,3 +391,43 @@ the final grams are the remainder to add. Build feed ratios stay explicitly loca
 to each build. Unknown seed composition is excluded with a visible warning, never
 assumed. See docs/recipe-database.md. No source recipe or database publication is
 changed by this UI release. Private data and legacy calculators are preserved.
+
+## Unified worksheet template (worksheet-template-1 / SWv26)
+
+All 134 published recipes retain their records, stages, units, source references,
+procedures and calculation engine. The shared renderer now uses the approved
+book-style overall/reference table, working build/final lists on the left, and
+recipe guidance plus the baking action plan on the right. One Arial typography
+system and teal/paper palette covers the collection, shared views, Owner editor,
+legacy calculators and DDT; source illustration colours remain illustrations.
+
+The batch line shows piece weight, count and live total (mixed-unit recipes keep
+the known-subtotal limitation). Reference stages are alternative views, not extra
+mixing additions; derived reference percentages use the declared counted-flour
+basis, with unknown starter/composition warnings retained. Source percentages stay
+unchanged in their preserved original tables. No publication or schema is rewritten.
+
+`recipe-timeline.js` is a presentation-only planner. Durations are entered from the
+method or the baker's own plan, never inferred from seed mass or batch scaling.
+Independent builds run in parallel; explicit transfer dependencies make chained
+builds sequential. Ranges propagate to dated actions, oven entry, and oven-exit
+finish. A reminder occurs exactly 55 minutes before oven entry without extending
+the plan. Cooling is excluded. Scaling keeps the current timing inputs; they do
+not change the publication or private recipe notes. Non-oven components/tools,
+waffles and boiled dumplings retain their methods without a misleading bread-oven
+planner. Owner draft previews use the same presentation and working planner.
+
+Prior source/site assets, all published records, visibility state, SHA-256 manifest
+and rollback instructions are privately backed up before rollout. Rollback restores
+the previous dough tree, with a fresh release/cache version; do not roll back or
+clear content/auth databases or browser notes. No database writes are part of this
+release. Protected source engines and frozen import remain unchanged.
+
+Checks: all 134 public + 134 Owner content/scale/mobile views; source-oracle,
+1,602 workbook formulas, book/pizza/temperature arithmetic; Owner draft/preview/
+publish/rollback in an isolated fixture; 134-editor percentage audit; prior-release
+cache/SW upgrade and offline navigation. `tests/recipe-timeline.mjs` independently
+checks parallel/chained timing and the 55-minute offset. `tests/template-browser.mjs`
+checks common fonts, contrast, action-plan placement, timing edits, scaling-state
+preservation and desktop/tablet/mobile layouts. The production domain must serve
+the reviewed assets and unchanged publications before rollout is complete.

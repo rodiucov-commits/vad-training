@@ -1,4 +1,5 @@
-import {validateRecipe,recipeFlourWater,finalWaterForPercent} from './recipe-model.js?v=overall-percent-2';import {recipeContents,esc,num} from './recipe-content.js?v=overall-percent-2';
+import {mountTimeline} from './recipe-timeline.js?v=worksheet-template-1';
+import {validateRecipe,recipeFlourWater,finalWaterForPercent} from './recipe-model.js?v=overall-percent-2';import {recipeContents,esc,num} from './recipe-content.js?v=worksheet-template-1';
 export async function mountRecipeEditor(id,{content,toast,host=document.querySelector('#app'),onPublished}={}){
  host.innerHTML='<section class="panel"><h1>Opening recipe editor…</h1></section>';let state,record,dirty=false,busy=false;
  const request=async body=>{const response=await fetch('/owner/api/recipes?id='+encodeURIComponent(id),{cache:'no-store',credentials:'same-origin',...(body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{})}),data=await response.json();if(!response.ok)throw Error([data.error,...(data.errors||[])].join('\n'));return data;};
@@ -37,7 +38,7 @@ export async function mountRecipeEditor(id,{content,toast,host=document.querySel
   const action=el.dataset.editorAction;if(!action)return;
   if(action==='transfers'){for(const stage of record.stages)for(const row of stage.rows)if(row.kind==='transfer'){const build=record.stages.find(s=>s.id===row.fromStage);if(build&&build.rows.every(v=>v.quantity!==null&&v.unit==='g'))row.quantity=build.rows.reduce((sum,v)=>sum+v.quantity,0)-(row.retained||0);}dirty=true;render();host.querySelector('#rc-editor-status').textContent='Transfers recalculated from build totals minus retained quantities. Review before saving.';return;}
   if(action==='export'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({version:1,record,source:content.originals.get(id),history:state.history},null,2)],{type:'application/json'}));a.download=id+'-recipe-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);return;}
-  if(action==='preview'){const preview=host.querySelector('#rc-preview');preview.innerHTML='<h2>Draft preview · not published</h2>'+recipeContents(record,1,record.basePieces,{original:content.originals.get(id)});preview.scrollIntoView();return;}
+  if(action==='preview'){const preview=host.querySelector('#rc-preview');preview.innerHTML='<h2>Draft preview · not published</h2>'+recipeContents(record,1,record.basePieces,{original:content.originals.get(id)});mountTimeline(preview,record);preview.scrollIntoView();return;}
   if(action==='publish'&&dirty){host.querySelector('#rc-editor-status').textContent='Save the current draft before publishing.';return;}
   if(['publish','rollback','discard'].includes(action)&&!confirm(action==='publish'?'Publish this saved draft for everyone?':action==='rollback'?'Restore this revision publicly? History is retained.':'Discard the saved draft? Published recipe unchanged.'))return;
   busy=true;host.querySelectorAll('[data-editor-action]').forEach(b=>b.disabled=true);
