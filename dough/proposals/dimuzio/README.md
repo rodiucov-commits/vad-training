@@ -78,3 +78,27 @@ live publications equal the frozen originals and live model bytes match tested c
 Partial/unknown compositions retain disclosures (85partial bases,11unavailable bases).
 Deployment adds only this example and its tests/docs. Revert the proposal commits to
 remove it; no data rollback is needed because no shared recipe writes occur.
+
+## Starter correction
+
+Removed the intermediate total: the worksheet has one grand-total row at the bottom.
+Added a weighed starter ingredient and editable starter hydration. The default2%
+of whole-flour mass at100% hydration is an explicit demo assumption, not book data
+or a fermentation recommendation. Missing hydration is rejected, never guessed.
+
+Whole-formula flour/water and target mass include starter contents. Split seed into
+seedFlour=seedMass/(1+seedHydration/100), seedWater=seedMass-seedFlour. Keep the ripe
+preferment's chosen whole-flour allocation/hydration fixed; fresh feed flour/water
+are ripe composition minus seed contributions. Main rows show fresh flour/water
+and a separate starter ingredient, so physical masses can be summed without double
+counting. Ripe mass=fresh feed flour+fresh feed water+starter; final dough=ripe
+transfers+final additions. Reject starter overdraw. All recipe flour, including seed,
+is100%; fresh-flour percentage alone can be less than100%.
+
+Independent `python3 dough/tests/dimuzio-seed-audit.py`:54Decimal cases across both
+presets,3batch sizes,3starter doses and50/100/200%seed hydrations. Hand oracle:
+1000gwhole flour,110gwhole levain flour at100%hydration,20gseed at100%hydration:
+100gfeed flour+100gfeed water+20gseed=220gripe; final890gflour+580gwater+20gsalt+
+4gyeast+220gripe=1714g,69%whole-dough hydration. Seed isnot20gextra above that target.
+Browser tests verify one total, starter row, build equations, live seed hydration,
+unknown/overdraw rejection, batch scaling and both responsive presets.
