@@ -18,10 +18,13 @@ Source process is retained for167, Celsius conversions labelled;169 has no inven
 procedure. Book inconsistency notes are shown on the page and retained separately
 in the baking skill. The source PDF and all existing recipes/calculators are unchanged.
 
-Template proposal: batch plan → kitchen weighing list → inspectable overall-minus-
-preferments ledger → ripe transfer allocations → attributed method/source notes.
-Desktop uses a weighing-list sidebar. Mobile brings the weighing list immediately
-after the batch plan; the detailed worksheet scrolls inside its own frame.
+Revised at Vadim’s request: match the book’s table closely. A teal-headed,
+full-width worksheet replaces the editorial cards/sidebar. Columns are ingredients,
+whole-formula baker’s percent, straight/overall dough, one or two preferment
+subtractions and adjusted/final dough. Ripe transfer rows and a reconciled final
+total are inside the same table. Percentage sum, flour equation, preferment ratios
+and two-column procedure fields sit beneath, as in the source. Small screens scroll
+the worksheet inside its own frame; no whole-page overflow. Arithmetic unchanged.
 
 Verification:
 `PLAYWRIGHT_PATH=/path/to/playwright-core node dough/tests/dimuzio-proposal.cjs`
