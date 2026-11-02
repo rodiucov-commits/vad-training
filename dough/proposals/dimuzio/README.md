@@ -102,3 +102,25 @@ presets,3batch sizes,3starter doses and50/100/200%seed hydrations. Hand oracle:
 4gyeast+220gripe=1714g,69%whole-dough hydration. Seed isnot20gextra above that target.
 Browser tests verify one total, starter row, build equations, live seed hydration,
 unknown/overdraw rejection, batch scaling and both responsive presets.
+
+## Preferments-first / single-formula revision
+
+Live asset tagdimuzio-flow-7. Both build cards precede the compact final-dough table.
+No blank rows, separate transfer footer or “included” annotations in the total.
+Final table is one nonoverlapping weighing list: ripe levain/sponge then fresh final
+flour/water/salt/yeast; one total at bottom. Do not add build feed rows to this table.
+
+Primary editable controls specify each ripe preferment mass as percent of TOTAL
+DOUGH MASS. Display baker's equivalent (ripe mass / all recipe flour) and PFF
+(build flour incl starter / all recipe flour) separately. If d=1+H/100+S/100+.004,
+PFF=share*d/(1+buildHydration/100), and share=PFF*(1+buildHydration/100)/d.
+Canonical UI shares keep full precision; displayed rounding never drives recalculation.
+Changing overall hydration or batch size preserves chosen mass shares. Advanced
+PFF input updates the matching mass share in reverse. Seed mass/hydration controls
+remain available in the levain card, with weighed starter in its ingredient list.
+
+Browser tests cover both conversion directions, hydration and count edits, seed
+accounting/recovery, combined preferments, single total, absence of blank/footer
+rows, build order, process links and390/768/1440layouts.54independent Decimal
+seed oracles now also compare mass-share and baker's-percent outputs. Existing
+collection engines and records are not changed.

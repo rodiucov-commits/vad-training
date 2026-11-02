@@ -21,8 +21,8 @@ for two in [False,True]:
     total=final+ripe+spf+spw
     assert abs(total-D(count)*D(piece))<D('1e-30')
     assert abs((feedw+sw+remainingw+spw)/(feedf+sf+remainingf+spf)*100-D(s['hydration']))<D('1e-30')
-    cases.append(s);expected.append(dict(F=F,seed=seed,seedFlour=sf,seedWater=sw,feedFlour=feedf,feedWater=feedw,ripe=ripe,total=total,finalWater=remainingw))
-node="const fs=require('fs'),vm=require('vm');const code=fs.readFileSync(process.argv[1],'utf8').split('window.calculate=calculate;')[0]+';calculate';const calc=vm.runInNewContext(code);const cases=JSON.parse(fs.readFileSync(0,'utf8'));console.log(JSON.stringify(cases.map(s=>{const r=calc(s);return {F:r.F,seed:r.seed,seedFlour:r.seedFlour,seedWater:r.seedWater,feedFlour:r.builds[0].feedFlour,feedWater:r.builds[0].feedWater,ripe:r.builds[0].mass,total:r.total,finalWater:r.final[1]}})));"
+    cases.append(s);expected.append(dict(F=F,seed=seed,seedFlour=sf,seedWater=sw,feedFlour=feedf,feedWater=feedw,ripe=ripe,total=total,finalWater=remainingw,doughShare=ripe/total*100,bakerPercent=ripe/F*100))
+node="const fs=require('fs'),vm=require('vm');const code=fs.readFileSync(process.argv[1],'utf8').split('window.calculate=calculate;')[0]+';calculate';const calc=vm.runInNewContext(code);const cases=JSON.parse(fs.readFileSync(0,'utf8'));console.log(JSON.stringify(cases.map(s=>{const r=calc(s);return {F:r.F,seed:r.seed,seedFlour:r.seedFlour,seedWater:r.seedWater,feedFlour:r.builds[0].feedFlour,feedWater:r.builds[0].feedWater,ripe:r.builds[0].mass,total:r.total,finalWater:r.final[1],doughShare:r.builds[0].doughShare,bakerPercent:r.builds[0].bakerPercent}})));"
 r=subprocess.run(['node','-e',node,str(source)],input=json.dumps(cases),text=True,capture_output=True,check=True)
 for i,(actual,want) in enumerate(zip(json.loads(r.stdout),expected)):
  for key,value in want.items():

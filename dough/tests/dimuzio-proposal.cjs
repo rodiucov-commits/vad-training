@@ -1,4 +1,69 @@
-const {chromium}=require(process.env.PLAYWRIGHT_PATH||'playwright-core');const assert=require('node:assert/strict');const root=require('path').resolve(__dirname,'../proposals/dimuzio');const fs=require('fs');const http=require('http');
-(async()=>{const server=http.createServer((q,s)=>{const pathname=new URL(q.url,'http://localhost').pathname;const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','worksheet.js','worksheet.css'].includes(name)){s.writeHead(404);return s.end('Not found')}s.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'");s.setHeader('Content-Type',name.endsWith('.js')?'application/javascript':name.endsWith('.css')?'text/css':'text/html');s.end(fs.readFileSync(root+'/'+name))});await new Promise(r=>server.listen(0,'127.0.0.1',r));const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});const page=await browser.newPage({viewport:{width:1440,height:1050}});const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(process.env.SITE_URL||'http://127.0.0.1:'+server.address().port);await page.screenshot({path:root+'/desktop.png',fullPage:true});
-assert.equal(await page.locator('#ledger tr.total').count(),0);assert.equal(await page.locator('#ledger tr.grand').count(),1);assert.equal(await page.locator('#ledger tr.seed-row').count(),1);assert.match(await page.locator('#build-breakdown').textContent(),/starter levain/);assert.equal(await page.locator('.planning label').count(),3);assert.equal(await page.locator('.planning #hydration').count(),0);assert.equal(await page.locator('#total-weight').textContent(),'1,200.0');assert.equal(await page.locator('#mixing-total').textContent(),'8–9 min');assert.equal(await page.locator('#autolyse').inputValue(),'');assert.equal(await page.locator('#dough-temp').inputValue(),'');assert.equal(await page.locator('#ferment-temp').inputValue(),'23.9');await page.locator('#autolyse').fill('20');assert.equal(await page.locator('#elapsed-total').textContent(),'28–29 min');await page.locator('#speed1').fill('6');await page.locator('#speed2').fill('4');assert.equal(await page.locator('#mixing-total').textContent(),'10 min');assert.equal(await page.locator('#elapsed-total').textContent(),'30 min');await page.locator('#piece').fill('500');assert.equal(await page.locator('#total-weight').textContent(),'1,500.0');assert.match(await page.locator('#recipe-yield').textContent(),/3 pieces × 500.0 g/);assert.match(await page.locator('#cooking-method').textContent(),/10 min/);assert.match(await page.locator('#cooking-method').textContent(),/30 min/);assert.equal(await page.locator('#speed1').inputValue(),'6');assert.equal(await page.locator('.mix-card table').count(),0);assert.equal(await page.locator('.temperature-fields a').getAttribute('href'),'https://dc.rodiucov.com/#recipe/dough-temperature');await page.locator('#two').click();assert.equal(await page.locator('#speed1').inputValue(),'');assert.equal(await page.locator('#mixing-total').textContent(),'Not specified');assert.match(await page.locator('#cooking-method').textContent(),/Liquid levain:/);assert.match(await page.locator('#cooking-method').textContent(),/Sponge:/);assert.match(await page.locator('#ledger tr.grand td.deduct').first().textContent(),/129.9/);assert.match(await page.locator('#ledger tr.grand td.deduct').nth(1).textContent(),/129.9/);assert.match(await page.locator('#recipe-gap').textContent(),/not a complete source baking recipe/);await page.locator('#one').click();assert.equal(await page.locator('#cooking-method li').count(),6);assert.match(await page.locator('#cooking-method').textContent(),/60–90 minutes/);assert.match(await page.locator('#cooking-method').textContent(),/20–25 minutes at 246.1°C/);assert.equal(await page.locator('#ledger td').first().evaluate(e=>getComputedStyle(e).fontStyle),'normal');
-const result=await page.evaluate(()=>{const s={count:15,piece:400,hydration:69,salt:2,p1:11,h1:100,p2:0,h2:60,seedPercent:2,seedHydration:100,two:false};const a=calculate(s),b=calculate({...s,p1:9}),c=calculate({count:10,piece:700,hydration:70,salt:2,p1:8,h1:100,p2:10,h2:60,seedPercent:2,seedHydration:100,two:true});let rejected=false;try{calculate({...s,p1:90,h1:200})}catch{rejected=true}return {a,b,c,rejected}});assert(Math.abs(result.a.F-6000/1.714)<1e-9);assert(Math.abs(result.a.total-6000)<1e-8);assert.equal(result.a.overall[1],result.b.overall[1]);assert(result.b.final[1]>result.a.final[1]);assert(Math.abs(result.c.total-7000)<1e-8);assert(Math.abs(result.c.final[1]-(7000/1.724)*(.70-.08-.10*.60))<1e-8);assert(result.rejected);await page.locator('#seedHydration').fill('50');assert(await page.locator('#seedHydration').evaluate(e=>e===document.activeElement));const seed50=await page.evaluate(()=>demoResult);assert(Math.abs(seed50.seedFlour-seed50.seed/1.5)<1e-8);assert(Math.abs(seed50.builds[0].feedFlour+seed50.builds[0].feedWater+seed50.seed-seed50.builds[0].mass)<1e-8);await page.locator('#seedHydration').fill('');assert(await page.locator('#error').textContent());await page.locator('#seedHydration').fill('100');assert.equal(await page.locator('#error').textContent(),'');await page.locator('#seedPercent').fill('30');assert.match(await page.locator('#error').textContent(),/more flour or water/);await page.locator('#seedPercent').fill('2');await page.locator('#p1').fill('9');assert(await page.locator('#p1').evaluate(e=>e===document.activeElement));await page.locator('#two').click();assert.equal(await page.locator('.stage').count(),2);assert.equal(await page.locator('#ledger tr.transfer').count(),2);assert.equal(await page.locator('#ledger tr.grand td.final').textContent(),'1,400.0');await page.locator('#count').fill('10');assert.match(await page.locator('#batch').textContent(),/7,000/);await page.locator('#p1').fill('99');assert(await page.locator('#error').textContent());assert(await page.locator('#results').evaluate(e=>getComputedStyle(e).display==='none'));await page.locator('#reset').click();for(const width of [390,768,1440]){await page.setViewportSize({width,height:950});for(const preset of ['one','two']){await page.locator('#'+preset).click();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'overflow '+width);if(width===1440)await page.screenshot({path:root+'/desktop-'+preset+'.png',fullPage:true});if(width===390)await page.screenshot({path:root+'/mobile-'+preset+'.png',fullPage:true});}}assert.deepEqual(errors,[]);await browser.close();server.close();console.log('PASS: source-based arithmetic, fixed-hydration allocation changes, two builds, mass reconciliation, invalid allocations, live focus, both presets at 390/768/1440px; no page errors.');})().catch(e=>{console.error(e);process.exit(1)});
+const {chromium}=require(process.env.PLAYWRIGHT_PATH||'playwright-core');
+const assert=require('node:assert/strict'),path=require('path'),fs=require('fs'),http=require('http');
+const root=path.resolve(__dirname,'../proposals/dimuzio');
+const close=(a,b)=>assert(Math.abs(a-b)<1e-7,`${a} != ${b}`);
+(async()=>{
+ const server=http.createServer((q,s)=>{
+  const pathname=new URL(q.url,'http://localhost').pathname,name=pathname==='/'?'index.html':pathname.slice(1);
+  if(!['index.html','worksheet.js','worksheet.css'].includes(name)){s.writeHead(404);return s.end('Not found')}
+  s.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'");
+  s.setHeader('Content-Type',name.endsWith('.js')?'application/javascript':name.endsWith('.css')?'text/css':'text/html');s.end(fs.readFileSync(root+'/'+name));
+ });
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));
+ const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
+ try{
+  const page=await browser.newPage({viewport:{width:1440,height:1050}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(process.env.SITE_URL||'http://127.0.0.1:'+server.address().port);
+  const result=()=>page.evaluate(()=>demoResult);
+  const tableMass=()=>page.locator('#ledger tr:not(.grand) td:last-child').allTextContents().then(x=>x.reduce((a,v)=>a+Number(v.replace(/,/g,'')),0));
+  assert.equal(await page.locator('.planning label').count(),3);
+  assert.equal(await page.locator('#ledger tr.blank,#ledger tr.transfer,#ledger tr.total').count(),0);
+  assert.equal(await page.locator('#ledger tr.grand').count(),1);
+  assert.equal(await page.locator('#ledger tr.grand td').count(),3);
+  assert.equal(await page.locator('#ledger').innerText().then(t=>t.includes('included')),false);
+  assert.equal(await page.locator('#ledger tr.preferment-row').count(),1);
+  assert.match(await page.locator('#levain-build-rows').innerText(),/Starter levain/);
+  assert(await page.locator('#build-breakdown').evaluate(e=>e.compareDocumentPosition(document.querySelector('#ledger'))&Node.DOCUMENT_POSITION_FOLLOWING));
+  let r=await result();close(r.total,1200);close(r.builds[0].mass/r.total*100,22/1.714);close(r.builds[0].bakerPercent,22);close(r.builds[0].p,11);
+  assert(Math.abs(await tableMass()-1200)<.3);
+  assert.equal(await page.locator('#total-weight').textContent(),'1,200.0');
+  await page.locator('#levainShare').fill('20');assert(await page.locator('#levainShare').evaluate(e=>e===document.activeElement));
+  r=await result();close(r.builds[0].mass,240);close(r.builds[0].doughShare,20);close(r.builds[0].p,17.14);close(r.total,1200);
+  close(r.builds[0].feedFlour+r.builds[0].feedWater+r.seed,240);close(r.overall[1]/r.F*100,69);
+  await page.locator('#hydration').fill('75');r=await result();close(r.builds[0].doughShare,20);close(r.overall[1]/r.F*100,75);close(r.total,1200);
+  await page.locator('#count').fill('6');r=await result();close(r.builds[0].mass,480);close(r.total,2400);close(r.builds[0].doughShare,20);
+  await page.locator('#starter-options').evaluate(e=>e.open=true);
+  await page.locator('#seedHydration').fill('50');assert(await page.locator('#seedHydration').evaluate(e=>e===document.activeElement));
+  r=await result();close(r.seedFlour,r.seed/1.5);close(r.builds[0].feedFlour+r.builds[0].feedWater+r.seed,r.builds[0].mass);close(r.total,2400);
+  await page.locator('#seedHydration').fill('');assert(await page.locator('#error').textContent());assert.equal(await page.locator('#levain-build-rows tr').count(),0);
+  await page.locator('#seedHydration').fill('100');assert.equal(await page.locator('#error').textContent(),'');
+  await page.locator('#seedPercent').fill('60');assert.match(await page.locator('#error').textContent(),/more flour or water/);
+  await page.locator('#seedPercent').fill('2');await page.locator('#p1').fill('9');assert(await page.locator('#p1').evaluate(e=>e===document.activeElement));r=await result();close(r.builds[0].p,9);close(r.builds[0].doughShare,18/1.774);
+  await page.locator('#reset').click();assert.equal(await page.locator('#mixing-total').textContent(),'8–9 min');
+  await page.locator('#autolyse').fill('20');assert.equal(await page.locator('#elapsed-total').textContent(),'28–29 min');
+  await page.locator('#speed1').fill('6');await page.locator('#speed2').fill('4');assert.equal(await page.locator('#mixing-total').textContent(),'10 min');
+  assert.match(await page.locator('#cooking-method').textContent(),/30 min/);
+  await page.locator('#piece').fill('500');assert.equal(await page.locator('#speed1').inputValue(),'6');assert.match(await page.locator('#recipe-yield').textContent(),/3 pieces × 500.0 g/);
+  assert.equal(await page.locator('.temperature-fields a').getAttribute('href'),'https://dc.rodiucov.com/#recipe/dough-temperature');
+  await page.locator('#two').click();r=await result();close(r.total,1400);assert.equal(await page.locator('#ledger tr.preferment-row').count(),2);
+  assert(await page.locator('#second-fields').isVisible());assert.equal(await page.locator('.mix-card table').count(),0);
+  assert.match(await page.locator('#recipe-gap').textContent(),/not a complete source baking recipe/);
+  await page.locator('#levainShare').fill('15');await page.locator('#spongeShare').fill('10');r=await result();close(r.builds[0].mass,210);close(r.builds[1].mass,140);close(r.total,1400);close(r.overall[1]/r.F*100,70);
+  assert.match(await page.locator('#cooking-method').textContent(),/210.0 g ripe/);assert.match(await page.locator('#cooking-method').textContent(),/140.0 g ripe/);
+  await page.locator('#levainShare').fill('90');assert(await page.locator('#error').textContent());assert(await page.locator('#results').evaluate(e=>getComputedStyle(e).display==='none'));
+  await page.locator('#levainShare').fill('15');assert.equal(await page.locator('#error').textContent(),'');
+  const pure=await page.evaluate(()=>{const s={count:15,piece:400,hydration:69,salt:2,p1:11,h1:100,p2:0,h2:60,seedPercent:2,seedHydration:100,two:false};return{a:calculate(s),b:calculate({...s,p1:9}),inverse:pffFromMassShare(massShareFromPff(11,100,1.714),100,1.714)}});
+  close(pure.a.F,6000/1.714);close(pure.a.total,6000);close(pure.inverse,11);close(pure.a.overall[1],pure.b.overall[1]);assert(pure.b.final[1]>pure.a.final[1]);
+  for(const width of [390,768,1440]){
+   await page.setViewportSize({width,height:950});
+   for(const preset of ['one','two']){
+    await page.locator('#'+preset).click();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'overflow '+width);
+    assert.equal(await page.locator('#ledger tr.blank,#ledger tr.transfer').count(),0);
+    assert.equal(await page.locator('#ledger tr.grand').count(),1);
+    if(width===1440)await page.screenshot({path:root+'/desktop-'+preset+'.png',fullPage:true});
+    if(width===390)await page.screenshot({path:root+'/mobile-'+preset+'.png',fullPage:true});
+   }
+  }
+  assert.deepEqual(errors,[]);console.log('PASS: levain/sponge dough-mass percentages, baker/PFF conversions, fixed-share hydration/scaling edits, explicit seed, impossible/unknown inputs, one clean final formula, builds first, process/DDT links, focus, 390/768/1440px; no browser errors.');
+ }finally{await browser.close();server.close();}
+})().catch(e=>{console.error(e);process.exit(1)});
