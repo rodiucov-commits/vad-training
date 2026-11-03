@@ -52,4 +52,5 @@ for(const r of pizzaLoversRecipes){const state=defaults(r.preset),p=presets[r.pr
 }
 catalogue.push(...JSON.parse(read('sources/dimuzio-artisan.json')).recipes);
 catalogue.push(...JSON.parse(read('sources/suas-breads.json')).recipes);
+catalogue.push(...JSON.parse(read('sources/suas-croissants.json')).recipes);
 const output={schemaVersion:1,sourceVersion:'recipe-db-1',recipes:catalogue};fs.writeFileSync(new URL('recipe-catalog.json',root),JSON.stringify(output));console.log(JSON.stringify({recipes:catalogue.length,stages:catalogue.reduce((s,r)=>s+r.stages.length,0),methods:catalogue.reduce((s,r)=>s+r.methods.length,0),sourceSha:hash(bookJSON)}));

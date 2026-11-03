@@ -1,0 +1,2080 @@
+{
+  "recipes": [
+    {
+      "schemaVersion": 1,
+      "id": "suas-croissant-direct",
+      "title": "Croissants · direct dough",
+      "description": "Michel Suas · croissants · printed pp.331. Source discrepancy / calculated adaptation disclosed.",
+      "tag": "Croissants",
+      "source": {
+        "kind": "suas",
+        "referenceId": "suas-croissant-direct",
+        "sha256": "bebde6cc917183e92ecf7ee82904754dc60195cbf75a95dbb6084abb26570236",
+        "printedPages": "pp.331"
+      },
+      "basePieces": 48,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "final",
+          "name": "Détrempe additions + separate roll-in butter · p.331",
+          "role": "final",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 2496,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 949,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 38
+            },
+            {
+              "id": "r2",
+              "name": "Milk",
+              "quantity": 574,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 23
+            },
+            {
+              "id": "r3",
+              "name": "Sugar",
+              "quantity": 325,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 13
+            },
+            {
+              "id": "r4",
+              "name": "Salt",
+              "quantity": 50,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2
+            },
+            {
+              "id": "r5",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 30,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.2
+            },
+            {
+              "id": "r6",
+              "name": "Malt",
+              "quantity": 12,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.5
+            },
+            {
+              "id": "r7",
+              "name": "Dough butter",
+              "quantity": 100,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 4
+            },
+            {
+              "id": "roll-in-butter",
+              "name": "Roll-in butter · lamination only, not mixer butter",
+              "quantity": 1134,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": null
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Before mixing",
+          "body": "Keep dough butter and roll-in butter separate. Only the dough butter goes into the mixer; reserve the roll-in butter for lamination. The 25% roll-in percentage uses détrempe weight, not flour weight. Finished batch weight includes lamination butter once. (Suas, p.311; pp.331.)"
+        },
+        {
+          "heading": "Mix",
+          "body": "Use an improved mix for the détrempe. Hold sugar back until gluten development when it exceeds 10% of flour, then incorporate it. Target dough temperature 22–25°C.  (Suas, p.312; pp.331.)"
+        },
+        {
+          "heading": "First fermentation",
+          "body": "Ferment 45–60 minutes, then refrigerate 8–15 hours at 4°C. Enter the cold hold separately in the planner. (Suas, pp.331.)"
+        },
+        {
+          "heading": "Prepare lamination butter",
+          "body": "Use cold butter that is firm but pliable, with texture and temperature compatible with the chilled dough. Pound between heavy plastic sheets to form an even block; do not melt or spread warm butter. Enclose it in the dough before giving the turns. (Suas, pp.311–313.)"
+        },
+        {
+          "heading": "Laminate",
+          "body": "Give three single (letter) folds. Sheet gradually and evenly, fold in thirds, and rotate 90° between turns. Rest 30 minutes in the refrigerator between folds or series of folds. After the last fold, refrigerate at least 30 minutes before final sheeting. Plan all turns, handling and rests in the lamination field; do not count these rests again as bench time. (Suas, pp.315,317; pp.331.)"
+        },
+        {
+          "heading": "Shape",
+          "body": "Sheet the rested dough to 3–3.5 mm and allow it to relax before cutting. For traditional croissants, cut a 41 cm wide sheet into two 20.5 cm strips, then triangles with 10.25 cm bases. Gently stretch, roll from base toward tip without damaging the shoulders, and pan on parchment with room to expand. Apply a thin egg wash after shaping; it is an unquantified finishing ingredient, not part of dough mass. (Suas, pp.317–318.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "Proof 1½–2 hours at 26°C and 65% relative humidity. Check the dough’s readiness rather than treating the clock as proof of readiness. Apply a gentle thin egg wash again before baking, avoiding pooled wash and glued layers. (Suas, p.317; pp.331.)"
+        },
+        {
+          "heading": "Bake",
+          "body": "Bake in a convection oven for 13–15 minutes at 196°C (385°F), with 2 seconds of steam. The planner’s finish is oven exit and excludes cooling. (Suas, pp.331.)"
+        }
+      ],
+      "notes": [
+        "Printed metric kilogram quantities are converted to grams. Original local-table percentages are preserved; they are not whole-batch percentages. Butter for roll-in is 25% of détrempe, not a flour-based baker’s percentage; its source percentage cell is therefore intentionally blank.",
+        "The batch includes roll-in butter, but it must not be mixed into the détrempe. Base piece count 48 is an editable planning assumption, not a yield stated in Suas. Egg wash and dusting flour are unquantified finishing aids and are not included in the mass.",
+        "The flour/water calculation counts only explicit water and flour, tracing only consumed build fractions. Milk, eggs and butter contain unquantified water; seed hydration is not guessed. Do not treat the displayed direct-water ratio as full effective hydration.",
+        "Planner: enter cold holding and all lamination work/rests in the dedicated required fields. Enter 0 for unused warm bulk or bench stages. Prefermented-dough build time includes its unspecified cold hold. Natural-starter builds are sequential, not parallel."
+      ],
+      "warnings": [
+        "Suas p.331 prints 385°F (96°C). Calculated conversion: (385−32)×5/9 = 196.1°C; the working bake uses 196°C, also printed for the other croissant formulas. The original 96°C is retained here as a source discrepancy."
+      ],
+      "component": null,
+      "processPlan": {
+        "extraStages": [
+          {
+            "id": "cold-hold",
+            "label": "Chill détrempe before lamination · 8–15 hours at 4°C",
+            "after": "bulk"
+          },
+          {
+            "id": "lamination",
+            "label": "Three folds + all refrigerated rests before shaping",
+            "after": "bulk"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "suas-croissant-poolish",
+      "title": "Croissants · poolish",
+      "description": "Michel Suas · croissants · printed pp.332–333. Source discrepancy / calculated adaptation disclosed.",
+      "tag": "Croissants",
+      "source": {
+        "kind": "suas",
+        "referenceId": "suas-croissant-poolish",
+        "sha256": "bebde6cc917183e92ecf7ee82904754dc60195cbf75a95dbb6084abb26570236",
+        "printedPages": "pp.332–333"
+      },
+      "basePieces": 48,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build",
+          "name": "Poolish · p.332",
+          "role": "build",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 791,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 791,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r2",
+              "name": "Yeast (instant)",
+              "quantity": 1,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.1
+            }
+          ],
+          "timing": "12–16 hours at 18–21°C; DDT 21°C."
+        },
+        {
+          "id": "final",
+          "name": "Détrempe additions + separate roll-in butter · p.332",
+          "role": "final",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 1809,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Milk",
+              "quantity": 615,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 34
+            },
+            {
+              "id": "r2",
+              "name": "Sugar",
+              "quantity": 335,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 18.5
+            },
+            {
+              "id": "r3",
+              "name": "Salt",
+              "quantity": 52,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2.9
+            },
+            {
+              "id": "r4",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 25,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.4
+            },
+            {
+              "id": "r5",
+              "name": "Malt",
+              "quantity": 13,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.7
+            },
+            {
+              "id": "r6",
+              "name": "Dough butter",
+              "quantity": 103,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 5.7
+            },
+            {
+              "id": "r7",
+              "name": "Ripe poolish",
+              "quantity": 1583,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build",
+              "retained": 0,
+              "sourcePercent": 87.5
+            },
+            {
+              "id": "roll-in-butter",
+              "name": "Roll-in butter · lamination only, not mixer butter",
+              "quantity": 1134,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": null
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall détrempe · p.333 · excludes roll-in butter",
+          "role": "reference",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 2601,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 791,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 30.42
+            },
+            {
+              "id": "r2",
+              "name": "Milk",
+              "quantity": 615,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 23.66
+            },
+            {
+              "id": "r3",
+              "name": "Sugar",
+              "quantity": 335,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 12.87
+            },
+            {
+              "id": "r4",
+              "name": "Salt",
+              "quantity": 52,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2.02
+            },
+            {
+              "id": "r5",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 26,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1
+            },
+            {
+              "id": "r6",
+              "name": "Malt",
+              "quantity": 13,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.49
+            },
+            {
+              "id": "r7",
+              "name": "Dough butter",
+              "quantity": 103,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 3.97
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare poolish",
+          "body": "Combine the build ingredients; DDT 21°C. Ferment 12–16 hours at 18–21°C. Transfer only the amount shown in the final additions; any displayed residue is retained. (Suas, p.332.)"
+        },
+        {
+          "heading": "Before mixing",
+          "body": "Keep dough butter and roll-in butter separate. Only the dough butter goes into the mixer; reserve the roll-in butter for lamination. The 25% roll-in percentage uses détrempe weight, not flour weight. Finished batch weight includes lamination butter once. (Suas, p.311; pp.332–333.)"
+        },
+        {
+          "heading": "Mix",
+          "body": "Use an improved mix for the détrempe. Hold sugar back until gluten development when it exceeds 10% of flour, then incorporate it. Target dough temperature 22–25°C.  (Suas, p.312; pp.332–333.)"
+        },
+        {
+          "heading": "First fermentation",
+          "body": "Ferment 45–60 minutes, then refrigerate 1 hour at 4°C. Enter the cold hold separately in the planner. (Suas, pp.332–333.)"
+        },
+        {
+          "heading": "Prepare lamination butter",
+          "body": "Use cold butter that is firm but pliable, with texture and temperature compatible with the chilled dough. Pound between heavy plastic sheets to form an even block; do not melt or spread warm butter. Enclose it in the dough before giving the turns. (Suas, pp.311–313.)"
+        },
+        {
+          "heading": "Laminate",
+          "body": "Give three single (letter) folds. Sheet gradually and evenly, fold in thirds, and rotate 90° between turns. Rest 30 minutes in the refrigerator between folds or series of folds. After the last fold, refrigerate at least 30 minutes before final sheeting. Plan all turns, handling and rests in the lamination field; do not count these rests again as bench time. (Suas, pp.315,317; pp.332–333.)"
+        },
+        {
+          "heading": "Shape",
+          "body": "Sheet the rested dough to 3–3.5 mm and allow it to relax before cutting. For traditional croissants, cut a 41 cm wide sheet into two 20.5 cm strips, then triangles with 10.25 cm bases. Gently stretch, roll from base toward tip without damaging the shoulders, and pan on parchment with room to expand. Apply a thin egg wash after shaping; it is an unquantified finishing ingredient, not part of dough mass. (Suas, pp.317–318.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "Proof 1½–2 hours at 26°C and 65% relative humidity. Check the dough’s readiness rather than treating the clock as proof of readiness. Apply a gentle thin egg wash again before baking, avoiding pooled wash and glued layers. (Suas, p.317; pp.332–333.)"
+        },
+        {
+          "heading": "Bake",
+          "body": "Bake in a convection oven for 13–15 minutes at 196°C (385°F), with 2 seconds of steam. The planner’s finish is oven exit and excludes cooling. (Suas, pp.332–333.)"
+        }
+      ],
+      "notes": [
+        "Printed metric kilogram quantities are converted to grams. Original local-table percentages are preserved; they are not whole-batch percentages. Butter for roll-in is 25% of détrempe, not a flour-based baker’s percentage; its source percentage cell is therefore intentionally blank.",
+        "The batch includes roll-in butter, but it must not be mixed into the détrempe. Base piece count 48 is an editable planning assumption, not a yield stated in Suas. Egg wash and dusting flour are unquantified finishing aids and are not included in the mass.",
+        "The flour/water calculation counts only explicit water and flour, tracing only consumed build fractions. Milk, eggs and butter contain unquantified water; seed hydration is not guessed. Do not treat the displayed direct-water ratio as full effective hydration.",
+        "Planner: enter cold holding and all lamination work/rests in the dedicated required fields. Enter 0 for unused warm bulk or bench stages. Prefermented-dough build time includes its unspecified cold hold. Natural-starter builds are sequential, not parallel."
+      ],
+      "warnings": [
+        "Printed détrempe total is 4,536 g, but the listed metric additions and transfer total 4,535 g. Working weights retain those ingredients, not an invented balancing correction; with 1,134 g roll-in butter the batch is 5,669 g. The printed 25% roll-in figure is based on the rounded détrempe total."
+      ],
+      "component": null,
+      "processPlan": {
+        "extraStages": [
+          {
+            "id": "cold-hold",
+            "label": "Chill détrempe before lamination · 1 hour at 4°C",
+            "after": "bulk"
+          },
+          {
+            "id": "lamination",
+            "label": "Three folds + all refrigerated rests before shaping",
+            "after": "bulk"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "suas-croissant-prefermented-dough",
+      "title": "Croissants · prefermented dough",
+      "description": "Michel Suas · croissants · printed pp.335–336.",
+      "tag": "Croissants",
+      "source": {
+        "kind": "suas",
+        "referenceId": "suas-croissant-prefermented-dough",
+        "sha256": "bebde6cc917183e92ecf7ee82904754dc60195cbf75a95dbb6084abb26570236",
+        "printedPages": "pp.335–336"
+      },
+      "basePieces": 48,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build",
+          "name": "Prefermented dough · p.335",
+          "role": "build",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 490,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 318,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 65
+            },
+            {
+              "id": "r2",
+              "name": "Yeast (instant)",
+              "quantity": 3,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.6
+            },
+            {
+              "id": "r3",
+              "name": "Salt",
+              "quantity": 10,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2
+            }
+          ],
+          "timing": "1 hour at 18–21°C, then refrigerate until needed; include the entire unspecified cold hold in the build time."
+        },
+        {
+          "id": "final",
+          "name": "Détrempe additions + separate roll-in butter · p.335",
+          "role": "final",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 2003,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 661,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 33
+            },
+            {
+              "id": "r2",
+              "name": "Milk",
+              "quantity": 581,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 29
+            },
+            {
+              "id": "r3",
+              "name": "Sugar",
+              "quantity": 300,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 15
+            },
+            {
+              "id": "r4",
+              "name": "Salt",
+              "quantity": 40,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2
+            },
+            {
+              "id": "r5",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 24,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.2
+            },
+            {
+              "id": "r6",
+              "name": "Malt",
+              "quantity": 6,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.3
+            },
+            {
+              "id": "r7",
+              "name": "Dough butter",
+              "quantity": 100,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 5
+            },
+            {
+              "id": "r8",
+              "name": "Ripe prefermented dough",
+              "quantity": 821,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build",
+              "retained": 0,
+              "sourcePercent": 41
+            },
+            {
+              "id": "roll-in-butter",
+              "name": "Roll-in butter · lamination only, not mixer butter",
+              "quantity": 1134,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": null
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall détrempe · p.336 · excludes roll-in butter",
+          "role": "reference",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 2493,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 979,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 39.29
+            },
+            {
+              "id": "r2",
+              "name": "Milk",
+              "quantity": 581,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 23.3
+            },
+            {
+              "id": "r3",
+              "name": "Sugar",
+              "quantity": 300,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 12.05
+            },
+            {
+              "id": "r4",
+              "name": "Salt",
+              "quantity": 50,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2
+            },
+            {
+              "id": "r5",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 27,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.08
+            },
+            {
+              "id": "r6",
+              "name": "Malt",
+              "quantity": 6,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.24
+            },
+            {
+              "id": "r7",
+              "name": "Dough butter",
+              "quantity": 100,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 4.02
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare prefermented dough",
+          "body": "Combine the build ingredients; DDT 21°C. Ferment 1 hour at 18–21°C, then refrigerate until needed. The cold duration is not specified; include your chosen hold in the build timing. (Suas, p.335.)"
+        },
+        {
+          "heading": "Before mixing",
+          "body": "Keep dough butter and roll-in butter separate. Only the dough butter goes into the mixer; reserve the roll-in butter for lamination. The 25% roll-in percentage uses détrempe weight, not flour weight. Finished batch weight includes lamination butter once. (Suas, p.311; pp.335–336.)"
+        },
+        {
+          "heading": "Mix",
+          "body": "Use an improved mix for the détrempe. Hold sugar back until gluten development when it exceeds 10% of flour, then incorporate it. Target dough temperature 22–25°C.  (Suas, p.312; pp.335–336.)"
+        },
+        {
+          "heading": "First fermentation",
+          "body": "Ferment 45–60 minutes, then refrigerate 1 hour at 4°C. Enter the cold hold separately in the planner. (Suas, pp.335–336.)"
+        },
+        {
+          "heading": "Prepare lamination butter",
+          "body": "Use cold butter that is firm but pliable, with texture and temperature compatible with the chilled dough. Pound between heavy plastic sheets to form an even block; do not melt or spread warm butter. Enclose it in the dough before giving the turns. (Suas, pp.311–313.)"
+        },
+        {
+          "heading": "Laminate",
+          "body": "Give three single (letter) folds. Sheet gradually and evenly, fold in thirds, and rotate 90° between turns. Rest 30 minutes in the refrigerator between folds or series of folds. After the last fold, refrigerate at least 30 minutes before final sheeting. Plan all turns, handling and rests in the lamination field; do not count these rests again as bench time. (Suas, pp.315,317; pp.335–336.)"
+        },
+        {
+          "heading": "Shape",
+          "body": "Sheet the rested dough to 3–3.5 mm and allow it to relax before cutting. For traditional croissants, cut a 41 cm wide sheet into two 20.5 cm strips, then triangles with 10.25 cm bases. Gently stretch, roll from base toward tip without damaging the shoulders, and pan on parchment with room to expand. Apply a thin egg wash after shaping; it is an unquantified finishing ingredient, not part of dough mass. (Suas, pp.317–318.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "Proof 1½–2 hours at 26°C and 65% relative humidity. Check the dough’s readiness rather than treating the clock as proof of readiness. Apply a gentle thin egg wash again before baking, avoiding pooled wash and glued layers. (Suas, p.317; pp.335–336.)"
+        },
+        {
+          "heading": "Bake",
+          "body": "Bake in a convection oven for 13–15 minutes at 196°C (385°F), with 2 seconds of steam. The planner’s finish is oven exit and excludes cooling. (Suas, pp.335–336.)"
+        }
+      ],
+      "notes": [
+        "Printed metric kilogram quantities are converted to grams. Original local-table percentages are preserved; they are not whole-batch percentages. Butter for roll-in is 25% of détrempe, not a flour-based baker’s percentage; its source percentage cell is therefore intentionally blank.",
+        "The batch includes roll-in butter, but it must not be mixed into the détrempe. Base piece count 48 is an editable planning assumption, not a yield stated in Suas. Egg wash and dusting flour are unquantified finishing aids and are not included in the mass.",
+        "The flour/water calculation counts only explicit water and flour, tracing only consumed build fractions. Milk, eggs and butter contain unquantified water; seed hydration is not guessed. Do not treat the displayed direct-water ratio as full effective hydration.",
+        "Planner: enter cold holding and all lamination work/rests in the dedicated required fields. Enter 0 for unused warm bulk or bench stages. Prefermented-dough build time includes its unspecified cold hold. Natural-starter builds are sequential, not parallel."
+      ],
+      "warnings": [],
+      "component": null,
+      "processPlan": {
+        "extraStages": [
+          {
+            "id": "cold-hold",
+            "label": "Chill détrempe before lamination · 1 hour at 4°C",
+            "after": "bulk"
+          },
+          {
+            "id": "lamination",
+            "label": "Three folds + all refrigerated rests before shaping",
+            "after": "bulk"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "suas-croissant-sponge",
+      "title": "Croissants · sponge",
+      "description": "Michel Suas · croissants · printed pp.337–338. Source discrepancy / calculated adaptation disclosed.",
+      "tag": "Croissants",
+      "source": {
+        "kind": "suas",
+        "referenceId": "suas-croissant-sponge",
+        "sha256": "bebde6cc917183e92ecf7ee82904754dc60195cbf75a95dbb6084abb26570236",
+        "printedPages": "pp.337–338"
+      },
+      "basePieces": 48,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build",
+          "name": "Sponge · p.337",
+          "role": "build",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 520,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 322,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 62
+            },
+            {
+              "id": "r2",
+              "name": "Yeast (instant)",
+              "quantity": 1,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.1
+            }
+          ],
+          "timing": "12–16 hours at 18–21°C; DDT 21°C."
+        },
+        {
+          "id": "final",
+          "name": "Détrempe additions + separate roll-in butter · p.337",
+          "role": "final",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 2106,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 421,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 20
+            },
+            {
+              "id": "r2",
+              "name": "Milk",
+              "quantity": 632,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 30
+            },
+            {
+              "id": "r3",
+              "name": "Sugar",
+              "quantity": 337,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 16
+            },
+            {
+              "id": "r4",
+              "name": "Salt",
+              "quantity": 53,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2.5
+            },
+            {
+              "id": "r5",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 34,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.6
+            },
+            {
+              "id": "r6",
+              "name": "Malt",
+              "quantity": 6,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.3
+            },
+            {
+              "id": "r7",
+              "name": "Dough butter",
+              "quantity": 105,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 5
+            },
+            {
+              "id": "r8",
+              "name": "Ripe sponge",
+              "quantity": 842,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build",
+              "retained": 1,
+              "sourcePercent": 40
+            },
+            {
+              "id": "roll-in-butter",
+              "name": "Roll-in butter · lamination only, not mixer butter",
+              "quantity": 1134,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": null
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall détrempe · p.338 · excludes roll-in butter",
+          "role": "reference",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 2625,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 743,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 28.31
+            },
+            {
+              "id": "r2",
+              "name": "Milk",
+              "quantity": 632,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 24.06
+            },
+            {
+              "id": "r3",
+              "name": "Sugar",
+              "quantity": 337,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 12.83
+            },
+            {
+              "id": "r4",
+              "name": "Salt",
+              "quantity": 53,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2.01
+            },
+            {
+              "id": "r5",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 34,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.3
+            },
+            {
+              "id": "r6",
+              "name": "Malt",
+              "quantity": 6,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.24
+            },
+            {
+              "id": "r7",
+              "name": "Dough butter",
+              "quantity": 105,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 4.01
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare sponge",
+          "body": "Combine the build ingredients; DDT 21°C. Ferment 12–16 hours at 18–21°C. Transfer only the amount shown in the final additions; any displayed residue is retained. (Suas, p.337.)"
+        },
+        {
+          "heading": "Before mixing",
+          "body": "Keep dough butter and roll-in butter separate. Only the dough butter goes into the mixer; reserve the roll-in butter for lamination. The 25% roll-in percentage uses détrempe weight, not flour weight. Finished batch weight includes lamination butter once. (Suas, p.311; pp.337–338.)"
+        },
+        {
+          "heading": "Mix",
+          "body": "Use an improved mix for the détrempe. Hold sugar back until gluten development when it exceeds 10% of flour, then incorporate it. Target dough temperature 22–25°C. The printed sponge DDT line pairs 72°F with 27°C; 72°F converts to about 22°C. The conflicting original is disclosed in the warnings. (Suas, p.312; pp.337–338.)"
+        },
+        {
+          "heading": "First fermentation",
+          "body": "Ferment 45–60 minutes, then refrigerate 1 hour at 4°C. Enter the cold hold separately in the planner. (Suas, pp.337–338.)"
+        },
+        {
+          "heading": "Prepare lamination butter",
+          "body": "Use cold butter that is firm but pliable, with texture and temperature compatible with the chilled dough. Pound between heavy plastic sheets to form an even block; do not melt or spread warm butter. Enclose it in the dough before giving the turns. (Suas, pp.311–313.)"
+        },
+        {
+          "heading": "Laminate",
+          "body": "Give three single (letter) folds. Sheet gradually and evenly, fold in thirds, and rotate 90° between turns. Rest 30 minutes in the refrigerator between folds or series of folds. After the last fold, refrigerate at least 30 minutes before final sheeting. Plan all turns, handling and rests in the lamination field; do not count these rests again as bench time. (Suas, pp.315,317; pp.337–338.)"
+        },
+        {
+          "heading": "Shape",
+          "body": "Sheet the rested dough to 3–3.5 mm and allow it to relax before cutting. For traditional croissants, cut a 41 cm wide sheet into two 20.5 cm strips, then triangles with 10.25 cm bases. Gently stretch, roll from base toward tip without damaging the shoulders, and pan on parchment with room to expand. Apply a thin egg wash after shaping; it is an unquantified finishing ingredient, not part of dough mass. (Suas, pp.317–318.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "Proof 1½–2 hours at 26°C and 65% relative humidity. Check the dough’s readiness rather than treating the clock as proof of readiness. Apply a gentle thin egg wash again before baking, avoiding pooled wash and glued layers. (Suas, p.317; pp.337–338.)"
+        },
+        {
+          "heading": "Bake",
+          "body": "Bake in a convection oven for 13–15 minutes at 196°C (385°F), with 2 seconds of steam. The planner’s finish is oven exit and excludes cooling. (Suas, pp.337–338.)"
+        }
+      ],
+      "notes": [
+        "Printed metric kilogram quantities are converted to grams. Original local-table percentages are preserved; they are not whole-batch percentages. Butter for roll-in is 25% of détrempe, not a flour-based baker’s percentage; its source percentage cell is therefore intentionally blank.",
+        "The batch includes roll-in butter, but it must not be mixed into the détrempe. Base piece count 48 is an editable planning assumption, not a yield stated in Suas. Egg wash and dusting flour are unquantified finishing aids and are not included in the mass.",
+        "The flour/water calculation counts only explicit water and flour, tracing only consumed build fractions. Milk, eggs and butter contain unquantified water; seed hydration is not guessed. Do not treat the displayed direct-water ratio as full effective hydration.",
+        "Planner: enter cold holding and all lamination work/rests in the dedicated required fields. Enter 0 for unused warm bulk or bench stages. Prefermented-dough build time includes its unspecified cold hold. Natural-starter builds are sequential, not parallel."
+      ],
+      "warnings": [
+        "Suas p.337 sponge components total 843 g although its printed subtotal and final transfer are 842 g. This model transfers 842 g and retains 1 g.",
+        "Suas p.337 prints DDT 72°F (27°C) to 77°F (25°C). The working 22–25°C range follows the Fahrenheit conversions and the other croissant formulas; the conflicting printed 27°C is retained here."
+      ],
+      "component": null,
+      "processPlan": {
+        "extraStages": [
+          {
+            "id": "cold-hold",
+            "label": "Chill détrempe before lamination · 1 hour at 4°C",
+            "after": "bulk"
+          },
+          {
+            "id": "lamination",
+            "label": "Three folds + all refrigerated rests before shaping",
+            "after": "bulk"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "suas-croissant-natural-starter",
+      "title": "Croissants · natural starter",
+      "description": "Michel Suas · croissants · printed pp.339–341. Source discrepancy / calculated adaptation disclosed.",
+      "tag": "Croissants",
+      "source": {
+        "kind": "suas",
+        "referenceId": "suas-croissant-natural-starter",
+        "sha256": "bebde6cc917183e92ecf7ee82904754dc60195cbf75a95dbb6084abb26570236",
+        "printedPages": "pp.339–341"
+      },
+      "basePieces": 48,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "italian-levain",
+          "name": "Italian levain · p.339",
+          "role": "build",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 18,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 9,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 50
+            },
+            {
+              "id": "r2",
+              "name": "Starter",
+              "quantity": 18,
+              "unit": "g",
+              "kind": "starter",
+              "sourcePercent": 100
+            }
+          ],
+          "timing": "Refresh every 4 hours until mature; number of feeds unspecified, then final 12–16 hour build at 23–25°C. Include all preparation time."
+        },
+        {
+          "id": "first-dough",
+          "name": "First dough · pp.339–340",
+          "role": "build",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 223,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 112,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 50
+            },
+            {
+              "id": "r2",
+              "name": "Milk",
+              "quantity": 29,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 13
+            },
+            {
+              "id": "r3",
+              "name": "Eggs",
+              "quantity": 9,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 4
+            },
+            {
+              "id": "r4",
+              "name": "Sugar",
+              "quantity": 31,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 14
+            },
+            {
+              "id": "r5",
+              "name": "Dough butter",
+              "quantity": 9,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 4
+            },
+            {
+              "id": "r6",
+              "name": "Ripe Italian levain",
+              "quantity": 34,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "italian-levain",
+              "retained": 11,
+              "sourcePercent": 15
+            }
+          ],
+          "timing": "Mix 4 minutes speed 1, briefly speed 2; ferment 12 hours at 21°C. Build timing must also include its mixing/handling."
+        },
+        {
+          "id": "final",
+          "name": "Détrempe additions + separate roll-in butter · p.340",
+          "role": "final",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 2233,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 670,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 30
+            },
+            {
+              "id": "r2",
+              "name": "Milk",
+              "quantity": 558,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 25
+            },
+            {
+              "id": "r3",
+              "name": "Eggs",
+              "quantity": 112,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 5
+            },
+            {
+              "id": "r4",
+              "name": "Sugar",
+              "quantity": 313,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 14
+            },
+            {
+              "id": "r5",
+              "name": "Salt",
+              "quantity": 49,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2.2
+            },
+            {
+              "id": "r6",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 34,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.5
+            },
+            {
+              "id": "r7",
+              "name": "Malt",
+              "quantity": 31,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.4
+            },
+            {
+              "id": "r8",
+              "name": "Dough butter",
+              "quantity": 89,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 4
+            },
+            {
+              "id": "r9",
+              "name": "Ripe first dough",
+              "quantity": 447,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "first-dough",
+              "retained": 0,
+              "sourcePercent": 20
+            },
+            {
+              "id": "roll-in-butter",
+              "name": "Roll-in butter · lamination only, not mixer butter",
+              "quantity": 1134,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": null
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall détrempe · p.341 · excludes roll-in butter",
+          "role": "reference",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 2479,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 793,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 31.98
+            },
+            {
+              "id": "r2",
+              "name": "Milk",
+              "quantity": 587,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 23.69
+            },
+            {
+              "id": "r3",
+              "name": "Eggs",
+              "quantity": 121,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 4.86
+            },
+            {
+              "id": "r4",
+              "name": "Sugar",
+              "quantity": 344,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 13.87
+            },
+            {
+              "id": "r5",
+              "name": "Salt",
+              "quantity": 49,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.98
+            },
+            {
+              "id": "r6",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 34,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.35
+            },
+            {
+              "id": "r7",
+              "name": "Malt",
+              "quantity": 31,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.26
+            },
+            {
+              "id": "r8",
+              "name": "Dough butter",
+              "quantity": 98,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 3.96
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare Italian levain",
+          "body": "Mix to DDT 29°C and refresh every 4 hours until mature. The source gives no count of refreshes. For the mature levain’s final build it specifies DDT 21°C and 12–16 hours at 23–25°C. Plan the complete preparation, not just one refresh. Use 34 g in the first dough and retain 11 g at source scale. (Suas, p.339.)"
+        },
+        {
+          "heading": "Prepare first dough",
+          "body": "After the levain is ready, incorporate the first-dough ingredients for 4 minutes on speed 1, then use speed 2 only until gluten development begins. Ferment 12 hours at 21°C before adding all 447 g to the final dough. The introductory paragraph says 12–15 hours; the process instruction specifies 12 hours. (Suas, pp.339–340.)"
+        },
+        {
+          "heading": "Before mixing",
+          "body": "Keep dough butter and roll-in butter separate. Only the dough butter goes into the mixer; reserve the roll-in butter for lamination. The 25% roll-in percentage uses détrempe weight, not flour weight. Finished batch weight includes lamination butter once. (Suas, p.311; pp.339–341.)"
+        },
+        {
+          "heading": "Mix",
+          "body": "Use an improved mix for the détrempe. Hold sugar back until gluten development when it exceeds 10% of flour, then incorporate it. Target dough temperature 22–25°C.  (Suas, p.312; pp.339–341.)"
+        },
+        {
+          "heading": "First fermentation",
+          "body": "Ferment 45–60 minutes, then refrigerate 1 hour at 4°C. Enter the cold hold separately in the planner. (Suas, pp.339–341.)"
+        },
+        {
+          "heading": "Prepare lamination butter",
+          "body": "Use cold butter that is firm but pliable, with texture and temperature compatible with the chilled dough. Pound between heavy plastic sheets to form an even block; do not melt or spread warm butter. Enclose it in the dough before giving the turns. (Suas, pp.311–313.)"
+        },
+        {
+          "heading": "Laminate",
+          "body": "Give three single (letter) folds. Sheet gradually and evenly, fold in thirds, and rotate 90° between turns. Rest 30 minutes in the refrigerator between folds or series of folds. After the last fold, refrigerate at least 30 minutes before final sheeting. Plan all turns, handling and rests in the lamination field; do not count these rests again as bench time. (Suas, pp.315,317; pp.339–341.)"
+        },
+        {
+          "heading": "Shape",
+          "body": "Sheet the rested dough to 3–3.5 mm and allow it to relax before cutting. For traditional croissants, cut a 41 cm wide sheet into two 20.5 cm strips, then triangles with 10.25 cm bases. Gently stretch, roll from base toward tip without damaging the shoulders, and pan on parchment with room to expand. Apply a thin egg wash after shaping; it is an unquantified finishing ingredient, not part of dough mass. (Suas, pp.317–318.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "Proof 1½–2 hours at 26°C and 65% relative humidity. Check the dough’s readiness rather than treating the clock as proof of readiness. Apply a gentle thin egg wash again before baking, avoiding pooled wash and glued layers. (Suas, p.317; pp.339–341.)"
+        },
+        {
+          "heading": "Bake",
+          "body": "Bake in a convection oven for 13–15 minutes at 196°C (385°F), with 2 seconds of steam. The planner’s finish is oven exit and excludes cooling. (Suas, pp.339–341.)"
+        }
+      ],
+      "notes": [
+        "Printed metric kilogram quantities are converted to grams. Original local-table percentages are preserved; they are not whole-batch percentages. Butter for roll-in is 25% of détrempe, not a flour-based baker’s percentage; its source percentage cell is therefore intentionally blank.",
+        "The batch includes roll-in butter, but it must not be mixed into the détrempe. Base piece count 48 is an editable planning assumption, not a yield stated in Suas. Egg wash and dusting flour are unquantified finishing aids and are not included in the mass.",
+        "The flour/water calculation counts only explicit water and flour, tracing only consumed build fractions. Milk, eggs and butter contain unquantified water; seed hydration is not guessed. Do not treat the displayed direct-water ratio as full effective hydration.",
+        "Planner: enter cold holding and all lamination work/rests in the dedicated required fields. Enter 0 for unused warm bulk or bench stages. Prefermented-dough build time includes its unspecified cold hold. Natural-starter builds are sequential, not parallel."
+      ],
+      "warnings": [
+        "Suas pp.339–341 omit a roll-in butter quantity. This working adaptation applies Suas’s general croissant standard on p.311: 25% of the 4,536 g détrempe = 1,134 g. This is a calculated application of the general standard, not a printed ingredient on those recipe pages; the original détrempe is preserved separately."
+      ],
+      "component": null,
+      "processPlan": {
+        "extraStages": [
+          {
+            "id": "cold-hold",
+            "label": "Chill détrempe before lamination · 1 hour at 4°C",
+            "after": "bulk"
+          },
+          {
+            "id": "lamination",
+            "label": "Three folds + all refrigerated rests before shaping",
+            "after": "bulk"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "suas-croissant-hand-mix",
+      "title": "Croissants · hand mix",
+      "description": "Michel Suas · croissants · printed pp.341–342. Source discrepancy / calculated adaptation disclosed.",
+      "tag": "Croissants",
+      "source": {
+        "kind": "suas",
+        "referenceId": "suas-croissant-hand-mix",
+        "sha256": "bebde6cc917183e92ecf7ee82904754dc60195cbf75a95dbb6084abb26570236",
+        "printedPages": "pp.341–342"
+      },
+      "basePieces": 48,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build",
+          "name": "Poolish · p.341",
+          "role": "build",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 734,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 734,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r2",
+              "name": "Yeast (instant)",
+              "quantity": 1,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.1
+            }
+          ],
+          "timing": "12–16 hours at 18–21°C; DDT 21°C."
+        },
+        {
+          "id": "final",
+          "name": "Détrempe additions + separate roll-in butter · p.342",
+          "role": "final",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 1678,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 570,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 34
+            },
+            {
+              "id": "r2",
+              "name": "Milk",
+              "quantity": 336,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 20
+            },
+            {
+              "id": "r3",
+              "name": "Sugar",
+              "quantity": 310,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 18.5
+            },
+            {
+              "id": "r4",
+              "name": "Salt",
+              "quantity": 49,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2.9
+            },
+            {
+              "id": "r5",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 23,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.4
+            },
+            {
+              "id": "r6",
+              "name": "Malt",
+              "quantity": 7,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.4
+            },
+            {
+              "id": "r7",
+              "name": "Dough butter",
+              "quantity": 96,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 5.7
+            },
+            {
+              "id": "r8",
+              "name": "Ripe poolish",
+              "quantity": 1468,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build",
+              "retained": 1,
+              "sourcePercent": 87.5
+            },
+            {
+              "id": "roll-in-butter",
+              "name": "Roll-in butter · lamination only, not mixer butter",
+              "quantity": 1134,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": null
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall détrempe · p.342 · excludes roll-in butter",
+          "role": "reference",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 2411,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 1304,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 54.08
+            },
+            {
+              "id": "r2",
+              "name": "Milk",
+              "quantity": 329,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 13.92
+            },
+            {
+              "id": "r3",
+              "name": "Sugar",
+              "quantity": 310,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 12.87
+            },
+            {
+              "id": "r4",
+              "name": "Salt",
+              "quantity": 49,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2.02
+            },
+            {
+              "id": "r5",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 24,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1
+            },
+            {
+              "id": "r6",
+              "name": "Malt",
+              "quantity": 7,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.28
+            },
+            {
+              "id": "r7",
+              "name": "Dough butter",
+              "quantity": 96,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 3.97
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare poolish",
+          "body": "Combine the build ingredients; DDT 21°C. Ferment 12–16 hours at 18–21°C. Transfer only the amount shown in the final additions; any displayed residue is retained. (Suas, p.341.)"
+        },
+        {
+          "heading": "Before mixing",
+          "body": "Keep dough butter and roll-in butter separate. Only the dough butter goes into the mixer; reserve the roll-in butter for lamination. The 25% roll-in percentage uses détrempe weight, not flour weight. Finished batch weight includes lamination butter once. (Suas, p.311; pp.341–342.)"
+        },
+        {
+          "heading": "Mix",
+          "body": "Hand-mix the détrempe; do not substitute the improved-machine-mix instruction. Target dough temperature 22–25°C.  (Suas, p.312; pp.341–342.)"
+        },
+        {
+          "heading": "First fermentation",
+          "body": "Refrigerate immediately for 2 hours in the refrigerator; there is no separate warm bulk stage in this hand-mix formula. Enter the cold hold separately in the planner. (Suas, pp.341–342.)"
+        },
+        {
+          "heading": "Prepare lamination butter",
+          "body": "Use cold butter that is firm but pliable, with texture and temperature compatible with the chilled dough. Pound between heavy plastic sheets to form an even block; do not melt or spread warm butter. Enclose it in the dough before giving the turns. (Suas, pp.311–313.)"
+        },
+        {
+          "heading": "Laminate",
+          "body": "Give three single (letter) folds. Sheet gradually and evenly, fold in thirds, and rotate 90° between turns. Rest 1 hour in the refrigerator between each fold for this hand-mix formula. After the last fold, refrigerate at least 30 minutes before final sheeting. Plan all turns, handling and rests in the lamination field; do not count these rests again as bench time. (Suas, pp.315,317; pp.341–342.)"
+        },
+        {
+          "heading": "Shape",
+          "body": "Sheet the rested dough to 3–3.5 mm and allow it to relax before cutting. For traditional croissants, cut a 41 cm wide sheet into two 20.5 cm strips, then triangles with 10.25 cm bases. Gently stretch, roll from base toward tip without damaging the shoulders, and pan on parchment with room to expand. Apply a thin egg wash after shaping; it is an unquantified finishing ingredient, not part of dough mass. (Suas, pp.317–318.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "Proof 1½–2 hours at 26°C and 65% relative humidity. Check the dough’s readiness rather than treating the clock as proof of readiness. Apply a gentle thin egg wash again before baking, avoiding pooled wash and glued layers. (Suas, p.317; pp.341–342.)"
+        },
+        {
+          "heading": "Bake",
+          "body": "Bake in a convection oven for 13–15 minutes at 196°C (385°F), with 2 seconds of steam. The planner’s finish is oven exit and excludes cooling. (Suas, pp.341–342.)"
+        }
+      ],
+      "notes": [
+        "Printed metric kilogram quantities are converted to grams. Original local-table percentages are preserved; they are not whole-batch percentages. Butter for roll-in is 25% of détrempe, not a flour-based baker’s percentage; its source percentage cell is therefore intentionally blank.",
+        "The batch includes roll-in butter, but it must not be mixed into the détrempe. Base piece count 48 is an editable planning assumption, not a yield stated in Suas. Egg wash and dusting flour are unquantified finishing aids and are not included in the mass.",
+        "The flour/water calculation counts only explicit water and flour, tracing only consumed build fractions. Milk, eggs and butter contain unquantified water; seed hydration is not guessed. Do not treat the displayed direct-water ratio as full effective hydration.",
+        "Planner: enter cold holding and all lamination work/rests in the dedicated required fields. Enter 0 for unused warm bulk or bench stages. Prefermented-dough build time includes its unspecified cold hold. Natural-starter builds are sequential, not parallel."
+      ],
+      "warnings": [
+        "Suas p.341 poolish ingredients total 1,469 g although the printed total and transfer are 1,468 g. Transfer 1,468 g and retain 1 g.",
+        "Suas p.342 lists milk 336 g in final dough but 329 g in overall détrempe. Both are preserved separately; working additions use the final-dough 336 g.",
+        "Printed détrempe total is 4,536 g, but the listed metric additions and transfer total 4,537 g. Working weights retain those ingredients, not an invented balancing correction; with 1,134 g roll-in butter the batch is 5,671 g. The printed 25% roll-in figure is based on the rounded détrempe total."
+      ],
+      "component": null,
+      "processPlan": {
+        "extraStages": [
+          {
+            "id": "cold-hold",
+            "label": "Chill détrempe before lamination · 2 hours in the refrigerator",
+            "after": "bulk"
+          },
+          {
+            "id": "lamination",
+            "label": "Three folds + all refrigerated rests before shaping",
+            "after": "bulk"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "suas-croissant-whole-wheat",
+      "title": "Croissants · whole wheat",
+      "description": "Michel Suas · croissants · printed pp.343. Source discrepancy / calculated adaptation disclosed.",
+      "tag": "Croissants",
+      "source": {
+        "kind": "suas",
+        "referenceId": "suas-croissant-whole-wheat",
+        "sha256": "bebde6cc917183e92ecf7ee82904754dc60195cbf75a95dbb6084abb26570236",
+        "printedPages": "pp.343"
+      },
+      "basePieces": 48,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "final",
+          "name": "Détrempe additions + separate roll-in butter · p.343",
+          "role": "final",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 1924,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 75
+            },
+            {
+              "id": "r1",
+              "name": "Whole wheat flour",
+              "quantity": 641,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 25
+            },
+            {
+              "id": "r2",
+              "name": "Water",
+              "quantity": 1283,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 50
+            },
+            {
+              "id": "r3",
+              "name": "Egg yolks",
+              "quantity": 205,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 8
+            },
+            {
+              "id": "r4",
+              "name": "Sugar",
+              "quantity": 282,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 11
+            },
+            {
+              "id": "r5",
+              "name": "Salt",
+              "quantity": 51,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2
+            },
+            {
+              "id": "r6",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 41,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.6
+            },
+            {
+              "id": "r7",
+              "name": "Malt",
+              "quantity": 5,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.2
+            },
+            {
+              "id": "r8",
+              "name": "Dough butter",
+              "quantity": 103,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 4
+            },
+            {
+              "id": "roll-in-butter",
+              "name": "Roll-in butter · lamination only, not mixer butter",
+              "quantity": 1134,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": null
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Before mixing",
+          "body": "Keep dough butter and roll-in butter separate. Only the dough butter goes into the mixer; reserve the roll-in butter for lamination. The 25% roll-in percentage uses détrempe weight, not flour weight. Finished batch weight includes lamination butter once. (Suas, p.311; pp.343.)"
+        },
+        {
+          "heading": "Mix",
+          "body": "Use an improved mix for the détrempe. Hold sugar back until gluten development when it exceeds 10% of flour, then incorporate it. Target dough temperature 22–25°C.  (Suas, p.312; pp.343.)"
+        },
+        {
+          "heading": "First fermentation",
+          "body": "Ferment 45–60 minutes, then refrigerate 8–15 hours at 5°C. Enter the cold hold separately in the planner. (Suas, pp.343.)"
+        },
+        {
+          "heading": "Prepare lamination butter",
+          "body": "Use cold butter that is firm but pliable, with texture and temperature compatible with the chilled dough. Pound between heavy plastic sheets to form an even block; do not melt or spread warm butter. Enclose it in the dough before giving the turns. (Suas, pp.311–313.)"
+        },
+        {
+          "heading": "Laminate",
+          "body": "Give three single (letter) folds. Sheet gradually and evenly, fold in thirds, and rotate 90° between turns. Rest 30 minutes in the refrigerator between folds or series of folds. After the last fold, refrigerate at least 30 minutes before final sheeting. Plan all turns, handling and rests in the lamination field; do not count these rests again as bench time. (Suas, pp.315,317; pp.343.)"
+        },
+        {
+          "heading": "Shape",
+          "body": "Sheet the rested dough to 3–3.5 mm and allow it to relax before cutting. For traditional croissants, cut a 41 cm wide sheet into two 20.5 cm strips, then triangles with 10.25 cm bases. Gently stretch, roll from base toward tip without damaging the shoulders, and pan on parchment with room to expand. Apply a thin egg wash after shaping; it is an unquantified finishing ingredient, not part of dough mass. (Suas, pp.317–318.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "Proof 1½–2 hours at 26°C and 65% relative humidity. Check the dough’s readiness rather than treating the clock as proof of readiness. Apply a gentle thin egg wash again before baking, avoiding pooled wash and glued layers. (Suas, p.317; pp.343.)"
+        },
+        {
+          "heading": "Bake",
+          "body": "Bake in a convection oven for 13–15 minutes at 196°C (385°F), with 2 seconds of steam. The planner’s finish is oven exit and excludes cooling. (Suas, pp.343.)"
+        }
+      ],
+      "notes": [
+        "Printed metric kilogram quantities are converted to grams. Original local-table percentages are preserved; they are not whole-batch percentages. Butter for roll-in is 25% of détrempe, not a flour-based baker’s percentage; its source percentage cell is therefore intentionally blank.",
+        "The batch includes roll-in butter, but it must not be mixed into the détrempe. Base piece count 48 is an editable planning assumption, not a yield stated in Suas. Egg wash and dusting flour are unquantified finishing aids and are not included in the mass.",
+        "The flour/water calculation counts only explicit water and flour, tracing only consumed build fractions. Milk, eggs and butter contain unquantified water; seed hydration is not guessed. Do not treat the displayed direct-water ratio as full effective hydration.",
+        "Planner: enter cold holding and all lamination work/rests in the dedicated required fields. Enter 0 for unused warm bulk or bench stages. Prefermented-dough build time includes its unspecified cold hold. Natural-starter builds are sequential, not parallel."
+      ],
+      "warnings": [
+        "Printed détrempe total is 4,536 g, but the listed metric additions and transfer total 4,535 g. Working weights retain those ingredients, not an invented balancing correction; with 1,134 g roll-in butter the batch is 5,669 g. The printed 25% roll-in figure is based on the rounded détrempe total."
+      ],
+      "component": null,
+      "processPlan": {
+        "extraStages": [
+          {
+            "id": "cold-hold",
+            "label": "Chill détrempe before lamination · 8–15 hours at 5°C",
+            "after": "bulk"
+          },
+          {
+            "id": "lamination",
+            "label": "Three folds + all refrigerated rests before shaping",
+            "after": "bulk"
+          }
+        ]
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "suas-croissant-whole-wheat-prefermented",
+      "title": "Croissants · whole wheat with prefermented dough",
+      "description": "Michel Suas · croissants · printed pp.345–346. Source discrepancy / calculated adaptation disclosed.",
+      "tag": "Croissants",
+      "source": {
+        "kind": "suas",
+        "referenceId": "suas-croissant-whole-wheat-prefermented",
+        "sha256": "bebde6cc917183e92ecf7ee82904754dc60195cbf75a95dbb6084abb26570236",
+        "printedPages": "pp.345–346"
+      },
+      "basePieces": 48,
+      "finalStageId": "final",
+      "massKnown": true,
+      "stages": [
+        {
+          "id": "build",
+          "name": "Prefermented dough · p.345",
+          "role": "build",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 500,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 100
+            },
+            {
+              "id": "r1",
+              "name": "Water",
+              "quantity": 325,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 65
+            },
+            {
+              "id": "r2",
+              "name": "Yeast (instant)",
+              "quantity": 3,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.6
+            },
+            {
+              "id": "r3",
+              "name": "Salt",
+              "quantity": 10,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2
+            }
+          ],
+          "timing": "1 hour at 18–21°C, then refrigerate until needed; include the entire unspecified cold hold in the build time."
+        },
+        {
+          "id": "final",
+          "name": "Détrempe additions + separate roll-in butter · p.345",
+          "role": "final",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 1534,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 75
+            },
+            {
+              "id": "r1",
+              "name": "Whole wheat flour",
+              "quantity": 502,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 25
+            },
+            {
+              "id": "r2",
+              "name": "Water",
+              "quantity": 982,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 48
+            },
+            {
+              "id": "r3",
+              "name": "Egg yolks",
+              "quantity": 205,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 10
+            },
+            {
+              "id": "r4",
+              "name": "Sugar",
+              "quantity": 266,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 13
+            },
+            {
+              "id": "r5",
+              "name": "Salt",
+              "quantity": 41,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2
+            },
+            {
+              "id": "r6",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 32,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.6
+            },
+            {
+              "id": "r7",
+              "name": "Malt",
+              "quantity": 4,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.2
+            },
+            {
+              "id": "r8",
+              "name": "Dough butter",
+              "quantity": 123,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 6
+            },
+            {
+              "id": "r9",
+              "name": "Ripe prefermented dough",
+              "quantity": 838,
+              "unit": "g",
+              "kind": "transfer",
+              "fromStage": "build",
+              "retained": 0,
+              "sourcePercent": 41
+            },
+            {
+              "id": "roll-in-butter",
+              "name": "Roll-in butter · lamination only, not mixer butter",
+              "quantity": 1134,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": null
+            }
+          ],
+          "timing": ""
+        },
+        {
+          "id": "overall",
+          "name": "Printed overall détrempe · p.346 · excludes roll-in butter",
+          "role": "reference",
+          "rows": [
+            {
+              "id": "r0",
+              "name": "Bread flour",
+              "quantity": 2036,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 80
+            },
+            {
+              "id": "r1",
+              "name": "Whole wheat flour",
+              "quantity": 509,
+              "unit": "g",
+              "kind": "flour",
+              "sourcePercent": 20
+            },
+            {
+              "id": "r2",
+              "name": "Water",
+              "quantity": 1307,
+              "unit": "g",
+              "kind": "water",
+              "sourcePercent": 51.34
+            },
+            {
+              "id": "r3",
+              "name": "Egg yolks",
+              "quantity": 204,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 8.03
+            },
+            {
+              "id": "r4",
+              "name": "Sugar",
+              "quantity": 266,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 10.45
+            },
+            {
+              "id": "r5",
+              "name": "Salt",
+              "quantity": 51,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 2
+            },
+            {
+              "id": "r6",
+              "name": "Osmotolerant instant yeast",
+              "quantity": 36,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 1.4
+            },
+            {
+              "id": "r7",
+              "name": "Malt",
+              "quantity": 4,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 0.16
+            },
+            {
+              "id": "r8",
+              "name": "Dough butter",
+              "quantity": 123,
+              "unit": "g",
+              "kind": "other",
+              "sourcePercent": 4.82
+            }
+          ],
+          "timing": ""
+        }
+      ],
+      "methods": [
+        {
+          "heading": "Prepare prefermented dough",
+          "body": "Combine the build ingredients; DDT 21°C. Ferment 1 hour at 18–21°C, then refrigerate until needed. The cold duration is not specified; include your chosen hold in the build timing. (Suas, p.345.)"
+        },
+        {
+          "heading": "Before mixing",
+          "body": "Keep dough butter and roll-in butter separate. Only the dough butter goes into the mixer; reserve the roll-in butter for lamination. The 25% roll-in percentage uses détrempe weight, not flour weight. Finished batch weight includes lamination butter once. (Suas, p.311; pp.345–346.)"
+        },
+        {
+          "heading": "Mix",
+          "body": "Use an improved mix for the détrempe. Hold sugar back until gluten development when it exceeds 10% of flour, then incorporate it. Target dough temperature 22–25°C.  (Suas, p.312; pp.345–346.)"
+        },
+        {
+          "heading": "First fermentation",
+          "body": "Ferment 45–60 minutes, then refrigerate 1 hour at 5°C. Enter the cold hold separately in the planner. (Suas, pp.345–346.)"
+        },
+        {
+          "heading": "Prepare lamination butter",
+          "body": "Use cold butter that is firm but pliable, with texture and temperature compatible with the chilled dough. Pound between heavy plastic sheets to form an even block; do not melt or spread warm butter. Enclose it in the dough before giving the turns. (Suas, pp.311–313.)"
+        },
+        {
+          "heading": "Laminate",
+          "body": "Give three single (letter) folds. Sheet gradually and evenly, fold in thirds, and rotate 90° between turns. Rest 30 minutes in the refrigerator between folds or series of folds. After the last fold, refrigerate at least 30 minutes before final sheeting. Plan all turns, handling and rests in the lamination field; do not count these rests again as bench time. (Suas, pp.315,317; pp.345–346.)"
+        },
+        {
+          "heading": "Shape",
+          "body": "Sheet the rested dough to 3–3.5 mm and allow it to relax before cutting. For traditional croissants, cut a 41 cm wide sheet into two 20.5 cm strips, then triangles with 10.25 cm bases. Gently stretch, roll from base toward tip without damaging the shoulders, and pan on parchment with room to expand. Apply a thin egg wash after shaping; it is an unquantified finishing ingredient, not part of dough mass. (Suas, pp.317–318.)"
+        },
+        {
+          "heading": "Final proof",
+          "body": "Proof 1½–2 hours at 26°C and 65% relative humidity. Check the dough’s readiness rather than treating the clock as proof of readiness. Apply a gentle thin egg wash again before baking, avoiding pooled wash and glued layers. (Suas, p.317; pp.345–346.)"
+        },
+        {
+          "heading": "Bake",
+          "body": "Bake in a convection oven for 13–15 minutes at 196°C (385°F), with 2 seconds of steam. The planner’s finish is oven exit and excludes cooling. (Suas, pp.345–346.)"
+        }
+      ],
+      "notes": [
+        "Printed metric kilogram quantities are converted to grams. Original local-table percentages are preserved; they are not whole-batch percentages. Butter for roll-in is 25% of détrempe, not a flour-based baker’s percentage; its source percentage cell is therefore intentionally blank.",
+        "The batch includes roll-in butter, but it must not be mixed into the détrempe. Base piece count 48 is an editable planning assumption, not a yield stated in Suas. Egg wash and dusting flour are unquantified finishing aids and are not included in the mass.",
+        "The flour/water calculation counts only explicit water and flour, tracing only consumed build fractions. Milk, eggs and butter contain unquantified water; seed hydration is not guessed. Do not treat the displayed direct-water ratio as full effective hydration.",
+        "Planner: enter cold holding and all lamination work/rests in the dedicated required fields. Enter 0 for unused warm bulk or bench stages. Prefermented-dough build time includes its unspecified cold hold. Natural-starter builds are sequential, not parallel."
+      ],
+      "warnings": [
+        "Suas pp.345–346 disagree: bread flour totals 2,034 g from build plus final versus overall 2,036 g; final additions list whole wheat flour 502 g versus overall 509 g; egg yolks 205 versus 204 g; yeast totals 35 g from build plus final versus overall 36 g. Metric final additions are retained without replacing them with the conflicting overall or US columns.",
+        "Printed détrempe total is 4,536 g, but the listed metric additions and transfer total 4,527 g. Working weights retain those ingredients, not an invented balancing correction; with 1,134 g roll-in butter the batch is 5,661 g. The printed 25% roll-in figure is based on the rounded détrempe total."
+      ],
+      "component": null,
+      "processPlan": {
+        "extraStages": [
+          {
+            "id": "cold-hold",
+            "label": "Chill détrempe before lamination · 1 hour at 5°C",
+            "after": "bulk"
+          },
+          {
+            "id": "lamination",
+            "label": "Three folds + all refrigerated rests before shaping",
+            "after": "bulk"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,11 +1,11 @@
-import {processFields,timelineHTML,mountTimeline,readTimeline,supportsTimeline} from './recipe-timeline.js?v=suas-breads-1';
-import {validateRecipe,recipeFlourWater,recipeMass,knownMass,scaledRecipe,sumGrams} from './recipe-model.js?v=suas-breads-1';
+import {processFields,timelineHTML,mountTimeline,readTimeline,supportsTimeline} from './recipe-timeline.js?v=suas-croissants-1';
+import {validateRecipe,recipeFlourWater,recipeMass,knownMass,scaledRecipe,sumGrams} from './recipe-model.js?v=suas-croissants-1';
 import {scaledQuantity} from './hamelman-book.js?v=overall-percent-2';
 export const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const num=(v,d=2)=>new Intl.NumberFormat('en',{maximumFractionDigits:d}).format(v);
 const cacheKey='dough-published-catalog-v1',personalKey='dough-recipe-private-v1';
 export async function loadRecipeContent(){
- const baseline=await fetch('recipe-catalog.json?v=suas-breads-1').then(r=>{if(!r.ok)throw Error('Source unavailable');return r.json();}),originals=new Map(baseline.recipes.map(r=>[r.id,r]));let records=baseline.recipes,online=false;
+ const baseline=await fetch('recipe-catalog.json?v=suas-croissants-1').then(r=>{if(!r.ok)throw Error('Source unavailable');return r.json();}),originals=new Map(baseline.recipes.map(r=>[r.id,r]));let records=baseline.recipes,online=false;
  const valid=data=>data?.schemaVersion===1&&Array.isArray(data.recipes)&&data.recipes.length===originals.size&&data.recipes.every(r=>originals.has(r.id)&&!validateRecipe(r).errors.length);
  try{const response=await fetch('/api/recipes',{cache:'no-store',signal:AbortSignal.timeout(10000)});if(!response.ok)throw 0;const data=await response.json();if(!valid(data))throw 0;records=data.recipes;online=true;try{localStorage.setItem(cacheKey,JSON.stringify(data));}catch{}}
  catch{try{const data=JSON.parse(localStorage.getItem(cacheKey));if(valid(data))records=data.recipes;}catch{}}

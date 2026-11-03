@@ -9,12 +9,12 @@ export function createRecipeStore(){
  const reply=(v,status=200)=>new Response(JSON.stringify(v),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
  async function ready(env,url){if(!initialized)initialized=(async()=>{
   const db=env.DOUGH_RECIPES_DB;if(!db)throw Error('Missing recipe database');await db.exec(RECIPE_SCHEMA);
-  if(await db.prepare('SELECT version FROM recipe_imports WHERE version=?').bind('suas-breads-v1').first())return;
-  const response=await env.ASSETS.fetch(new Request(new URL('/recipe-catalog.json',url)));if(!response.ok)throw Error('Source catalogue unavailable');const data=await response.json();if(data.schemaVersion!==1||data.recipes.length!==195||new Set(data.recipes.map(r=>r.id)).size!==195)throw Error('Invalid import');
+  if(await db.prepare('SELECT version FROM recipe_imports WHERE version=?').bind('suas-croissants-v1').first())return;
+  const response=await env.ASSETS.fetch(new Request(new URL('/recipe-catalog.json',url)));if(!response.ok)throw Error('Source catalogue unavailable');const data=await response.json();if(data.schemaVersion!==1||data.recipes.length!==203||new Set(data.recipes.map(r=>r.id)).size!==203)throw Error('Invalid import');
   const statements=[];for(const r of data.recipes){if(validateRecipe(r).errors.length)throw Error('Invalid source '+r.id);const doc=JSON.stringify(r);statements.push(db.prepare('INSERT OR IGNORE INTO recipe_publications(id,revision,document) VALUES (?,1,?)').bind(r.id,doc),db.prepare('INSERT OR IGNORE INTO recipe_revisions(id,revision,document,created_at,kind) VALUES (?,1,?,?,?)').bind(r.id,doc,Date.now(),'source'));}
   // Partial cold-start imports are safe to retry: all inserts are idempotent;
   // no current publication/draft can ever be overwritten by import.
-  for(let i=0;i<statements.length;i+=30)await db.batch(statements.slice(i,i+30));await db.prepare('INSERT OR IGNORE INTO recipe_imports(version,imported_at) VALUES (?,?)').bind('suas-breads-v1',Date.now()).run();
+  for(let i=0;i<statements.length;i+=30)await db.batch(statements.slice(i,i+30));await db.prepare('INSERT OR IGNORE INTO recipe_imports(version,imported_at) VALUES (?,?)').bind('suas-croissants-v1',Date.now()).run();
  })().catch(e=>{initialized=null;throw e;});await initialized;}
  async function body(req){const reader=req.body?.getReader();if(!reader)throw Error('Invalid request');let n=0,s='';const decoder=new TextDecoder();for(;;){const {done,value}=await reader.read();if(done)break;n+=value.byteLength;if(n>350000){await reader.cancel();throw Error('Request too large');}s+=decoder.decode(value,{stream:true});}return JSON.parse(s+decoder.decode());}
  const parse=r=>r?{revision:r.revision,record:JSON.parse(r.document)}:null;

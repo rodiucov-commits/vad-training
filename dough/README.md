@@ -450,3 +450,7 @@ Three public Calculator cards: `suas-mixing-short`, `suas-mixing-improved`, `sua
 ## Suas bread formulas (2026-11-03)
 
 `Suas formulas` main-menu tab and `Suas` source filter contain44 non-sweet breads/rolls from the original book. Mixing tools stay in Calculators. See [Suas source/audit notes](docs/suas-breads.md) for scope, explicitly preserved printed inconsistencies, calculated build adaptations, source gaps, backups and additive database import. Existing151 records stay unchanged.
+
+## Suas croissants (suas-croissants-1 / SWv34)
+
+Eight explicitly requested croissant doughs join the Suas collection (52 recipes). Source audit, lamination-butter accounting, printed conflicts, required cold/folding holds and additive import preservation: [docs/suas-croissants.md](docs/suas-croissants.md). Existing195 records unchanged;203 publications and208 cards total.
