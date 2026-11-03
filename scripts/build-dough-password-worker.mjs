@@ -5,7 +5,8 @@ const auth=fs.readFileSync(new URL('./dough-password-auth.mjs',import.meta.url),
 const archive=fs.readFileSync(new URL('./dough-recipe-archive.mjs',import.meta.url),'utf8').replaceAll('export ','');
 const book=JSON.parse(fs.readFileSync(new URL('../dough/hamelman-book.json',import.meta.url),'utf8'));
 const dimuzio=JSON.parse(fs.readFileSync(new URL('../dough/sources/dimuzio-artisan.json',import.meta.url),'utf8'));
-const allowed=[...new Set([...recipes.filter(r=>r.tag!=='Calculator'&&!r.temperature),...pizzaLoversRecipes,...book.recipes,...dimuzio.recipes].map(r=>r.id))];
+const suas=JSON.parse(fs.readFileSync(new URL('../dough/sources/suas-breads.json',import.meta.url),'utf8'));
+const allowed=[...new Set([...recipes.filter(r=>r.tag!=='Calculator'&&!r.temperature),...pizzaLoversRecipes,...book.recipes,...dimuzio.recipes,...suas.recipes].map(r=>r.id))];
 const model=fs.readFileSync(new URL('../dough/recipe-model.js',import.meta.url),'utf8').replaceAll('export ','');
 const store=fs.readFileSync(new URL('./dough-recipe-store.mjs',import.meta.url),'utf8').replaceAll('export ','');
 const handler=fs.readFileSync(new URL('./dough-password-handler.mjs',import.meta.url),'utf8');

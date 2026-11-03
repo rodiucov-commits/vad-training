@@ -446,3 +446,7 @@ Collection filters and card labels use source provenance, not bread type: Hamelm
 ## Suas mixing calculators
 
 Three public Calculator cards: `suas-mixing-short`, `suas-mixing-improved`, `suas-mixing-intensive`. Source: original Suas first-edition images, printed pp.65–71. `suas-mixing.js` keeps the three straight-dough formulas and development targets separate. RPM calculates development only; incorporation is added once. Default3.5 minutes is explicitly an adaptation of p.71’s3–4 minutes, separately disclosing pp.69–70’s4–5 minute examples. No batch/time proportionality or invented bake schedule. Fresh yeast stays fresh yeast. Existing publications and local notes untouched.
+
+## Suas bread formulas (2026-11-03)
+
+`Suas formulas` main-menu tab and `Suas` source filter contain44 non-sweet breads/rolls from the original book. Mixing tools stay in Calculators. See [Suas source/audit notes](docs/suas-breads.md) for scope, explicitly preserved printed inconsistencies, calculated build adaptations, source gaps, backups and additive database import. Existing151 records stay unchanged.

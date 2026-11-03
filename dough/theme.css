@@ -8,3 +8,5 @@ body,body *{font-family:Arial,Helvetica,sans-serif!important}body{background:var
 .rc-batch output{display:block;min-height:44px;padding:9px 12px;background:#e2efea;border:1px solid #aac5c0;font-size:16px;color:#326f72;font-weight:600}.rc-batch .controls .field{flex:1;min-width:0}.rc-batch .controls input{width:100%}.rc-batch .controls{display:grid;grid-template-columns:1fr 1fr 1fr}.rc-sheet .summary-box:first-child{display:none}.rc-sheet .summary-box{background:transparent;padding:0}.rc-sheet .summary-box strong{font-size:14px}.rc-sheet .summary-box small{display:none}@media(max-width:600px){.rc-batch .controls{gap:8px}.rc-batch input,.rc-batch output{font-size:14px;padding:9px 5px}.rc-batch .field{font-size:10px}}
 
 .rc-kitchen .panel p.ferment-instruction{color:#28585b}
+
+header{flex-wrap:wrap}header nav{flex-wrap:wrap}@media(max-width:560px){header nav{width:100%;margin-left:0;gap:14px;justify-content:flex-start}}

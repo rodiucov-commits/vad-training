@@ -1,0 +1,4703 @@
+[
+ {
+  "id": "suas-baguette-short-mix-straight",
+  "tables": [
+   {
+    "page": 186,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2625.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 70.0,
+      "quantity": 1837.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.3,
+      "quantity": 8.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 52.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 0.5,
+      "quantity": 13.0
+     }
+    ],
+    "line": 31,
+    "end": 44,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-baguette-with-poolish",
+  "tables": [
+   {
+    "page": 187,
+    "heading": "Poolish Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 875.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 875.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 1.0
+     }
+    ],
+    "line": 18,
+    "end": 24,
+    "printedTotal": 1752.0
+   },
+   {
+    "page": 187,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1777.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 52.24,
+      "quantity": 928.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.7,
+      "quantity": 12.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.99,
+      "quantity": 53.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 0.75,
+      "quantity": 13.0
+     },
+     {
+      "name": "Poolish",
+      "sourcePercent": 98.56,
+      "quantity": 1752.0
+     }
+    ],
+    "line": 33,
+    "end": 50,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 188,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2653.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 68.0,
+      "quantity": 1804.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.5,
+      "quantity": 13.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 53.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 0.5,
+      "quantity": 13.0
+     }
+    ],
+    "line": 16,
+    "end": 30,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-baguette-with-prefermented-dough",
+  "tables": [
+   {
+    "page": 188,
+    "heading": "Prefermented Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 796.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 65.0,
+      "quantity": 517.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.6,
+      "quantity": 5.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 16.0
+     }
+    ],
+    "line": 39,
+    "end": 48,
+    "printedTotal": 1334.0
+   },
+   {
+    "page": 189,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1857.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 69.29,
+      "quantity": 1287.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.46,
+      "quantity": 8.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 37.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 0.71,
+      "quantity": 13.0
+     },
+     {
+      "name": "Prefermented dough",
+      "sourcePercent": 71.83,
+      "quantity": 1334.0
+     }
+    ],
+    "line": 6,
+    "end": 22,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 189,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2653.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 68.0,
+      "quantity": 1804.0
+     },
+     {
+      "name": "Yeast (dry instant)",
+      "sourcePercent": 0.5,
+      "quantity": 13.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 53.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 0.5,
+      "quantity": 13.0
+     }
+    ],
+    "line": 46,
+    "end": 57,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-baguette-with-sponge",
+  "tables": [
+   {
+    "page": 190,
+    "heading": "Sponge Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 796.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 65.0,
+      "quantity": 517.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 1.0
+     }
+    ],
+    "line": 9,
+    "end": 14,
+    "printedTotal": 1314.0
+   },
+   {
+    "page": 190,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1857.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 69.29,
+      "quantity": 1287.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.67,
+      "quantity": 12.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.86,
+      "quantity": 53.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 0.71,
+      "quantity": 13.0
+     },
+     {
+      "name": "Sponge",
+      "sourcePercent": 70.76,
+      "quantity": 1314.0
+     }
+    ],
+    "line": 24,
+    "end": 40,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 191,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2653.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 68.0,
+      "quantity": 1804.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.5,
+      "quantity": 13.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 53.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 0.5,
+      "quantity": 13.0
+     }
+    ],
+    "line": 6,
+    "end": 18,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-ciabatta-with-poolish",
+  "tables": [
+   {
+    "page": 191,
+    "heading": "Poolish Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 951.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 951.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 1.0
+     }
+    ],
+    "line": 44,
+    "end": 50,
+    "printedTotal": 1903.0
+   },
+   {
+    "page": 192,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1552.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 61.29,
+      "quantity": 951.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.26,
+      "quantity": 4.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 3.23,
+      "quantity": 50.0
+     },
+     {
+      "name": "Oil",
+      "sourcePercent": 4.84,
+      "quantity": 75.0
+     },
+     {
+      "name": "Poolish",
+      "sourcePercent": 122.64,
+      "quantity": 1903.0
+     }
+    ],
+    "line": 12,
+    "end": 23,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 192,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2503.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 76.0,
+      "quantity": 1903.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.2,
+      "quantity": 5.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 50.0
+     },
+     {
+      "name": "Oil",
+      "sourcePercent": 3.0,
+      "quantity": 75.0
+     }
+    ],
+    "line": 44,
+    "end": 55,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-country-bread",
+  "tables": [
+   {
+    "page": 193,
+    "heading": "Prefermented Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1321.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 65.0,
+      "quantity": 859.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 1.2,
+      "quantity": 16.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 26.0
+     }
+    ],
+    "line": 35,
+    "end": 44,
+    "printedTotal": 2222.0
+   },
+   {
+    "page": 194,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 90.0,
+      "quantity": 1189.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 10.0,
+      "quantity": 132.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 71.0,
+      "quantity": 938.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 1.2,
+      "quantity": 16.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 26.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 1.0,
+      "quantity": 13.0
+     },
+     {
+      "name": "Prefermented dough",
+      "sourcePercent": 168.2,
+      "quantity": 2222.0
+     }
+    ],
+    "line": 6,
+    "end": 22,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 194,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Flour",
+      "sourcePercent": 95.0,
+      "quantity": 2510.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 5.0,
+      "quantity": 132.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 68.0,
+      "quantity": 1796.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 1.2,
+      "quantity": 32.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 53.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 0.5,
+      "quantity": 13.0
+     }
+    ],
+    "line": 46,
+    "end": 59,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-san-francisco-sourdough-bread",
+  "tables": [
+   {
+    "page": 201,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 95.0,
+      "quantity": 348.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 5.0,
+      "quantity": 18.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 50.0,
+      "quantity": 183.0
+     },
+     {
+      "name": "Starter (stiff)",
+      "sourcePercent": 80.0,
+      "quantity": 293.0
+     }
+    ],
+    "line": 7,
+    "end": 19,
+    "printedTotal": 843.0
+   },
+   {
+    "page": 201,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Flour",
+      "sourcePercent": 100.0,
+      "quantity": 2106.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 72.8,
+      "quantity": 1534.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.53,
+      "quantity": 53.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 40.0,
+      "quantity": 843.0
+     }
+    ],
+    "line": 27,
+    "end": 34,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-sourdough-with-liquid-levain",
+  "tables": [
+   {
+    "page": 202,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 95.0,
+      "quantity": 390.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 5.0,
+      "quantity": 21.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 410.0
+     },
+     {
+      "name": "Starter (liquid)",
+      "sourcePercent": 60.0,
+      "quantity": 246.0
+     }
+    ],
+    "line": 7,
+    "end": 19,
+    "printedTotal": 1067.0
+   },
+   {
+    "page": 202,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2134.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 60.0,
+      "quantity": 1280.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 2.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.5,
+      "quantity": 53.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 50.0,
+      "quantity": 1067.0
+     }
+    ],
+    "line": 27,
+    "end": 42,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-sourdough-bread-one-feeding",
+  "tables": [
+   {
+    "page": 203,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 95.0,
+      "quantity": 457.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 5.0,
+      "quantity": 24.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 50.0,
+      "quantity": 241.0
+     },
+     {
+      "name": "Starter (stiff)",
+      "sourcePercent": 25.0,
+      "quantity": 120.0
+     }
+    ],
+    "line": 7,
+    "end": 20,
+    "printedTotal": 842.0
+   },
+   {
+    "page": 203,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2106.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 72.8,
+      "quantity": 1533.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 2.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.53,
+      "quantity": 53.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 40.0,
+      "quantity": 842.0
+     }
+    ],
+    "line": 28,
+    "end": 37,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-white-pan-bread-open-top-and-pain-de-mie",
+  "tables": [
+   {
+    "page": 204,
+    "heading": "Prefermented Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 574.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 68.0,
+      "quantity": 373.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.5,
+      "quantity": 3.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 11.0
+     }
+    ],
+    "line": 22,
+    "end": 31,
+    "printedTotal": 962.0
+   },
+   {
+    "page": 205,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1922.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 62.99,
+      "quantity": 1211.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 38.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.99,
+      "quantity": 19.0
+     },
+     {
+      "name": "Sugar",
+      "sourcePercent": 5.0,
+      "quantity": 96.0
+     },
+     {
+      "name": "Butter",
+      "sourcePercent": 9.99,
+      "quantity": 192.0
+     },
+     {
+      "name": "Milk powder",
+      "sourcePercent": 5.0,
+      "quantity": 96.0
+     },
+     {
+      "name": "Prefermented dough",
+      "sourcePercent": 50.03,
+      "quantity": 962.0
+     }
+    ],
+    "line": 11,
+    "end": 29,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 205,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2496.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 63.45,
+      "quantity": 1584.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 50.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.88,
+      "quantity": 22.0
+     },
+     {
+      "name": "Sugar",
+      "sourcePercent": 3.85,
+      "quantity": 96.0
+     },
+     {
+      "name": "Butter",
+      "sourcePercent": 7.69,
+      "quantity": 192.0
+     },
+     {
+      "name": "Milk powder",
+      "sourcePercent": 3.85,
+      "quantity": 96.0
+     }
+    ],
+    "line": 46,
+    "end": 59,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-100-percent-whole-grain-bread",
+  "tables": [
+   {
+    "page": 208,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 100.0,
+      "quantity": 166.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 80.0,
+      "quantity": 133.0
+     },
+     {
+      "name": "Starter (stiff)",
+      "sourcePercent": 25.0,
+      "quantity": 41.0
+     }
+    ],
+    "line": 41,
+    "end": 47,
+    "printedTotal": 750.0
+   },
+   {
+    "page": 209,
+    "heading": "Soaker Formula",
+    "rows": [
+     {
+      "name": "Flax seeds",
+      "sourcePercent": 15.25,
+      "quantity": 86.0
+     },
+     {
+      "name": "Sunflower seeds",
+      "sourcePercent": 15.25,
+      "quantity": 86.0
+     },
+     {
+      "name": "Sesame seeds",
+      "sourcePercent": 15.25,
+      "quantity": 86.0
+     },
+     {
+      "name": "Rolled oats",
+      "sourcePercent": 15.25,
+      "quantity": 86.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 39.0,
+      "quantity": 219.0
+     }
+    ],
+    "line": 6,
+    "end": 24,
+    "printedTotal": 562.0
+   },
+   {
+    "page": 209,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 65.0,
+      "quantity": 1218.0
+     },
+     {
+      "name": "Rye meal",
+      "sourcePercent": 25.0,
+      "quantity": 469.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 10.0,
+      "quantity": 187.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 69.0,
+      "quantity": 1293.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.7,
+      "quantity": 51.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.3,
+      "quantity": 6.0
+     },
+     {
+      "name": "Soaker",
+      "sourcePercent": 30.0,
+      "quantity": 562.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 40.0,
+      "quantity": 750.0
+     }
+    ],
+    "line": 32,
+    "end": 48,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-sourdough-whole-wheat-bread",
+  "tables": [
+   {
+    "page": 210,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 95.0,
+      "quantity": 342.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 5.0,
+      "quantity": 18.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 50.0,
+      "quantity": 180.0
+     },
+     {
+      "name": "Starter (stiff)",
+      "sourcePercent": 80.0,
+      "quantity": 288.0
+     }
+    ],
+    "line": 15,
+    "end": 22,
+    "printedTotal": 827.0
+   },
+   {
+    "page": 210,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 40.0,
+      "quantity": 827.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 60.0,
+      "quantity": 1241.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 76.6,
+      "quantity": 1584.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.16,
+      "quantity": 3.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.53,
+      "quantity": 52.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 40.0,
+      "quantity": 827.0
+     }
+    ],
+    "line": 35,
+    "end": 51,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-sourdough-rye-bread",
+  "tables": [
+   {
+    "page": 212,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 95.0,
+      "quantity": 348.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 5.0,
+      "quantity": 18.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 50.0,
+      "quantity": 183.0
+     },
+     {
+      "name": "Starter (stiff)",
+      "sourcePercent": 80.0,
+      "quantity": 293.0
+     }
+    ],
+    "line": 16,
+    "end": 28,
+    "printedTotal": 842.0
+   },
+   {
+    "page": 212,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 40.0,
+      "quantity": 842.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 60.0,
+      "quantity": 1263.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 72.8,
+      "quantity": 1533.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.12,
+      "quantity": 3.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.53,
+      "quantity": 53.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 40.0,
+      "quantity": 842.0
+     }
+    ],
+    "line": 35,
+    "end": 53,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-sourdough-multigrain-bread",
+  "tables": [
+   {
+    "page": 214,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 95.0,
+      "quantity": 365.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 5.0,
+      "quantity": 19.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 50.0,
+      "quantity": 192.0
+     },
+     {
+      "name": "Starter (stiff)",
+      "sourcePercent": 80.0,
+      "quantity": 307.0
+     }
+    ],
+    "line": 14,
+    "end": 22,
+    "printedTotal": 883.0
+   },
+   {
+    "page": 214,
+    "heading": "Soaker Formula",
+    "rows": [
+     {
+      "name": "Flax seeds",
+      "sourcePercent": 39.13,
+      "quantity": 199.0
+     },
+     {
+      "name": "Sunflower seeds",
+      "sourcePercent": 39.13,
+      "quantity": 199.0
+     },
+     {
+      "name": "Sesame seeds",
+      "sourcePercent": 39.13,
+      "quantity": 199.0
+     },
+     {
+      "name": "Rolled oats",
+      "sourcePercent": 39.13,
+      "quantity": 199.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 508.0
+     }
+    ],
+    "line": 29,
+    "end": 36,
+    "printedTotal": 1302.0
+   },
+   {
+    "page": 214,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 65.0,
+      "quantity": 1435.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 25.0,
+      "quantity": 552.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 10.0,
+      "quantity": 221.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 72.8,
+      "quantity": 1607.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.16,
+      "quantity": 4.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.53,
+      "quantity": 56.0
+     },
+     {
+      "name": "Soaker",
+      "sourcePercent": 59.0,
+      "quantity": 1302.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 40.0,
+      "quantity": 883.0
+     }
+    ],
+    "line": 39,
+    "end": 52,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-sourdough-olive-bread",
+  "tables": [
+   {
+    "page": 215,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 95.0,
+      "quantity": 236.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 5.0,
+      "quantity": 12.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 249.0
+     },
+     {
+      "name": "Starter (stiff)",
+      "sourcePercent": 80.0,
+      "quantity": 199.0
+     }
+    ],
+    "line": 34,
+    "end": 45,
+    "printedTotal": 696.0
+   },
+   {
+    "page": 216,
+    "heading": "First Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2321.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 63.0,
+      "quantity": 1462.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 2.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.3,
+      "quantity": 53.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 30.0,
+      "quantity": 696.0
+     }
+    ],
+    "line": 6,
+    "end": 20,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 216,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Thyme",
+      "sourcePercent": 0.15,
+      "quantity": 7.0
+     },
+     {
+      "name": "Olives",
+      "sourcePercent": 14.0,
+      "quantity": 635.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 5.0,
+      "quantity": 227.0
+     },
+     {
+      "name": "Dough",
+      "sourcePercent": 100.0,
+      "quantity": 4536.0
+     }
+    ],
+    "line": 24,
+    "end": 31,
+    "printedTotal": 5405.0
+   }
+  ]
+ },
+ {
+  "id": "suas-sourdough-cheese-bread",
+  "tables": [
+   {
+    "page": 217,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 95.0,
+      "quantity": 216.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 5.0,
+      "quantity": 11.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 227.0
+     },
+     {
+      "name": "Starter (liquid)",
+      "sourcePercent": 60.0,
+      "quantity": 136.0
+     }
+    ],
+    "line": 15,
+    "end": 26,
+    "printedTotal": 591.0
+   },
+   {
+    "page": 217,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1969.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 63.0,
+      "quantity": 1240.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 2.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.3,
+      "quantity": 45.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 30.0,
+      "quantity": 591.0
+     },
+     {
+      "name": "Asiago, shredded",
+      "sourcePercent": 35.0,
+      "quantity": 689.0
+     }
+    ],
+    "line": 33,
+    "end": 43,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-miche",
+  "tables": [
+   {
+    "page": 218,
+    "heading": "First Feeding Levain Formula",
+    "rows": [
+     {
+      "name": "High-extraction flour",
+      "sourcePercent": 100.0,
+      "quantity": 202.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 120.0,
+      "quantity": 243.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 0.6,
+      "quantity": 1.0
+     },
+     {
+      "name": "Starter (stiff)",
+      "sourcePercent": 10.0,
+      "quantity": 20.0
+     }
+    ],
+    "line": 27,
+    "end": 35,
+    "printedTotal": 466.0
+   },
+   {
+    "page": 218,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "High-extraction flour",
+      "sourcePercent": 100.0,
+      "quantity": 1165.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 120.0,
+      "quantity": 1399.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 0.6,
+      "quantity": 7.0
+     },
+     {
+      "name": "First feeding",
+      "sourcePercent": 40.0,
+      "quantity": 466.0
+     }
+    ],
+    "line": 43,
+    "end": 51,
+    "printedTotal": 3037.0
+   },
+   {
+    "page": 219,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 60.0,
+      "quantity": 790.0
+     },
+     {
+      "name": "High-extraction flour",
+      "sourcePercent": 20.0,
+      "quantity": 263.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 20.0,
+      "quantity": 263.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 10.0,
+      "quantity": 132.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 3.8,
+      "quantity": 50.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 230.6,
+      "quantity": 3037.0
+     }
+    ],
+    "line": 11,
+    "end": 24,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-pain-de-beaucaire",
+  "tables": [
+   {
+    "page": 220,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 95.0,
+      "quantity": 334.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 5.0,
+      "quantity": 18.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 352.0
+     },
+     {
+      "name": "Starter (stiff)",
+      "sourcePercent": 60.0,
+      "quantity": 211.0
+     }
+    ],
+    "line": 22,
+    "end": 30,
+    "printedTotal": 914.0
+   },
+   {
+    "page": 220,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2285.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 56.0,
+      "quantity": 1280.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 2.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.4,
+      "quantity": 55.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 40.0,
+      "quantity": 914.0
+     }
+    ],
+    "line": 42,
+    "end": 53,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-two-castle-rye",
+  "tables": [
+   {
+    "page": 221,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 100.0,
+      "quantity": 419.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 80.0,
+      "quantity": 335.0
+     },
+     {
+      "name": "Starter (rye)",
+      "sourcePercent": 12.0,
+      "quantity": 50.0
+     }
+    ],
+    "line": 44,
+    "end": 54,
+    "printedTotal": 804.0
+   },
+   {
+    "page": 222,
+    "heading": "Soaker Formula",
+    "rows": [
+     {
+      "name": "Coarse whole wheat flour",
+      "sourcePercent": 10.0,
+      "quantity": 266.0
+     },
+     {
+      "name": "Oat flakes",
+      "sourcePercent": 10.0,
+      "quantity": 266.0
+     },
+     {
+      "name": "Sunflower seeds",
+      "sourcePercent": 10.0,
+      "quantity": 266.0
+     },
+     {
+      "name": "Pumpkin seeds",
+      "sourcePercent": 20.0,
+      "quantity": 532.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 50.0,
+      "quantity": 1330.0
+     }
+    ],
+    "line": 10,
+    "end": 25,
+    "printedTotal": 1206.0
+   },
+   {
+    "page": 222,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 40.0,
+      "quantity": 643.0
+     },
+     {
+      "name": "High-extraction flour",
+      "sourcePercent": 40.0,
+      "quantity": 643.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 20.0,
+      "quantity": 322.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 50.0,
+      "quantity": 804.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.8,
+      "quantity": 45.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 1.2,
+      "quantity": 19.0
+     },
+     {
+      "name": "Honey",
+      "sourcePercent": 2.0,
+      "quantity": 32.0
+     },
+     {
+      "name": "Roasted malt",
+      "sourcePercent": 1.0,
+      "quantity": 16.0
+     },
+     {
+      "name": "Rye levain",
+      "sourcePercent": 50.0,
+      "quantity": 804.0
+     },
+     {
+      "name": "Soaker",
+      "sourcePercent": 75.0,
+      "quantity": 1206.0
+     }
+    ],
+    "line": 31,
+    "end": 54,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-mountain-bread",
+  "tables": [
+   {
+    "page": 223,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 100.0,
+      "quantity": 385.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 120.0,
+      "quantity": 462.0
+     },
+     {
+      "name": "Rye starter",
+      "sourcePercent": 8.0,
+      "quantity": 31.0
+     }
+    ],
+    "line": 28,
+    "end": 34,
+    "printedTotal": 877.0
+   },
+   {
+    "page": 223,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 85.0,
+      "quantity": 1864.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 15.0,
+      "quantity": 329.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 64.0,
+      "quantity": 1404.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 2.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.7,
+      "quantity": 59.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 40.0,
+      "quantity": 877.0
+     }
+    ],
+    "line": 45,
+    "end": 57,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-new-york-rye",
+  "tables": [
+   {
+    "page": 224,
+    "heading": "Prefermented Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 523.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 65.0,
+      "quantity": 340.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.5,
+      "quantity": 3.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 10.0
+     }
+    ],
+    "line": 36,
+    "end": 45,
+    "printedTotal": 876.0
+   },
+   {
+    "page": 225,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 50.0,
+      "quantity": 1046.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 50.0,
+      "quantity": 1046.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 71.25,
+      "quantity": 1490.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.5,
+      "quantity": 10.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 42.0
+     },
+     {
+      "name": "Caraway seeds",
+      "sourcePercent": 1.25,
+      "quantity": 26.0
+     },
+     {
+      "name": "Prefermented dough",
+      "sourcePercent": 41.88,
+      "quantity": 876.0
+     }
+    ],
+    "line": 6,
+    "end": 20,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 225,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Flour",
+      "sourcePercent": 60.0,
+      "quantity": 1569.0
+     },
+     {
+      "name": "Medium rye",
+      "sourcePercent": 40.0,
+      "quantity": 1046.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 70.0,
+      "quantity": 1830.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.5,
+      "quantity": 13.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 52.0
+     },
+     {
+      "name": "Caraway seeds",
+      "sourcePercent": 1.0,
+      "quantity": 26.0
+     }
+    ],
+    "line": 40,
+    "end": 54,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-naan",
+  "tables": [
+   {
+    "page": 226,
+    "heading": "Sponge Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 633.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 62.0,
+      "quantity": 392.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 1.0
+     }
+    ],
+    "line": 17,
+    "end": 22,
+    "printedTotal": 1026.0
+   },
+   {
+    "page": 226,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 93.0,
+      "quantity": 1792.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 7.0,
+      "quantity": 106.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 48.67,
+      "quantity": 924.0
+     },
+     {
+      "name": "Goat milk yogurt",
+      "sourcePercent": 67.61,
+      "quantity": 1283.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.37,
+      "quantity": 7.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.13,
+      "quantity": 40.0
+     },
+     {
+      "name": "Olive oil",
+      "sourcePercent": 3.07,
+      "quantity": 58.0
+     },
+     {
+      "name": "Sponge",
+      "sourcePercent": 54.03,
+      "quantity": 1026.0
+     }
+    ],
+    "line": 30,
+    "end": 52,
+    "printedTotal": 5237.0
+   },
+   {
+    "page": 227,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 95.8,
+      "quantity": 2425.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 4.2,
+      "quantity": 106.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 52.0,
+      "quantity": 1316.0
+     },
+     {
+      "name": "Goat milk yogurt",
+      "sourcePercent": 23.0,
+      "quantity": 582.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.3,
+      "quantity": 8.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 1.6,
+      "quantity": 40.0
+     },
+     {
+      "name": "Olive oil",
+      "sourcePercent": 2.3,
+      "quantity": 58.0
+     }
+    ],
+    "line": 13,
+    "end": 29,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-pita",
+  "tables": [
+   {
+    "page": 229,
+    "heading": "Sponge Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 397.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 78.0,
+      "quantity": 309.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 12.0,
+      "quantity": 48.0
+     },
+     {
+      "name": "Sugar",
+      "sourcePercent": 6.5,
+      "quantity": 26.0
+     }
+    ],
+    "line": 40,
+    "end": 48,
+    "printedTotal": 779.0
+   },
+   {
+    "page": 230,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2247.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 62.0,
+      "quantity": 1393.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.0,
+      "quantity": 0.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 1.18,
+      "quantity": 26.0
+     },
+     {
+      "name": "Sugar",
+      "sourcePercent": 0.03,
+      "quantity": 1.0
+     },
+     {
+      "name": "Butter",
+      "sourcePercent": 4.0,
+      "quantity": 90.0
+     },
+     {
+      "name": "Sponge",
+      "sourcePercent": 34.68,
+      "quantity": 779.0
+     }
+    ],
+    "line": 6,
+    "end": 19,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 230,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2643.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 64.4,
+      "quantity": 1702.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 1.8,
+      "quantity": 48.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 1.0,
+      "quantity": 26.0
+     },
+     {
+      "name": "Sugar",
+      "sourcePercent": 1.0,
+      "quantity": 26.0
+     },
+     {
+      "name": "Olive oil",
+      "sourcePercent": 3.4,
+      "quantity": 90.0
+     }
+    ],
+    "line": 38,
+    "end": 51,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-focaccia",
+  "tables": [
+   {
+    "page": 232,
+    "heading": "Prefermented Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 639.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 65.0,
+      "quantity": 415.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.6,
+      "quantity": 4.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 13.0
+     }
+    ],
+    "line": 21,
+    "end": 30,
+    "printedTotal": 1071.0
+   },
+   {
+    "page": 232,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1917.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 66.33,
+      "quantity": 1271.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.47,
+      "quantity": 9.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 38.0
+     },
+     {
+      "name": "Oil",
+      "sourcePercent": 8.0,
+      "quantity": 153.0
+     },
+     {
+      "name": "Cheese, grated",
+      "sourcePercent": 4.0,
+      "quantity": 77.0
+     },
+     {
+      "name": "Prefermented dough",
+      "sourcePercent": 55.87,
+      "quantity": 1071.0
+     }
+    ],
+    "line": 40,
+    "end": 56,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 233,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2555.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 66.0,
+      "quantity": 1687.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.5,
+      "quantity": 13.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 51.0
+     },
+     {
+      "name": "Oil",
+      "sourcePercent": 6.0,
+      "quantity": 153.0
+     },
+     {
+      "name": "Cheese, grated",
+      "sourcePercent": 3.0,
+      "quantity": 77.0
+     }
+    ],
+    "line": 17,
+    "end": 33,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-fougasse",
+  "tables": [
+   {
+    "page": 234,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 95.0,
+      "quantity": 387.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 387.0
+     },
+     {
+      "name": "Starter",
+      "sourcePercent": 60.0,
+      "quantity": 232.0
+     }
+    ],
+    "line": 22,
+    "end": 26,
+    "printedTotal": 1006.0
+   },
+   {
+    "page": 234,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2078.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 60.0,
+      "quantity": 1247.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.4,
+      "quantity": 8.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.5,
+      "quantity": 52.0
+     },
+     {
+      "name": "Olive oil",
+      "sourcePercent": 5.0,
+      "quantity": 104.0
+     },
+     {
+      "name": "Rosemary",
+      "sourcePercent": 0.4,
+      "quantity": 8.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 50.0,
+      "quantity": 1039.0
+     }
+    ],
+    "line": 34,
+    "end": 49,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-pugliese",
+  "tables": [
+   {
+    "page": 241,
+    "heading": "Sponge Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 80.0,
+      "quantity": 901.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 20.0,
+      "quantity": 225.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 55.0,
+      "quantity": 619.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.4,
+      "quantity": 4.0
+     }
+    ],
+    "line": 22,
+    "end": 29,
+    "printedTotal": 1749.0
+   },
+   {
+    "page": 241,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 93.0,
+      "quantity": 721.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 7.0,
+      "quantity": 405.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 60.0,
+      "quantity": 676.0
+     },
+     {
+      "name": "Mashed potatoes",
+      "sourcePercent": 82.0,
+      "quantity": 923.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.48,
+      "quantity": 5.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 5.0,
+      "quantity": 56.0
+     },
+     {
+      "name": "Sponge",
+      "sourcePercent": 155.32,
+      "quantity": 1749.0
+     }
+    ],
+    "line": 37,
+    "end": 52,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 242,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 72.0,
+      "quantity": 1622.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 28.0,
+      "quantity": 631.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 57.5,
+      "quantity": 1295.0
+     },
+     {
+      "name": "Mashed potatoes",
+      "sourcePercent": 41.0,
+      "quantity": 923.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.4,
+      "quantity": 9.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.5,
+      "quantity": 56.0
+     }
+    ],
+    "line": 21,
+    "end": 32,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-roasted-potato-bread",
+  "tables": [
+   {
+    "page": 243,
+    "heading": "Sponge Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 50.0,
+      "quantity": 184.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 50.0,
+      "quantity": 184.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 68.0,
+      "quantity": 251.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 0.0
+     }
+    ],
+    "line": 20,
+    "end": 26,
+    "printedTotal": 620.0
+   },
+   {
+    "page": 243,
+    "heading": "Soaker Formula",
+    "rows": [
+     {
+      "name": "Cracked wheat",
+      "sourcePercent": 100.0,
+      "quantity": 90.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 90.0
+     }
+    ],
+    "line": 34,
+    "end": 42,
+    "printedTotal": 179.0
+   },
+   {
+    "page": 244,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 89.76,
+      "quantity": 1615.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 5.42,
+      "quantity": 98.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 4.82,
+      "quantity": 87.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 64.99,
+      "quantity": 1170.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.59,
+      "quantity": 47.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.29,
+      "quantity": 5.0
+     },
+     {
+      "name": "Soaker",
+      "sourcePercent": 9.96,
+      "quantity": 179.0
+     },
+     {
+      "name": "Potatoes (large diced and roasted)",
+      "sourcePercent": 39.76,
+      "quantity": 716.0
+     },
+     {
+      "name": "Sponge",
+      "sourcePercent": 34.43,
+      "quantity": 620.0
+     }
+    ],
+    "line": 6,
+    "end": 26,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 244,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 83.0,
+      "quantity": 1800.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 13.0,
+      "quantity": 282.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 4.0,
+      "quantity": 87.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 65.5,
+      "quantity": 1420.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.15,
+      "quantity": 47.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.26,
+      "quantity": 6.0
+     },
+     {
+      "name": "Soaker",
+      "sourcePercent": 8.27,
+      "quantity": 179.0
+     },
+     {
+      "name": "Potatoes (roasted)",
+      "sourcePercent": 33.0,
+      "quantity": 716.0
+     }
+    ],
+    "line": 47,
+    "end": 67,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-pear-buckwheat-bread",
+  "tables": [
+   {
+    "page": 245,
+    "heading": "Poolish Formula",
+    "rows": [
+     {
+      "name": "Buckwheat flour",
+      "sourcePercent": 20.0,
+      "quantity": 186.0
+     },
+     {
+      "name": "Bread flour",
+      "sourcePercent": 80.0,
+      "quantity": 685.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 871.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 1.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 0.1,
+      "quantity": 1.0
+     }
+    ],
+    "line": 20,
+    "end": 29,
+    "printedTotal": 1743.0
+   },
+   {
+    "page": 245,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1403.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 47.48,
+      "quantity": 666.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 3.19,
+      "quantity": 45.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.76,
+      "quantity": 11.0
+     },
+     {
+      "name": "Walnuts (toasted)",
+      "sourcePercent": 14.26,
+      "quantity": 200.0
+     },
+     {
+      "name": "Dry pears, soaked in white wine",
+      "sourcePercent": 33.39,
+      "quantity": 468.0
+     },
+     {
+      "name": "Poolish",
+      "sourcePercent": 124.3,
+      "quantity": 1743.0
+     }
+    ],
+    "line": 37,
+    "end": 52,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 246,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 91.8,
+      "quantity": 2087.0
+     },
+     {
+      "name": "Buckwheat flour",
+      "sourcePercent": 8.2,
+      "quantity": 186.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 67.6,
+      "quantity": 1537.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 45.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.5,
+      "quantity": 11.0
+     },
+     {
+      "name": "Walnuts (toasted)",
+      "sourcePercent": 8.8,
+      "quantity": 200.0
+     },
+     {
+      "name": "Pears, soaked in white wine",
+      "sourcePercent": 20.6,
+      "quantity": 468.0
+     }
+    ],
+    "line": 22,
+    "end": 35,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-sesame-semolina-bread",
+  "tables": [
+   {
+    "page": 247,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 95.0,
+      "quantity": 344.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 5.0,
+      "quantity": 18.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 362.0
+     },
+     {
+      "name": "Starter (liquid)",
+      "sourcePercent": 60.0,
+      "quantity": 217.0
+     }
+    ],
+    "line": 18,
+    "end": 26,
+    "printedTotal": 940.0
+   },
+   {
+    "page": 247,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 31.0,
+      "quantity": 648.0
+     },
+     {
+      "name": "Semolina flour",
+      "sourcePercent": 34.0,
+      "quantity": 710.0
+     },
+     {
+      "name": "Durum flour",
+      "sourcePercent": 35.0,
+      "quantity": 731.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 65.0,
+      "quantity": 1358.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 2.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 3.0,
+      "quantity": 63.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 45.0,
+      "quantity": 940.0
+     },
+     {
+      "name": "Sesame seeds",
+      "sourcePercent": 4.0,
+      "quantity": 84.0
+     }
+    ],
+    "line": 35,
+    "end": 56,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-spelt-bread",
+  "tables": [
+   {
+    "page": 252,
+    "heading": "Poolish Formula",
+    "rows": [
+     {
+      "name": "White spelt flour",
+      "sourcePercent": 90.0,
+      "quantity": 791.0
+     },
+     {
+      "name": "Whole spelt flour",
+      "sourcePercent": 10.0,
+      "quantity": 88.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 879.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 1.0
+     }
+    ],
+    "line": 30,
+    "end": 40,
+    "printedTotal": 1758.0
+   },
+   {
+    "page": 253,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "White spelt flour",
+      "sourcePercent": 90.0,
+      "quantity": 1606.0
+     },
+     {
+      "name": "Wheat spelt flour",
+      "sourcePercent": 10.0,
+      "quantity": 178.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 52.24,
+      "quantity": 932.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.43,
+      "quantity": 8.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.69,
+      "quantity": 48.0
+     },
+     {
+      "name": "Poolish",
+      "sourcePercent": 98.56,
+      "quantity": 1758.0
+     }
+    ],
+    "line": 6,
+    "end": 23,
+    "printedTotal": 4530.0
+   },
+   {
+    "page": 253,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "White spelt flour",
+      "sourcePercent": 90.0,
+      "quantity": 2396.0
+     },
+     {
+      "name": "Whole spelt flour",
+      "sourcePercent": 10.0,
+      "quantity": 266.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 68.0,
+      "quantity": 1811.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 48.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.36,
+      "quantity": 9.0
+     }
+    ],
+    "line": 43,
+    "end": 53,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-pain-meunier",
+  "tables": [
+   {
+    "page": 254,
+    "heading": "Prefermented Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1204.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 65.0,
+      "quantity": 783.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.6,
+      "quantity": 7.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 24.0
+     }
+    ],
+    "line": 21,
+    "end": 31,
+    "printedTotal": 2019.0
+   },
+   {
+    "page": 254,
+    "heading": "Soaker Formula",
+    "rows": [
+     {
+      "name": "Cracked wheat",
+      "sourcePercent": 100.0,
+      "quantity": 280.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 280.0
+     }
+    ],
+    "line": 45,
+    "end": 52,
+    "printedTotal": 559.0
+   },
+   {
+    "page": 255,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 85.8,
+      "quantity": 1013.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 9.47,
+      "quantity": 112.0
+     },
+     {
+      "name": "Wheat germ",
+      "sourcePercent": 4.73,
+      "quantity": 56.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 63.9,
+      "quantity": 755.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 1.91,
+      "quantity": 23.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.0,
+      "quantity": 0.0
+     },
+     {
+      "name": "Soaker",
+      "sourcePercent": 47.34,
+      "quantity": 559.0
+     },
+     {
+      "name": "Prefermented dough",
+      "sourcePercent": 170.91,
+      "quantity": 2019.0
+     }
+    ],
+    "line": 6,
+    "end": 21,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 255,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 95.2,
+      "quantity": 2218.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 4.8,
+      "quantity": 112.0
+     },
+     {
+      "name": "Wheat germ",
+      "sourcePercent": 2.4,
+      "quantity": 56.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 66.0,
+      "quantity": 1538.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 47.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.31,
+      "quantity": 7.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 0.48,
+      "quantity": 11.0
+     },
+     {
+      "name": "Soaker",
+      "sourcePercent": 24.0,
+      "quantity": 559.0
+     }
+    ],
+    "line": 43,
+    "end": 64,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-rustic-filone",
+  "tables": [
+   {
+    "page": 256,
+    "heading": "Poolish Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 70.0,
+      "quantity": 491.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 30.0,
+      "quantity": 211.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 702.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 1.0
+     }
+    ],
+    "line": 15,
+    "end": 21,
+    "printedTotal": 1404.0
+   },
+   {
+    "page": 256,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 387.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 50.0,
+      "quantity": 193.0
+     },
+     {
+      "name": "Starter (stiff)",
+      "sourcePercent": 50.0,
+      "quantity": 193.0
+     }
+    ],
+    "line": 30,
+    "end": 40,
+    "printedTotal": 774.0
+   },
+   {
+    "page": 257,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 90.0,
+      "quantity": 1580.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 10.0,
+      "quantity": 176.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 55.0,
+      "quantity": 965.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 3.0,
+      "quantity": 53.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.4,
+      "quantity": 7.0
+     },
+     {
+      "name": "Poolish",
+      "sourcePercent": 80.0,
+      "quantity": 1404.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 20.0,
+      "quantity": 351.0
+     }
+    ],
+    "line": 6,
+    "end": 21,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-cornbread",
+  "tables": [
+   {
+    "page": 258,
+    "heading": "Poolish Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 441.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 441.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 0.2,
+      "quantity": 1.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 0.0
+     }
+    ],
+    "line": 23,
+    "end": 31,
+    "printedTotal": 884.0
+   },
+   {
+    "page": 258,
+    "heading": "Prefermented Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 971.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 65.0,
+      "quantity": 631.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.6,
+      "quantity": 6.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 19.0
+     }
+    ],
+    "line": 42,
+    "end": 53,
+    "printedTotal": 1628.0
+   },
+   {
+    "page": 259,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 25.05,
+      "quantity": 341.0
+     },
+     {
+      "name": "Corn flour",
+      "sourcePercent": 64.77,
+      "quantity": 882.0
+     },
+     {
+      "name": "Coarse cornmeal",
+      "sourcePercent": 10.18,
+      "quantity": 139.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 44.91,
+      "quantity": 612.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.38,
+      "quantity": 32.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.5,
+      "quantity": 7.0
+     },
+     {
+      "name": "Butter",
+      "sourcePercent": 0.79,
+      "quantity": 11.0
+     },
+     {
+      "name": "Prefermented dough",
+      "sourcePercent": 119.47,
+      "quantity": 1628.0
+     },
+     {
+      "name": "Poolish",
+      "sourcePercent": 64.86,
+      "quantity": 884.0
+     }
+    ],
+    "line": 6,
+    "end": 21,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 259,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 63.2,
+      "quantity": 1754.0
+     },
+     {
+      "name": "Corn flour",
+      "sourcePercent": 31.8,
+      "quantity": 882.0
+     },
+     {
+      "name": "Coarse corn",
+      "sourcePercent": 5.0,
+      "quantity": 139.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 60.7,
+      "quantity": 1684.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 1.9,
+      "quantity": 53.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.47,
+      "quantity": 13.0
+     },
+     {
+      "name": "Butter",
+      "sourcePercent": 0.39,
+      "quantity": 11.0
+     }
+    ],
+    "line": 40,
+    "end": 53,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-francese",
+  "tables": [
+   {
+    "page": 260,
+    "heading": "Poolish Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 508.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 508.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 1.0
+     }
+    ],
+    "line": 20,
+    "end": 25,
+    "printedTotal": 1016.0
+   },
+   {
+    "page": 260,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 79.52,
+      "quantity": 1686.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 20.48,
+      "quantity": 345.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 70.0,
+      "quantity": 1422.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.35,
+      "quantity": 7.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 41.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 0.98,
+      "quantity": 20.0
+     },
+     {
+      "name": "Poolish",
+      "sourcePercent": 50.03,
+      "quantity": 1016.0
+     }
+    ],
+    "line": 34,
+    "end": 48,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 261,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 86.4,
+      "quantity": 2193.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 13.6,
+      "quantity": 345.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 76.0,
+      "quantity": 1929.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.3,
+      "quantity": 8.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 1.6,
+      "quantity": 41.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 0.78,
+      "quantity": 20.0
+     }
+    ],
+    "line": 21,
+    "end": 34,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-pizza-dough",
+  "tables": [
+   {
+    "page": 263,
+    "heading": "Poolish Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 614.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 614.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 1.0
+     }
+    ],
+    "line": 19,
+    "end": 24,
+    "printedTotal": 1229.0
+   },
+   {
+    "page": 263,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1842.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 69.33,
+      "quantity": 1277.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.23,
+      "quantity": 4.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.67,
+      "quantity": 49.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 0.67,
+      "quantity": 12.0
+     },
+     {
+      "name": "Oil",
+      "sourcePercent": 6.67,
+      "quantity": 123.0
+     },
+     {
+      "name": "Poolish",
+      "sourcePercent": 66.7,
+      "quantity": 1229.0
+     }
+    ],
+    "line": 33,
+    "end": 47,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 264,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2456.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 77.0,
+      "quantity": 1891.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.2,
+      "quantity": 5.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 49.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 0.5,
+      "quantity": 12.0
+     },
+     {
+      "name": "Oil",
+      "sourcePercent": 5.0,
+      "quantity": 123.0
+     }
+    ],
+    "line": 13,
+    "end": 26,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-multigrain-pan-bread",
+  "tables": [
+   {
+    "page": 265,
+    "heading": "Prefermented Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 612.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 65.0,
+      "quantity": 398.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 12.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.6,
+      "quantity": 4.0
+     }
+    ],
+    "line": 22,
+    "end": 33,
+    "printedTotal": 1027.0
+   },
+   {
+    "page": 265,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 50.0,
+      "quantity": 96.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 50.0,
+      "quantity": 96.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 60.0,
+      "quantity": 115.0
+     },
+     {
+      "name": "Starter (stiff)",
+      "sourcePercent": 40.0,
+      "quantity": 77.0
+     }
+    ],
+    "line": 43,
+    "end": 54,
+    "printedTotal": 385.0
+   },
+   {
+    "page": 266,
+    "heading": "Soaker Formula",
+    "rows": [
+     {
+      "name": "Flax seeds",
+      "sourcePercent": 20.0,
+      "quantity": 110.0
+     },
+     {
+      "name": "Sunflower seeds",
+      "sourcePercent": 20.0,
+      "quantity": 110.0
+     },
+     {
+      "name": "Sesame seeds",
+      "sourcePercent": 20.0,
+      "quantity": 110.0
+     },
+     {
+      "name": "Rolled oats",
+      "sourcePercent": 30.0,
+      "quantity": 165.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 50.0,
+      "quantity": 275.0
+     }
+    ],
+    "line": 6,
+    "end": 15,
+    "printedTotal": 770.0
+   },
+   {
+    "page": 266,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 60.0,
+      "quantity": 770.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 20.0,
+      "quantity": 257.0
+     },
+     {
+      "name": "Medium rye flour",
+      "sourcePercent": 10.0,
+      "quantity": 128.0
+     },
+     {
+      "name": "Semolina flour",
+      "sourcePercent": 5.0,
+      "quantity": 64.0
+     },
+     {
+      "name": "Rice flour",
+      "sourcePercent": 5.0,
+      "quantity": 64.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 68.0,
+      "quantity": 873.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.5,
+      "quantity": 32.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 1.0,
+      "quantity": 13.0
+     },
+     {
+      "name": "Honey",
+      "sourcePercent": 6.0,
+      "quantity": 77.0
+     },
+     {
+      "name": "Oil",
+      "sourcePercent": 6.0,
+      "quantity": 77.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 30.0,
+      "quantity": 385.0
+     },
+     {
+      "name": "Prefermented dough",
+      "sourcePercent": 80.0,
+      "quantity": 1027.0
+     },
+     {
+      "name": "Soaker",
+      "sourcePercent": 60.0,
+      "quantity": 770.0
+     }
+    ],
+    "line": 27,
+    "end": 50,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-honey-wheat-pan-bread",
+  "tables": [
+   {
+    "page": 267,
+    "heading": "Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 302.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 90.0,
+      "quantity": 272.0
+     },
+     {
+      "name": "Starter (stiff)",
+      "sourcePercent": 8.0,
+      "quantity": 24.0
+     }
+    ],
+    "line": 18,
+    "end": 25,
+    "printedTotal": 599.0
+   },
+   {
+    "page": 267,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 100.0,
+      "quantity": 1996.0
+     },
+     {
+      "name": "Water #1",
+      "sourcePercent": 72.0,
+      "quantity": 1437.0
+     },
+     {
+      "name": "Water #2",
+      "sourcePercent": 8.0,
+      "quantity": 160.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.2,
+      "quantity": 44.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 1.0,
+      "quantity": 20.0
+     },
+     {
+      "name": "Honey",
+      "sourcePercent": 8.0,
+      "quantity": 160.0
+     },
+     {
+      "name": "Sunflower oil",
+      "sourcePercent": 6.0,
+      "quantity": 120.0
+     },
+     {
+      "name": "Levain",
+      "sourcePercent": 30.0,
+      "quantity": 599.0
+     }
+    ],
+    "line": 37,
+    "end": 55,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-hamburger-buns",
+  "tables": [
+   {
+    "page": 269,
+    "heading": "Sponge Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 627.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 62.0,
+      "quantity": 388.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 1.0
+     }
+    ],
+    "line": 16,
+    "end": 22,
+    "printedTotal": 1016.0
+   },
+   {
+    "page": 269,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Flour",
+      "sourcePercent": 100.0,
+      "quantity": 1880.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 63.33,
+      "quantity": 1191.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 1.01,
+      "quantity": 19.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.67,
+      "quantity": 50.0
+     },
+     {
+      "name": "Sugar",
+      "sourcePercent": 5.07,
+      "quantity": 95.0
+     },
+     {
+      "name": "Butter",
+      "sourcePercent": 10.13,
+      "quantity": 190.0
+     },
+     {
+      "name": "Milk powder",
+      "sourcePercent": 5.07,
+      "quantity": 95.0
+     },
+     {
+      "name": "Sponge",
+      "sourcePercent": 54.03,
+      "quantity": 1016.0
+     }
+    ],
+    "line": 31,
+    "end": 50,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 270,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2506.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 63.0,
+      "quantity": 1579.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.78,
+      "quantity": 20.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 50.0
+     },
+     {
+      "name": "Sugar",
+      "sourcePercent": 3.8,
+      "quantity": 95.0
+     },
+     {
+      "name": "Butter",
+      "sourcePercent": 7.6,
+      "quantity": 190.0
+     },
+     {
+      "name": "Milk powder",
+      "sourcePercent": 3.8,
+      "quantity": 95.0
+     }
+    ],
+    "line": 15,
+    "end": 32,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-soft-dinner-rolls",
+  "tables": [
+   {
+    "page": 270,
+    "heading": "Sponge Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 578.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 62.0,
+      "quantity": 359.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 1.0
+     }
+    ],
+    "line": 52,
+    "end": 58,
+    "printedTotal": 938.0
+   },
+   {
+    "page": 271,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1735.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 52.67,
+      "quantity": 914.0
+     },
+     {
+      "name": "Eggs",
+      "sourcePercent": 16.0,
+      "quantity": 278.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 1.03,
+      "quantity": 18.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.67,
+      "quantity": 46.0
+     },
+     {
+      "name": "Sugar",
+      "sourcePercent": 8.0,
+      "quantity": 139.0
+     },
+     {
+      "name": "Butter",
+      "sourcePercent": 20.0,
+      "quantity": 347.0
+     },
+     {
+      "name": "Milk powder",
+      "sourcePercent": 7.0,
+      "quantity": 121.0
+     },
+     {
+      "name": "Sponge",
+      "sourcePercent": 54.03,
+      "quantity": 938.0
+     }
+    ],
+    "line": 12,
+    "end": 32,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 272,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2314.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 55.0,
+      "quantity": 1273.0
+     },
+     {
+      "name": "Eggs",
+      "sourcePercent": 12.0,
+      "quantity": 278.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.8,
+      "quantity": 19.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 46.0
+     },
+     {
+      "name": "Sugar",
+      "sourcePercent": 6.0,
+      "quantity": 139.0
+     },
+     {
+      "name": "Butter",
+      "sourcePercent": 15.0,
+      "quantity": 347.0
+     },
+     {
+      "name": "Milk powder",
+      "sourcePercent": 5.25,
+      "quantity": 121.0
+     }
+    ],
+    "line": 6,
+    "end": 24,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-bagels",
+  "tables": [
+   {
+    "page": 272,
+    "heading": "Sponge Formula",
+    "rows": [
+     {
+      "name": "High-gluten flour",
+      "sourcePercent": 100.0,
+      "quantity": 888.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 65.0,
+      "quantity": 577.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.3,
+      "quantity": 3.0
+     }
+    ],
+    "line": 49,
+    "end": 56,
+    "printedTotal": 1468.0
+   },
+   {
+    "page": 273,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "High-gluten flour",
+      "sourcePercent": 100.0,
+      "quantity": 2073.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 43.57,
+      "quantity": 903.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.3,
+      "quantity": 6.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 1.86,
+      "quantity": 38.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 2.29,
+      "quantity": 47.0
+     },
+     {
+      "name": "Sponge",
+      "sourcePercent": 70.84,
+      "quantity": 1468.0
+     }
+    ],
+    "line": 10,
+    "end": 26,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 273,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "High-gluten flour",
+      "sourcePercent": 100.0,
+      "quantity": 2961.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 50.0,
+      "quantity": 1480.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.3,
+      "quantity": 9.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 1.3,
+      "quantity": 38.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 1.6,
+      "quantity": 47.0
+     }
+    ],
+    "line": 46,
+    "end": 56,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-pretzels",
+  "tables": [
+   {
+    "page": 274,
+    "heading": "Poolish Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 243.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 243.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 0.0
+     }
+    ],
+    "line": 26,
+    "end": 31,
+    "printedTotal": 486.0
+   },
+   {
+    "page": 274,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2454.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 29.67,
+      "quantity": 728.0
+     },
+     {
+      "name": "Milk",
+      "sourcePercent": 29.67,
+      "quantity": 728.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.79,
+      "quantity": 19.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 1.98,
+      "quantity": 49.0
+     },
+     {
+      "name": "Butter",
+      "sourcePercent": 2.97,
+      "quantity": 73.0
+     },
+     {
+      "name": "Poolish",
+      "sourcePercent": 19.79,
+      "quantity": 486.0
+     }
+    ],
+    "line": 39,
+    "end": 55,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 275,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2696.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 36.0,
+      "quantity": 971.0
+     },
+     {
+      "name": "Milk",
+      "sourcePercent": 27.0,
+      "quantity": 728.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.73,
+      "quantity": 20.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 1.8,
+      "quantity": 49.0
+     },
+     {
+      "name": "Butter",
+      "sourcePercent": 2.7,
+      "quantity": 73.0
+     }
+    ],
+    "line": 27,
+    "end": 39,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-onion-poppy-seed-rolls",
+  "tables": [
+   {
+    "page": 280,
+    "heading": "Sponge Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 528.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 62.0,
+      "quantity": 327.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.1,
+      "quantity": 1.0
+     }
+    ],
+    "line": 20,
+    "end": 25,
+    "printedTotal": 856.0
+   },
+   {
+    "page": 280,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1584.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 48.67,
+      "quantity": 771.0
+     },
+     {
+      "name": "Eggs",
+      "sourcePercent": 16.0,
+      "quantity": 253.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 1.03,
+      "quantity": 16.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.67,
+      "quantity": 42.0
+     },
+     {
+      "name": "Sugar",
+      "sourcePercent": 8.0,
+      "quantity": 127.0
+     },
+     {
+      "name": "Butter",
+      "sourcePercent": 20.0,
+      "quantity": 317.0
+     },
+     {
+      "name": "Milk powder",
+      "sourcePercent": 6.67,
+      "quantity": 106.0
+     },
+     {
+      "name": "Onions (small diced and sauteed until translucent)",
+      "sourcePercent": 24.0,
+      "quantity": 380.0
+     },
+     {
+      "name": "Poppy seeds",
+      "sourcePercent": 5.33,
+      "quantity": 84.0
+     },
+     {
+      "name": "Sponge",
+      "sourcePercent": 54.03,
+      "quantity": 856.0
+     }
+    ],
+    "line": 34,
+    "end": 57,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 281,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 2112.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 52.0,
+      "quantity": 1098.0
+     },
+     {
+      "name": "Eggs",
+      "sourcePercent": 12.0,
+      "quantity": 253.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.8,
+      "quantity": 17.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 42.0
+     },
+     {
+      "name": "Sugar",
+      "sourcePercent": 6.0,
+      "quantity": 127.0
+     },
+     {
+      "name": "Butter",
+      "sourcePercent": 15.0,
+      "quantity": 317.0
+     },
+     {
+      "name": "Milk Powder",
+      "sourcePercent": 5.0,
+      "quantity": 106.0
+     },
+     {
+      "name": "Onions",
+      "sourcePercent": 18.0,
+      "quantity": 380.0
+     },
+     {
+      "name": "Poppy seeds",
+      "sourcePercent": 4.0,
+      "quantity": 84.0
+     }
+    ],
+    "line": 24,
+    "end": 46,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-potato-dill-rolls",
+  "tables": [
+   {
+    "page": 282,
+    "heading": "Prefermented Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 372.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 67.0,
+      "quantity": 249.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.6,
+      "quantity": 2.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.0,
+      "quantity": 7.0
+     }
+    ],
+    "line": 15,
+    "end": 25,
+    "printedTotal": 631.0
+   },
+   {
+    "page": 282,
+    "heading": "Liquid Levain Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 121.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 121.0
+     },
+     {
+      "name": "Starter",
+      "sourcePercent": 60.0,
+      "quantity": 73.0
+     }
+    ],
+    "line": 36,
+    "end": 48,
+    "printedTotal": 315.0
+   },
+   {
+    "page": 283,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 80.0,
+      "quantity": 1682.0
+     },
+     {
+      "name": "Whole wheat flour",
+      "sourcePercent": 12.0,
+      "quantity": 252.0
+     },
+     {
+      "name": "Potato flour",
+      "sourcePercent": 8.0,
+      "quantity": 168.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 68.0,
+      "quantity": 1430.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.3,
+      "quantity": 48.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.2,
+      "quantity": 4.0
+     },
+     {
+      "name": "Levain (liquid)",
+      "sourcePercent": 15.0,
+      "quantity": 315.0
+     },
+     {
+      "name": "Prefermented dough",
+      "sourcePercent": 30.0,
+      "quantity": 631.0
+     },
+     {
+      "name": "Dill",
+      "sourcePercent": 0.2,
+      "quantity": 4.0
+     }
+    ],
+    "line": 6,
+    "end": 23,
+    "printedTotal": 4536.0
+   }
+  ]
+ },
+ {
+  "id": "suas-carrot-rolls",
+  "tables": [
+   {
+    "page": 284,
+    "heading": "Prefermented Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 422.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 422.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.2,
+      "quantity": 1.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 0.1,
+      "quantity": 0.0
+     }
+    ],
+    "line": 17,
+    "end": 26,
+    "printedTotal": 845.0
+   },
+   {
+    "page": 284,
+    "heading": "Soaker Formula",
+    "rows": [
+     {
+      "name": "Seven grain mix",
+      "sourcePercent": 100.0,
+      "quantity": 422.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 100.0,
+      "quantity": 422.0
+     }
+    ],
+    "line": 35,
+    "end": 39,
+    "printedTotal": 844.0
+   },
+   {
+    "page": 285,
+    "heading": "Final Dough Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1300.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 65.96,
+      "quantity": 857.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 3.52,
+      "quantity": 46.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 1.15,
+      "quantity": 15.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 3.44,
+      "quantity": 45.0
+     },
+     {
+      "name": "Carrots (shredded)",
+      "sourcePercent": 45.03,
+      "quantity": 585.0
+     },
+     {
+      "name": "Soaker",
+      "sourcePercent": 64.9,
+      "quantity": 844.0
+     },
+     {
+      "name": "Poolish",
+      "sourcePercent": 65.0,
+      "quantity": 845.0
+     }
+    ],
+    "line": 6,
+    "end": 24,
+    "printedTotal": 4536.0
+   },
+   {
+    "page": 285,
+    "heading": "Total Formula",
+    "rows": [
+     {
+      "name": "Bread flour",
+      "sourcePercent": 100.0,
+      "quantity": 1721.0
+     },
+     {
+      "name": "Water",
+      "sourcePercent": 74.3,
+      "quantity": 1279.0
+     },
+     {
+      "name": "Salt",
+      "sourcePercent": 2.68,
+      "quantity": 46.0
+     },
+     {
+      "name": "Yeast (instant)",
+      "sourcePercent": 0.92,
+      "quantity": 16.0
+     },
+     {
+      "name": "Malt",
+      "sourcePercent": 2.6,
+      "quantity": 45.0
+     },
+     {
+      "name": "Carrots",
+      "sourcePercent": 34.0,
+      "quantity": 585.0
+     },
+     {
+      "name": "Soaker",
+      "sourcePercent": 49.0,
+      "quantity": 844.0
+     }
+    ],
+    "line": 45,
+    "end": 62,
+    "printedTotal": 4536.0
+   }
+  ]
+ }
+]
