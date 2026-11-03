@@ -438,3 +438,7 @@ Added17 requested DiMuzio formulas under **Artisan Bread**, available at
 `/#artisan-bread`: all4baguettes on199–202 and the13other selected recipes through233,
 with their procedure continuations. Existing134 recipe records remain unchanged.
 See [source mapping, accounting/corrections and additive import](docs/dimuzio-artisan.md).
+
+## Source collections (2026-11-03)
+
+Collection filters and card labels use source provenance, not bread type: Hamelman (`hamelman`), Artisan (`dimuzio`), Personal (`workbook`, including the blank master), and Others (Pizzalovers, DDT and future unclassified sources). All remains available. Original recipe tags stay preserved for recipe semantics and calculators; no published records or drafts are rewritten. No special Artisan collection hash route is required.
