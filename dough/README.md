@@ -441,4 +441,4 @@ See [source mapping, accounting/corrections and additive import](docs/dimuzio-ar
 
 ## Source collections (2026-11-03)
 
-Collection filters and card labels use source provenance, not bread type: Hamelman (`hamelman`), Artisan (`dimuzio`), Personal (`workbook`, including the blank master), and Others (Pizzalovers, DDT and future unclassified sources). All remains available. Original recipe tags stay preserved for recipe semantics and calculators; no published records or drafts are rewritten. No special Artisan collection hash route is required.
+Collection filters and card labels use source provenance, not bread type: Hamelman (`hamelman`), Artisan (`dimuzio`), Personal (`workbook`, including the blank master), PizzaLovers (`pizzalovers`), and Others (DDT and future unclassified sources). All remains available. Original recipe tags stay preserved for recipe semantics and calculators; no published records or drafts are rewritten. No special Artisan collection hash route is required.
