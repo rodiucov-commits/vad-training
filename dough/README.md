@@ -458,3 +458,7 @@ Eight explicitly requested croissant doughs join the Suas collection (52 recipes
 ## Collection navigation (collection-nav-1 / SWv35)
 
 Header has The collection and Calculators, plus existing account controls. Suas remains only in the source-filter row beside Hamelman. All lists204 recipe/build cards and excludes the4 DDT/mixing calculators; the Calculators filter/header lists those4 without deleting records or changing formulas. Header buttons clear search and select their listing; card/back navigation preserves that selection. Visible card numbers start at01 per listing. Public and Owner use the same navigation. `tests/collection-navigation.mjs` covers actual clicks, source membership, search reset, DDT exclusion, mixing/detail/back, mobile and isolated Owner mode.
+
+## Suas retarding process chart (retarding-1 / SWv36)
+
+Calculators → Suas · Retarding processes redraws all four paths of printed p.103 Fig.4-16 in responsive process rows, with printable/downloadable SVG and standalone HTML. Details, source conflicts and reproducible export/test commands: [docs/suas-retarding.md](docs/suas-retarding.md). One reference utility added;203 publications unchanged;5 calculator/reference cards separate from204 recipe/build cards.
