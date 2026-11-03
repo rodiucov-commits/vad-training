@@ -462,3 +462,7 @@ Header has The collection and Calculators, plus existing account controls. Suas 
 ## Suas retarding process chart (retarding-1 / SWv36)
 
 Calculators → Suas · Retarding processes redraws all four paths of printed p.103 Fig.4-16 in responsive process rows, with printable/downloadable SVG and standalone HTML. Details, source conflicts and reproducible export/test commands: [docs/suas-retarding.md](docs/suas-retarding.md). One reference utility added;203 publications unchanged;5 calculator/reference cards separate from204 recipe/build cards.
+
+## Suas sourdough culture defects (culture-defects-1 / SWv38)
+
+Calculators → Suas · Main defects of sourdough culture presents all4 defect groups from p98 Fig4-13, with19 causes and19 remedies, searchable/filterable and mobile-friendly. Reference notes preserve unspecified dose bases and the source’s ambiguous wording. Six utility cards,204 recipe/build cards and203 publications. See [docs/suas-culture-defects.md](docs/suas-culture-defects.md) and `tests/suas-culture-defects.mjs`.
