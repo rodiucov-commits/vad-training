@@ -442,3 +442,7 @@ See [source mapping, accounting/corrections and additive import](docs/dimuzio-ar
 ## Source collections (2026-11-03)
 
 Collection filters and card labels use source provenance, not bread type: Hamelman (`hamelman`), Artisan (`dimuzio`), Personal (`workbook`, including the blank master), PizzaLovers (`pizzalovers`), Calculators (DDT), and Others (future unclassified sources). All remains available. Original recipe tags stay preserved for recipe semantics and calculators; no published records or drafts are rewritten. No special Artisan collection hash route is required.
+
+## Suas mixing calculators
+
+Three public Calculator cards: `suas-mixing-short`, `suas-mixing-improved`, `suas-mixing-intensive`. Source: original Suas first-edition images, printed pp.65–71. `suas-mixing.js` keeps the three straight-dough formulas and development targets separate. RPM calculates development only; incorporation is added once. Default3.5 minutes is explicitly an adaptation of p.71’s3–4 minutes, separately disclosing pp.69–70’s4–5 minute examples. No batch/time proportionality or invented bake schedule. Fresh yeast stays fresh yeast. Existing publications and local notes untouched.
