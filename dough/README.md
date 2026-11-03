@@ -454,3 +454,7 @@ Three public Calculator cards: `suas-mixing-short`, `suas-mixing-improved`, `sua
 ## Suas croissants (suas-croissants-1 / SWv34)
 
 Eight explicitly requested croissant doughs join the Suas collection (52 recipes). Source audit, lamination-butter accounting, printed conflicts, required cold/folding holds and additive import preservation: [docs/suas-croissants.md](docs/suas-croissants.md). Existing195 records unchanged;203 publications and208 cards total.
+
+## Collection navigation (collection-nav-1 / SWv35)
+
+Header has The collection and Calculators, plus existing account controls. Suas remains only in the source-filter row beside Hamelman. All lists204 recipe/build cards and excludes the4 DDT/mixing calculators; the Calculators filter/header lists those4 without deleting records or changing formulas. Header buttons clear search and select their listing; card/back navigation preserves that selection. Visible card numbers start at01 per listing. Public and Owner use the same navigation. `tests/collection-navigation.mjs` covers actual clicks, source membership, search reset, DDT exclusion, mixing/detail/back, mobile and isolated Owner mode.
