@@ -466,3 +466,7 @@ Calculators → Suas · Retarding processes redraws all four paths of printed p.
 ## Suas sourdough culture defects (culture-defects-1 / SWv38)
 
 Calculators → Suas · Main defects of sourdough culture presents all4 defect groups from p98 Fig4-13, with19 causes and19 remedies, searchable/filterable and mobile-friendly. Reference notes preserve unspecified dose bases and the source’s ambiguous wording. Six utility cards,204 recipe/build cards and203 publications. See [docs/suas-culture-defects.md](docs/suas-culture-defects.md) and `tests/suas-culture-defects.mjs`.
+
+### Bread-family library — proposal A
+
+The Collection now provides ten bread-family shelves, source/method filters, accent-insensitive multi-word ingredient search and compact recipe rows. All 203 published recipes/builds retain their original IDs and calculations. Calculators holds six existing tools plus the blank master. See [navigation design, boundaries and checks](docs/collection-library.md). Release `bread-library-1`, service-worker cache v39.
