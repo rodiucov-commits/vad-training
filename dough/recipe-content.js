@@ -1,6 +1,6 @@
 function validPersonalRecipe(r,originals){const source=originals.get(r.derivedFrom?.originalId);return r.source?.kind==='personal'&&/^personal-[a-f0-9]{32}$/.test(r.id)&&source&&r.source.sha256===source.source.sha256;}
 import {processFields,timelineHTML,mountTimeline,readTimeline,supportsTimeline} from './recipe-timeline.js?v=suas-croissants-1';
-import {validateRecipe,recipeFlourWater,recipeMass,knownMass,scaledRecipe,sumGrams} from './recipe-model.js?v=save-new-recipe-1';
+import {validateRecipe,recipeFlourWater,recipeMass,knownMass,scaledRecipe,sumGrams} from './recipe-model.js?v=live-adjustments-2';
 import {scaledQuantity} from './hamelman-book.js?v=overall-percent-2';
 export const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const num=(v,d=2)=>new Intl.NumberFormat('en',{maximumFractionDigits:d}).format(v);

@@ -1,5 +1,7 @@
 // Shared browser/server schema and calculations. A stage explicitly lists additions;
 // a ripe build appears once as a transfer, never again as separate feed additions.
+// Botanical seeds are additions, not sourdough cultures, even in legacy records.
+export const ingredientKind=row=>row.kind==='starter'&&/\b(?:sesame|flax(?:seeds?)?|linseeds?|sunflower|pumpkin|poppy|caraway|anise|fennel|chia|hemp)\b/i.test(row.name||'')&&!/\b(?:starter|levain|culture|sourdough|mature)\b/i.test(row.name||'')?'other':row.kind;
 export const sumGrams=stage=>stage.rows.reduce((sum,r)=>sum+(r.unit==='g'&&typeof r.quantity==='number'?r.quantity:0),0);
 export function recipeMass(r){return sumGrams(r.stages.find(s=>s.id===r.finalStageId));}
 export function knownMass(r){return r.stages.find(s=>s.id===r.finalStageId).rows.every(v=>v.unit==='g'&&v.quantity!==null);}
@@ -11,20 +13,21 @@ export function recipeFlourWater(r){
   if(!stage||active.has(stage.id)){reasons.add('Missing or circular build');return {flour:0,water:0};}
   active.add(stage.id);const result={flour:0,water:0};
   for(const row of stage.rows){
+   const kind=ingredientKind(row);
    if(row.quantity===0)continue;
-   if(row.kind==='transfer'){
+   if(kind==='transfer'){
     const build=r.stages.find(s=>s.id===row.fromStage),mass=build?sumGrams(build):0;
     if(row.drained||!build||mass<=0||row.quantity===null||row.unit!=='g'||build.rows.some(v=>v.quantity===null||v.unit!=='g')){reasons.add('Build composition cannot be determined: '+row.name);continue;}
     const part=visit(build,factor*row.quantity/mass);result.flour+=part.flour;result.water+=part.water;
-   }else if(row.kind==='other'&&/milk|buttermilk|eggs?|yog[hu]rt|kefir|cream|juice|whey|butter|honey|syrup|puree|purée/i.test(row.name||'')){
+   }else if(kind==='other'&&/milk|buttermilk|eggs?|yog[hu]rt|kefir|cream|juice|whey|butter|honey|syrup|puree|purée/i.test(row.name||'')){
     unknownWaterComponents.add(row.name);
-   }else if(['flour','water','starter'].includes(row.kind)){
+   }else if(['flour','water','starter'].includes(kind)){
     if(row.quantity===null||row.unit!=='g'){reasons.add('Unweighed flour, water or starter: '+row.name);continue;}
     const quantity=row.quantity*factor;
-    if(row.kind==='starter'){
+    if(kind==='starter'){
      if(row.seedHydration===undefined){unknownSeeds.add(row.name);continue;}
      const flour=quantity/(1+row.seedHydration/100);result.flour+=flour;result.water+=quantity-flour;
-    }else result[row.kind]+=quantity;
+    }else result[kind]+=quantity;
    }
   }
   active.delete(stage.id);return result;
@@ -59,7 +62,7 @@ export function validateRecipe(r,{publication=false}={}){
    if(v.quantity<0){(publication?errors:warnings).push('Negative source addition: '+v.name);}
    if(v.quantity===null)warnings.push('Unquantified ingredient: '+v.name);
    if(v.seedHydration!==undefined&&(!Number.isFinite(v.seedHydration)||v.seedHydration<0||v.seedHydration>1000))errors.push('Invalid seed hydration');
-   if(v.kind==='starter'&&v.seedHydration===undefined)warnings.push('Starter hydration is unspecified: '+v.name);
+   if(ingredientKind(v)==='starter'&&v.seedHydration===undefined)warnings.push('Starter hydration is unspecified: '+v.name);
   }
  }
  if(r.stages.some(s=>!s||!Array.isArray(s.rows)||s.rows.some(v=>!v||typeof v!=='object')))return {errors:[...new Set(errors)],warnings};

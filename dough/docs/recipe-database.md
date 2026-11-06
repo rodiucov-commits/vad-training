@@ -220,3 +220,45 @@ and recipe-copy-upgrade (previous HTTP/SW cache, private settings, offline origi
 routes). Owner writes run only against synthetic fixture databases. The separate
 HTTPS custom-recipe offline test could not use a self-signed service worker;
 custom-copy offline fresh navigation is not certified by these browser checks.
+
+## Semolina live-adjustment repair (live-adjustments-2 / SWv42)
+
+The exact reported route is `/owner#edit/hamelman-semolina-bread`. Its legacy
+record marks sesame seeds as `starter`, and leaves the mature culture's hydration
+unspecified. The previous global known-culture requirement blocked every levain
+water/flour edit, and hid the dough-share control even though these particular
+edits can be balanced without guessing culture composition.
+
+`ingredientKind` treats named botanical seeds as additions, except names explicitly
+identifying a culture/starter. Frozen records/reference tables remain unchanged.
+Both runtime and independent Python ledger recognize this classification.
+
+The allocation ledger now tracks flour by ingredient, water, and each unknown
+culture's transferred mass. It rejects any change in unknown culture carried into
+finished dough. When a build has a fixed retained reserve R, a water/flour edit
+rebalances prepared unknown culture X while keeping its carried quantity K fixed:
+`X*(A+X-R)/(A+X)=K`, where A is the other prepared material. This is a transparent
+mass-balance calculation, not an assumed hydration. For a requested ripe transfer
+T, prepared unknown culture is `K*(T+R)/T`; remaining known flour/water/feed material
+is resized proportionally. Actual inoculum-dose changes still require its actual
+hydration. Partial/source-accounting percentages remain labelled as such.
+
+Flour differences deduct matching final flour first: changing Semolina's bread
+flour does not change its durum flour. Final water, transfer, local feed percentages,
+levain dough-share/PFF controls and full preview update on input. The overall
+known flour/water, unknown culture contribution, dough mass, sesame/salt additions
+and absolute retained reserve all stay fixed.
+
+A fixed, high-contrast **Apply adjustments** bar stays on screen on desktop and
+mobile, including after repeated applies, edits and scrolling. Apply validates the
+working recipe without publishing or deleting controls. Existing Save draft /
+Update existing recipe / Save as new recipe boundaries are unchanged.
+
+Checks: exact-route `semolina-adjustments.mjs` and browser fixture (water/flour,
+four sequential levain-share edits, matching flour, preview, focus and seven applies),
+existing levain/copy/preview/editor/server suites, all203 Owner percentage editors,
+and independent Decimal audit:193 matched bases,124 partial-composition bases,
+10 unavailable;183 final-water controls. Frozen recipe/source data unchanged.
+The additional previous-release HTTP-cache fixture timed out before initial load;
+that extra returning-browser fixture is inconclusive, not a passing upgrade check.
+All changed dependency URLs, entry, release manifest and SWv42 are versioned together.
