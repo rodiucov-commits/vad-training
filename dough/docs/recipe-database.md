@@ -137,3 +137,41 @@ Regression commands: `node dough/tests/recipe-percent.mjs` and, with PLAYWRIGHT_
 eligible final-water controls exercised without changing production data. Existing
 source engines, 134public+134Owner shared views, isolated editor writes and a real
 previous-release cache/offline upgrade are checked independently.
+
+## Linked levain amendments (linked-levain-1 / SWv40)
+
+The Owner amendment editor now links known-composition build/seed quantity and
+feed-percentage edits to adjusted final flour/water additions. It recalculates
+explicit transfers, preserves absolute reserves and deducts the *carried* component
+differences, preserving overall flour, water and final dough mass. Final fresh
+flour blends are reduced proportionally; source/reference stages remain immutable.
+
+Each eligible final-stage ripe-build or starter row offers two synchronized controls:
+**Levain / build · % of final dough weight** (ripe transferred mass / final mass)
+and **Prefermented flour · % of all recipe flour** (carried flour / whole-dough
+flour). Resizing preserves the build's flour/water/starter proportions, not its
+ripening time. Fixed non-flour/water build ingredients are not silently scaled.
+This is a calculation/adaptation, not a fermentation-time prediction; allocation
+follows the subtraction convention in DiMuzio printed p165.
+
+Unknown starter hydration is never guessed. Assign its actual hydration first;
+this defines previously unknown accounting without changing weighed ingredients.
+Only subsequent composition edits rebalance known components. Unweighed/drained,
+shared or chained builds cannot use the direct ripe-share resize control; explicit
+feed edits can propagate through single-use chains. Negative final additions,
+insufficient flour/water and non-flour/water mass changes reject transactionally.
+An emptied build requires explicit fresh-feed quantities to restart it. These
+constraints are surfaced in the editor; no source publication or saved draft is
+changed by deploying the software.
+
+Verification: `node dough/tests/recipe-allocation.mjs` and, with PLAYWRIGHT_PATH,
+`node dough/tests/recipe-allocation-browser.mjs`, plus recipe-percent, editor-browser,
+source parity, and the independent Decimal audit. Browser fixtures use synthetic
+sessions/databases, not live recipe writes. Entry/module/SW versions are coordinated;
+private local notes and published recipe revisions are preserved.
+
+Release verification note: the historical `recipe-source-parity.mjs` still asserts
+134 non-DiMuzio records and fails against the pre-existing expanded catalog (186).
+That unrelated obsolete assertion was not weakened. The current Dimuzio, Suas bread,
+Suas croissant, workbook, pizza and Hamelman source-oracle suites pass; all source
+JSON and the common recipe model are byte-for-byte unchanged from the prior release.
