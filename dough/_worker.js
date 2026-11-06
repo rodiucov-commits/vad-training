@@ -104,7 +104,8 @@ function validateRecipe(r,{publication=false}={}){
  if(!r||typeof r!=='object'||Array.isArray(r))return {errors:['Invalid recipe record'],warnings};
  if(r.schemaVersion!==1||!id(r.id))errors.push('Invalid recipe ID or schema');
  if(!str(r.title,200)||!r.title.trim()||!str(r.description)||!str(r.tag,100))errors.push('Title, description or category is invalid');
- if(!r.source||!['workbook','hamelman','pizzalovers','dimuzio','suas'].includes(r.source.kind)||r.source.referenceId!==r.id||!str(r.source.sha256,64)||!/^[a-f0-9]{64}$/.test(r.source.sha256))errors.push('Invalid source provenance');
+ if(!r.source||!['workbook','hamelman','pizzalovers','dimuzio','suas','personal'].includes(r.source.kind)||r.source.referenceId!==r.id||!str(r.source.sha256,64)||!/^[a-f0-9]{64}$/.test(r.source.sha256))errors.push('Invalid source provenance');
+ if(r.source?.kind==='personal'&&(!r.id.startsWith('personal-')||!r.derivedFrom||!id(r.derivedFrom.id)||!id(r.derivedFrom.originalId)||!str(r.derivedFrom.title,200)||!Number.isInteger(r.derivedFrom.revision)||r.derivedFrom.revision<1))errors.push('Invalid personal recipe lineage');
  if(r.component!==null&&(!r.component||!id(r.component.id)||!str(r.component.name,200)||!Number.isFinite(r.component.grams)||r.component.grams<=0))errors.push('Invalid base-dough component');
  if(!Number.isInteger(r.basePieces)||r.basePieces<1||r.basePieces>10000)errors.push('Piece count must be 1–10,000');
  if(r.processPlan!==undefined&&(!r.processPlan||!Array.isArray(r.processPlan.extraStages)||r.processPlan.extraStages.length>5||new Set(r.processPlan.extraStages.map(e=>e?.id)).size!==r.processPlan.extraStages.length||r.processPlan.extraStages.some(e=>!id(e?.id)||!str(e?.label,200)||!['bulk','bench','shape','proof'].includes(e?.after))))errors.push('Invalid additional process stages');
@@ -165,12 +166,28 @@ function createRecipeStore(){
   const current=await details(db,id);if(!current)return reply({error:'Recipe not found'},404);if(req.method==='GET')return reply(current);
   let b;try{b=await body(req);}catch{return reply({error:'Invalid or oversized request'},400);}
   if(b.baseRevision!==current.revision)return reply({error:'This recipe changed. Reload before saving or publishing.'},409);
+  if(b.action==='copy'){
+   const title=typeof b.newName==='string'?b.newName.trim():'';
+   if(!title||title.length>200||title.toLocaleLowerCase()===current.record.title.trim().toLocaleLowerCase())return reply({error:'Choose a different recipe name (1–200 characters)'},422);
+   if(!/^[a-f0-9]{32}$/.test(b.requestId||''))return reply({error:'Invalid save request'},400);
+   if(!b.record||b.record.id!==id||JSON.stringify(b.record.source)!==JSON.stringify(current.record.source)||JSON.stringify(b.record.derivedFrom)!==JSON.stringify(current.record.derivedFrom))return reply({error:'Recipe identity and source provenance cannot be changed'},400);
+   const inputValidation=validateRecipe(b.record,{publication:true});if(inputValidation.errors.length)return reply({error:'Resolve formula errors before saving a new recipe',...inputValidation},422);
+   const source=JSON.parse((await db.prepare('SELECT document FROM recipe_revisions WHERE id=? AND revision=1').bind(id).first()).document);
+   for(const stage of source.stages.filter(s=>s.role==='reference'))if(JSON.stringify(stage)!==JSON.stringify(b.record.stages.find(v=>v.id===stage.id)))return reply({error:'Original reference tables cannot be edited'},422);
+   const newId='personal-'+b.requestId,record={...b.record,id:newId,title,source:{kind:'personal',referenceId:newId,sha256:current.record.source.sha256},derivedFrom:{id,originalId:current.record.derivedFrom?.originalId||id,title:current.record.title,revision:current.revision}};
+   delete record.revision;
+   const validation=validateRecipe(record,{publication:true});if(validation.errors.length)return reply({error:'Resolve formula errors before saving a new recipe',...validation},422);
+   const document=JSON.stringify(record),existing=await details(db,newId);
+   if(existing)return JSON.stringify(existing.record)===document?reply({...existing,created:true}):reply({error:'This save request was already used for a different recipe'},409);
+   await db.batch([db.prepare('INSERT INTO recipe_publications(id,revision,document) VALUES (?,1,?)').bind(newId,document),db.prepare('INSERT INTO recipe_revisions(id,revision,document,created_at,kind) VALUES (?,1,?,?,?)').bind(newId,document,Date.now(),'copy')]);
+   return reply({...await details(db,newId),created:true},201);
+  }
   if(b.action==='discard'){
    if(!current.draft||b.draftVersion!==current.draft.version)return reply({error:'Draft changed. Reload first.'},409);
    await db.prepare('DELETE FROM recipe_drafts WHERE id=? AND version=?').bind(id,b.draftVersion).run();return reply(await details(db,id));
   }
   if(b.action==='draft'){
-   if(!b.record||b.record.id!==id||JSON.stringify(b.record.source)!==JSON.stringify(current.record.source))return reply({error:'Recipe identity and source provenance cannot be changed'},400);
+   if(!b.record||b.record.id!==id||JSON.stringify(b.record.source)!==JSON.stringify(current.record.source)||JSON.stringify(b.record.derivedFrom)!==JSON.stringify(current.record.derivedFrom))return reply({error:'Recipe identity and source provenance cannot be changed'},400);
    const validation=validateRecipe(b.record);if(validation.errors.length)return reply({error:'Recipe validation failed',...validation},422);
    const source=JSON.parse((await db.prepare('SELECT document FROM recipe_revisions WHERE id=? AND revision=1').bind(id).first()).document);
    // Original reference tables remain immutable. Current build/final rows and
@@ -201,7 +218,8 @@ function createRecipeArchive(allowedIds){
  const allowed=new Set(allowedIds);let ready;
  async function schema(db){if(!db)throw Error('Missing recipe state database');if(!ready)ready=Promise.resolve(db.exec('CREATE TABLE IF NOT EXISTS recipe_archive (recipe_id TEXT PRIMARY KEY, deleted_at INTEGER NOT NULL);')).catch(e=>{ready=null;throw e;});return ready;}
  const reply=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
- async function list(db){await schema(db);const rows=await db.prepare('SELECT recipe_id FROM recipe_archive ORDER BY recipe_id').all();return rows.results.map(r=>r.recipe_id).filter(id=>allowed.has(id));}
+ async function allowedId(db,id){if(allowed.has(id))return true;if(!/^personal-[a-f0-9]{32}$/.test(id||''))return false;const table=await db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='recipe_publications'").first();if(!table)return false;const row=await db.prepare('SELECT document FROM recipe_publications WHERE id=?').bind(id).first();return !!row&&JSON.parse(row.document).source?.kind==='personal';}
+ async function list(db){await schema(db);const rows=await db.prepare('SELECT recipe_id FROM recipe_archive ORDER BY recipe_id').all();const ids=[];for(const row of rows.results)if(await allowedId(db,row.recipe_id))ids.push(row.recipe_id);return ids;}
  return {async fetch(req,env,isOwner){
   try{
    const url=new URL(req.url);if(req.method==='GET'&&url.pathname==='/api/recipe-archive')return reply({deleted:await list(env.DOUGH_RECIPES_DB)});
@@ -211,7 +229,7 @@ function createRecipeArchive(allowedIds){
    if(!/^application\/json(?:;|$)/i.test(req.headers.get('Content-Type')||''))return reply({error:'JSON required'},415);
    const reader=req.body?.getReader();let length=0,text='';if(reader){const decoder=new TextDecoder();for(;;){const {done,value}=await reader.read();if(done)break;length+=value.byteLength;if(length>2048){await reader.cancel();return reply({error:'Request too large'},413);}text+=decoder.decode(value,{stream:true});}text+=decoder.decode();}
    let body;try{body=JSON.parse(text);}catch{return reply({error:'Invalid request'},400);}
-   if(!body||!allowed.has(body.id)||typeof body.deleted!=='boolean')return reply({error:'Choose a valid recipe and action'},400);
+   if(!body||!await allowedId(env.DOUGH_RECIPES_DB,body.id)||typeof body.deleted!=='boolean')return reply({error:'Choose a valid recipe and action'},400);
    await schema(env.DOUGH_RECIPES_DB);
    if(body.deleted)await env.DOUGH_RECIPES_DB.prepare('INSERT INTO recipe_archive (recipe_id,deleted_at) VALUES (?,?) ON CONFLICT(recipe_id) DO UPDATE SET deleted_at=excluded.deleted_at').bind(body.id,Date.now()).run();
    else await env.DOUGH_RECIPES_DB.prepare('DELETE FROM recipe_archive WHERE recipe_id=?').bind(body.id).run();

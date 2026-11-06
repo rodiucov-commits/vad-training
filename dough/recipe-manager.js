@@ -25,5 +25,5 @@ export async function createRecipeManager(recipes,{owner,toast,onChange}){
  }
  function filterLinks(host){for(const a of host.querySelectorAll('a[href^="#recipe/"]')){const id=a.getAttribute('href').slice(8).split('?')[0];if(deleted.has(id)){if(a.closest('.pl-presets'))a.remove();else a.replaceWith(document.createTextNode(a.textContent));}}}
  async function refresh(){try{const response=await fetch('/api/recipe-archive',{cache:'no-store',signal:AbortSignal.timeout(4000)});if(!response.ok)throw 0;const data=await response.json();if(!Array.isArray(data.deleted))throw 0;update(data.deleted);online=true;}catch{online=false;}}
- return {refresh,get deleted(){return deleted;},setActive,renderDeleted,filterLinks};
+ return {sync(){for(const r of recipes.filter(r=>r.tag!=='Calculator'&&!r.temperature))catalog.set(r.id,r);},refresh,get deleted(){return deleted;},setActive,renderDeleted,filterLinks};
 }

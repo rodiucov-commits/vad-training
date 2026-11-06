@@ -175,3 +175,48 @@ Release verification note: the historical `recipe-source-parity.mjs` still asser
 That unrelated obsolete assertion was not weakened. The current Dimuzio, Suas bread,
 Suas croissant, workbook, pizza and Hamelman source-oracle suites pass; all source
 JSON and the common recipe model are byte-for-byte unchanged from the prior release.
+
+## Save as new recipe and live amendment preview (save-new-recipe-1 / SWv41)
+
+The Owner editor offers two explicit paths:
+- **Save draft → Update existing recipe** publishes amendments (including its
+  editable Title) against the existing revision/history.
+- **New recipe name → Save as new recipe** validates the current working formula
+  and method, confirms creation of a separate published recipe, and opens it.
+  The original publication, saved draft, history, notes and calculator remain
+  unchanged. Copying does not upload/copy browser-private baking notes.
+
+The authenticated, same-origin `copy` action on the existing Owner recipes API
+creates a server-assigned `personal-<request UUID>` identity with provenance and
+parent revision recorded in `derivedFrom`. It preserves immutable original
+reference tables, validates publishable quantities/transfers and atomically inserts
+publication + revision1 into the existing content-only database. A repeated request
+ID returns the same record, not an extra copy. It does not require changing the
+original saved draft. New recipes belong to Personal and inherit the original
+bread-family navigation metadata without claiming to be the author's original.
+The original source link remains available. Personal recipes support normal
+editing, renaming, revision history and reversible delete/restore. Authentication,
+D1 bindings, frozen imports and all source records are unchanged.
+
+The client accepts validated personal records in addition to every frozen source
+record, upserts dynamic collection entries/picker options and retains them in its
+last-known public snapshot. Browser private data remains isolated by recipe ID.
+Existing source recipes must all be present before accepting a full snapshot.
+
+An expanded **Live amended recipe preview** is present from initial editor load.
+It renders the same recipe-content template with builds, adjusted final additions,
+yield and complete procedure. Title, percentages, grams, method and new-copy name
+update on input without replacing the focused editing field. Desktop shows a
+scrollable sticky preview beside the editing fields; mobile stacks the complete
+preview below with View live preview / Back to editing navigation. Preview-only
+process controls are hidden/disabled; it cannot save or publish anything.
+
+Checks: recipe-store/recipe-archive/owner-password server suites;
+recipe-copy-browser (named unsaved copy, original + private-note preservation,
+reload, public route, Personal search/library, existing-copy rename, archive/restore),
+recipe-preview-browser (live values/names/method, focus and responsive layout),
+203 public +203 Owner recipe-content views, existing editor lifecycle/levain suites,
+and recipe-copy-upgrade (previous HTTP/SW cache, private settings, offline original
+routes). Owner writes run only against synthetic fixture databases. The separate
+HTTPS custom-recipe offline test could not use a self-signed service worker;
+custom-copy offline fresh navigation is not certified by these browser checks.

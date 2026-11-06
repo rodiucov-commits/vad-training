@@ -3,7 +3,8 @@ export function createRecipeArchive(allowedIds){
  const allowed=new Set(allowedIds);let ready;
  async function schema(db){if(!db)throw Error('Missing recipe state database');if(!ready)ready=Promise.resolve(db.exec('CREATE TABLE IF NOT EXISTS recipe_archive (recipe_id TEXT PRIMARY KEY, deleted_at INTEGER NOT NULL);')).catch(e=>{ready=null;throw e;});return ready;}
  const reply=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
- async function list(db){await schema(db);const rows=await db.prepare('SELECT recipe_id FROM recipe_archive ORDER BY recipe_id').all();return rows.results.map(r=>r.recipe_id).filter(id=>allowed.has(id));}
+ async function allowedId(db,id){if(allowed.has(id))return true;if(!/^personal-[a-f0-9]{32}$/.test(id||''))return false;const table=await db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='recipe_publications'").first();if(!table)return false;const row=await db.prepare('SELECT document FROM recipe_publications WHERE id=?').bind(id).first();return !!row&&JSON.parse(row.document).source?.kind==='personal';}
+ async function list(db){await schema(db);const rows=await db.prepare('SELECT recipe_id FROM recipe_archive ORDER BY recipe_id').all();const ids=[];for(const row of rows.results)if(await allowedId(db,row.recipe_id))ids.push(row.recipe_id);return ids;}
  return {async fetch(req,env,isOwner){
   try{
    const url=new URL(req.url);if(req.method==='GET'&&url.pathname==='/api/recipe-archive')return reply({deleted:await list(env.DOUGH_RECIPES_DB)});
@@ -13,7 +14,7 @@ export function createRecipeArchive(allowedIds){
    if(!/^application\/json(?:;|$)/i.test(req.headers.get('Content-Type')||''))return reply({error:'JSON required'},415);
    const reader=req.body?.getReader();let length=0,text='';if(reader){const decoder=new TextDecoder();for(;;){const {done,value}=await reader.read();if(done)break;length+=value.byteLength;if(length>2048){await reader.cancel();return reply({error:'Request too large'},413);}text+=decoder.decode(value,{stream:true});}text+=decoder.decode();}
    let body;try{body=JSON.parse(text);}catch{return reply({error:'Invalid request'},400);}
-   if(!body||!allowed.has(body.id)||typeof body.deleted!=='boolean')return reply({error:'Choose a valid recipe and action'},400);
+   if(!body||!await allowedId(env.DOUGH_RECIPES_DB,body.id)||typeof body.deleted!=='boolean')return reply({error:'Choose a valid recipe and action'},400);
    await schema(env.DOUGH_RECIPES_DB);
    if(body.deleted)await env.DOUGH_RECIPES_DB.prepare('INSERT INTO recipe_archive (recipe_id,deleted_at) VALUES (?,?) ON CONFLICT(recipe_id) DO UPDATE SET deleted_at=excluded.deleted_at').bind(body.id,Date.now()).run();
    else await env.DOUGH_RECIPES_DB.prepare('DELETE FROM recipe_archive WHERE recipe_id=?').bind(body.id).run();

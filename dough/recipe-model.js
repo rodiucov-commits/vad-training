@@ -47,7 +47,8 @@ export function validateRecipe(r,{publication=false}={}){
  if(!r||typeof r!=='object'||Array.isArray(r))return {errors:['Invalid recipe record'],warnings};
  if(r.schemaVersion!==1||!id(r.id))errors.push('Invalid recipe ID or schema');
  if(!str(r.title,200)||!r.title.trim()||!str(r.description)||!str(r.tag,100))errors.push('Title, description or category is invalid');
- if(!r.source||!['workbook','hamelman','pizzalovers','dimuzio','suas'].includes(r.source.kind)||r.source.referenceId!==r.id||!str(r.source.sha256,64)||!/^[a-f0-9]{64}$/.test(r.source.sha256))errors.push('Invalid source provenance');
+ if(!r.source||!['workbook','hamelman','pizzalovers','dimuzio','suas','personal'].includes(r.source.kind)||r.source.referenceId!==r.id||!str(r.source.sha256,64)||!/^[a-f0-9]{64}$/.test(r.source.sha256))errors.push('Invalid source provenance');
+ if(r.source?.kind==='personal'&&(!r.id.startsWith('personal-')||!r.derivedFrom||!id(r.derivedFrom.id)||!id(r.derivedFrom.originalId)||!str(r.derivedFrom.title,200)||!Number.isInteger(r.derivedFrom.revision)||r.derivedFrom.revision<1))errors.push('Invalid personal recipe lineage');
  if(r.component!==null&&(!r.component||!id(r.component.id)||!str(r.component.name,200)||!Number.isFinite(r.component.grams)||r.component.grams<=0))errors.push('Invalid base-dough component');
  if(!Number.isInteger(r.basePieces)||r.basePieces<1||r.basePieces>10000)errors.push('Piece count must be 1–10,000');
  if(r.processPlan!==undefined&&(!r.processPlan||!Array.isArray(r.processPlan.extraStages)||r.processPlan.extraStages.length>5||new Set(r.processPlan.extraStages.map(e=>e?.id)).size!==r.processPlan.extraStages.length||r.processPlan.extraStages.some(e=>!id(e?.id)||!str(e?.label,200)||!['bulk','bench','shape','proof'].includes(e?.after))))errors.push('Invalid additional process stages');

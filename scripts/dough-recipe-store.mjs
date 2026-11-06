@@ -31,12 +31,28 @@ export function createRecipeStore(){
   const current=await details(db,id);if(!current)return reply({error:'Recipe not found'},404);if(req.method==='GET')return reply(current);
   let b;try{b=await body(req);}catch{return reply({error:'Invalid or oversized request'},400);}
   if(b.baseRevision!==current.revision)return reply({error:'This recipe changed. Reload before saving or publishing.'},409);
+  if(b.action==='copy'){
+   const title=typeof b.newName==='string'?b.newName.trim():'';
+   if(!title||title.length>200||title.toLocaleLowerCase()===current.record.title.trim().toLocaleLowerCase())return reply({error:'Choose a different recipe name (1–200 characters)'},422);
+   if(!/^[a-f0-9]{32}$/.test(b.requestId||''))return reply({error:'Invalid save request'},400);
+   if(!b.record||b.record.id!==id||JSON.stringify(b.record.source)!==JSON.stringify(current.record.source)||JSON.stringify(b.record.derivedFrom)!==JSON.stringify(current.record.derivedFrom))return reply({error:'Recipe identity and source provenance cannot be changed'},400);
+   const inputValidation=validateRecipe(b.record,{publication:true});if(inputValidation.errors.length)return reply({error:'Resolve formula errors before saving a new recipe',...inputValidation},422);
+   const source=JSON.parse((await db.prepare('SELECT document FROM recipe_revisions WHERE id=? AND revision=1').bind(id).first()).document);
+   for(const stage of source.stages.filter(s=>s.role==='reference'))if(JSON.stringify(stage)!==JSON.stringify(b.record.stages.find(v=>v.id===stage.id)))return reply({error:'Original reference tables cannot be edited'},422);
+   const newId='personal-'+b.requestId,record={...b.record,id:newId,title,source:{kind:'personal',referenceId:newId,sha256:current.record.source.sha256},derivedFrom:{id,originalId:current.record.derivedFrom?.originalId||id,title:current.record.title,revision:current.revision}};
+   delete record.revision;
+   const validation=validateRecipe(record,{publication:true});if(validation.errors.length)return reply({error:'Resolve formula errors before saving a new recipe',...validation},422);
+   const document=JSON.stringify(record),existing=await details(db,newId);
+   if(existing)return JSON.stringify(existing.record)===document?reply({...existing,created:true}):reply({error:'This save request was already used for a different recipe'},409);
+   await db.batch([db.prepare('INSERT INTO recipe_publications(id,revision,document) VALUES (?,1,?)').bind(newId,document),db.prepare('INSERT INTO recipe_revisions(id,revision,document,created_at,kind) VALUES (?,1,?,?,?)').bind(newId,document,Date.now(),'copy')]);
+   return reply({...await details(db,newId),created:true},201);
+  }
   if(b.action==='discard'){
    if(!current.draft||b.draftVersion!==current.draft.version)return reply({error:'Draft changed. Reload first.'},409);
    await db.prepare('DELETE FROM recipe_drafts WHERE id=? AND version=?').bind(id,b.draftVersion).run();return reply(await details(db,id));
   }
   if(b.action==='draft'){
-   if(!b.record||b.record.id!==id||JSON.stringify(b.record.source)!==JSON.stringify(current.record.source))return reply({error:'Recipe identity and source provenance cannot be changed'},400);
+   if(!b.record||b.record.id!==id||JSON.stringify(b.record.source)!==JSON.stringify(current.record.source)||JSON.stringify(b.record.derivedFrom)!==JSON.stringify(current.record.derivedFrom))return reply({error:'Recipe identity and source provenance cannot be changed'},400);
    const validation=validateRecipe(b.record);if(validation.errors.length)return reply({error:'Recipe validation failed',...validation},422);
    const source=JSON.parse((await db.prepare('SELECT document FROM recipe_revisions WHERE id=? AND revision=1').bind(id).first()).document);
    // Original reference tables remain immutable. Current build/final rows and

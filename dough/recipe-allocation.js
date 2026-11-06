@@ -1,4 +1,4 @@
-import {recipeFlourWater,recipeMass,sumGrams,knownMass} from './recipe-model.js?v=linked-levain-1';
+import {recipeFlourWater,recipeMass,sumGrams,knownMass} from './recipe-model.js?v=save-new-recipe-1';
 const final=r=>r.stages.find(s=>s.id===r.finalStageId);
 const requireBasis=r=>{const b=recipeFlourWater(r);if(!b.available||b.unknownSeeds.length)throw Error('Enter known starter hydration and weighed build ingredients before linking flour and water');return b;};
 export function allocationInfo(r,row){
