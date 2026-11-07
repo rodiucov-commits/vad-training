@@ -471,11 +471,10 @@ Calculators → Suas · Main defects of sourdough culture presents all4 defect g
 
 The Collection now provides ten bread-family shelves, source/method filters, accent-insensitive multi-word ingredient search and compact recipe rows. All 203 published recipes/builds retain their original IDs and calculations. Calculators holds six existing tools plus the blank master. See [navigation design, boundaries and checks](docs/collection-library.md). Release `bread-library-1`, service-worker cache v39.
 
-## Finished-product photos (prepared, deployment pending)
+## Finished-product photos
 
 Version A uses the existing method panel and moves one figure under the title on
 mobile. Owner crop/upload, private previews and explicit draft/publication are
 implemented with a new DOUGH_PHOTOS R2 binding. Originals stay on the user's device;
-only optimised derivatives are uploaded. No live feature is claimed until R2 is
-provisioned and the reviewed code deployed. See [media workflow, security, tests and
+only optimised derivatives are uploaded. Photos appear publicly only after the Owner explicitly publishes the saved draft. See [media workflow, security, tests and
 deployment/rollback instructions](docs/recipe-photos.md).

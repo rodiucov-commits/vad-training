@@ -1,9 +1,11 @@
 # Finished-product photos — version A
 
-Release: `recipe-photos-1`, SWv46. Implementation is prepared locally; production
-provisioning/deployment is blocked on authenticated Cloudflare R2/Pages access.
-The existing API token returns403 for both APIs and the managed Cloudflare browser
-is signed out. No bucket/subscription, Pages binding or live source has been changed.
+Release: `recipe-photos-1`, SWv46. Cloudflare R2 Standard bucket
+`dough-recipe-photos` is provisioned with the production `DOUGH_PHOTOS` binding.
+Actual object put/get/delete verification passed using an isolated synthetic key.
+Existing production D1 bindings, environment variables, compatibility settings and
+preview configuration were compared unchanged after the narrow Pages PATCH.
+No original recipe, draft/history or authentication data is migrated by this release.
 
 ## Owner workflow
 
@@ -60,7 +62,7 @@ Owner draft images or bulk-downloads the entire image library.
 - No Cloudflare/GitHub credentials appear in frontend assets. No CSP relaxation.
   Photos do not enter Git history; only the uploader/renderer code does.
 
-## Deployment checklist — resume after Cloudflare sign-in
+## Deployment checklist / future reprovisioning
 
 1. Confirm the signed-in Cloudflare account and target Pages project from the
    dashboard. Export the entire current project config, latest deployment settings
