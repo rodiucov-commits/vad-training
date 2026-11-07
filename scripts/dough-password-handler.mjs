@@ -3,10 +3,12 @@ const privateHeaders={'Content-Type':'text/html; charset=utf-8','Cache-Control':
 export default {async fetch(request,env){
  const url=new URL(request.url),p=url.pathname;
  if(p==='/_worker.js'||p==='/owner-auth.js'||p.startsWith('/tests/')||p.startsWith('/scripts/')||p==='/owner-login.html')return new Response('Not found',{status:404});
+ if(p.startsWith('/media/'))return recipeMedia.fetch(request,env,async()=>false);
  if(p==='/api/recipes')return recipeStore.fetch(request,env,async()=>false);
  if(p==='/api/recipe-archive')return recipeArchive.fetch(request,env,async()=>false);
  if(p==='/owner'||p.startsWith('/owner/')){
   if(!['dc.rodiucov.com','dough-calculator-2nr.pages.dev','dc.test'].includes(url.hostname))return new Response('Not found',{status:404});
+  if(p==='/owner/api/media'||p.startsWith('/owner/media/'))return recipeMedia.fetch(request,env,r=>auth.session(r,env.DOUGH_AUTH_DB));
   if(p==='/owner/api/recipes')return recipeStore.fetch(request,env,r=>auth.session(r,env.DOUGH_AUTH_DB));
   if(p==='/owner/api/recipe-archive')return recipeArchive.fetch(request,env,r=>auth.session(r,env.DOUGH_AUTH_DB));
   if(p.startsWith('/owner/api/'))return auth.api(request,env.DOUGH_AUTH_DB);

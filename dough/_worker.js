@@ -111,6 +111,7 @@ function validateRecipe(r,{publication=false}={}){
  if(r.source?.kind==='personal'&&(!r.id.startsWith('personal-')||!r.derivedFrom||!id(r.derivedFrom.id)||!id(r.derivedFrom.originalId)||!str(r.derivedFrom.title,200)||!Number.isInteger(r.derivedFrom.revision)||r.derivedFrom.revision<1))errors.push('Invalid personal recipe lineage');
  if(r.component!==null&&(!r.component||!id(r.component.id)||!str(r.component.name,200)||!Number.isFinite(r.component.grams)||r.component.grams<=0))errors.push('Invalid base-dough component');
  if(!Number.isInteger(r.basePieces)||r.basePieces<1||r.basePieces>10000)errors.push('Piece count must be 1–10,000');
+ if(r.photos!==undefined&&(!Array.isArray(r.photos)||r.photos.length>2||new Set(r.photos.map(p=>p?.id)).size!==r.photos.length||r.photos.some(p=>!p||typeof p.id!=='string'||!(/^[a-f0-9]{32}$/).test(p.id)||!str(p.alt,300)||!p.alt.trim()||!str(p.caption,300)||!['actual','reference','illustrative'].includes(p.kind))))errors.push('Photos require a valid uploaded image and a short description');
  if(r.processPlan!==undefined&&(!r.processPlan||!Array.isArray(r.processPlan.extraStages)||r.processPlan.extraStages.length>5||new Set(r.processPlan.extraStages.map(e=>e?.id)).size!==r.processPlan.extraStages.length||r.processPlan.extraStages.some(e=>!id(e?.id)||!str(e?.label,200)||!['bulk','bench','shape','proof'].includes(e?.after))))errors.push('Invalid additional process stages');
  if(!Array.isArray(r.stages)||!r.stages.length||r.stages.length>40)return {errors:[...errors,'A recipe requires 1–40 stages'],warnings};
  const ids=new Set();for(const s of r.stages){if(!s||!id(s.id)||ids.has(s.id)||!str(s.name,200)||!['build','final','component','reference'].includes(s.role)||!str(s.timing))errors.push('Invalid or duplicate stage');ids.add(s?.id);if(!Array.isArray(s?.rows)||s.rows.length>200||!s.rows.length){errors.push('Each stage needs 1–200 ingredients');continue;}
@@ -136,6 +137,63 @@ function validateRecipe(r,{publication=false}={}){
  return {errors:[...new Set(errors)],warnings:[...new Set(warnings)]};
 }
 
+const MEDIA_SCHEMA=`CREATE TABLE IF NOT EXISTS recipe_media(id TEXT PRIMARY KEY,created_at INTEGER NOT NULL,published_at INTEGER,small_key TEXT NOT NULL,large_key TEXT NOT NULL);`;
+async function validateRecipePhotos(db,record){
+ if(record.photos===undefined)return null;if(!Array.isArray(record.photos)||record.photos.length>2)return 'Invalid photo list';if(!record.photos.length)return null;
+ try{for(const photo of record.photos)if(!photo||!(/^[a-f0-9]{32}$/).test(photo.id)||!await db.prepare('SELECT id FROM recipe_media WHERE id=?').bind(photo.id).first())return 'Photo is no longer available. Upload it again before saving.';}catch{return 'Photo is no longer available. Upload it again before saving.';}
+ return null;
+}
+function publishPhotoStatement(db,record,recipeId,revision){
+ if(!record.photos?.length)return [];
+ return [db.prepare(`UPDATE recipe_media SET published_at=COALESCE(published_at,?) WHERE id IN (${record.photos.map(()=>'?').join(',')}) AND EXISTS(SELECT 1 FROM recipe_publications WHERE id=? AND revision=? AND document=?)`).bind(Date.now(),...record.photos.map(p=>p.id),recipeId,revision,JSON.stringify(record))];
+}
+function jpegDimensions(bytes){
+ if(bytes.length<16||bytes[0]!==255||bytes[1]!==216||bytes.at(-2)!==255||bytes.at(-1)!==217)throw Error('A valid JPEG image is required');
+ let at=2,dimensions;
+ while(at+3<bytes.length){if(bytes[at++]!==255)throw Error('Invalid JPEG');while(bytes[at]===255)at++;const marker=bytes[at++];if(marker===218)break;if(marker===217)break;if(marker===1||(marker>=208&&marker<=215))continue;
+ const length=(bytes[at]<<8)+bytes[at+1];if(length<2||at+length>bytes.length)throw Error('Invalid JPEG');
+ if(marker===225||marker===237)throw Error('Image metadata must be removed before uploading');
+ if([192,193,194].includes(marker)){if(length<8)throw Error('Invalid JPEG');dimensions={height:(bytes[at+3]<<8)+bytes[at+4],width:(bytes[at+5]<<8)+bytes[at+6]};}
+ at+=length;
+ }
+ if(!dimensions)throw Error('JPEG dimensions are missing');return dimensions;
+}
+function createRecipeMedia(){
+ const reply=(v,status=200)=>new Response(JSON.stringify(v),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}});
+ return {async fetch(req,env,authorized){
+ const url=new URL(req.url),upload=url.pathname==='/owner/api/media',privateImage=url.pathname.startsWith('/owner/media/');
+ try{
+  if((upload||privateImage)&&!await authorized(req))return reply({error:'Sign in required'},401);
+  if(upload&&req.method==='GET')return reply({available:!!env.DOUGH_PHOTOS,maxPhotos:2});
+  if(!env.DOUGH_PHOTOS||!env.DOUGH_RECIPES_DB)return reply({error:'Photo storage is not available yet'},503);
+  const db=env.DOUGH_RECIPES_DB;
+  if(upload){
+   if(req.method!=='POST')return reply({error:'Method not allowed'},405);
+   if(req.headers.get('Origin')!==url.origin||req.headers.get('Sec-Fetch-Site')==='cross-site')return reply({error:'Request origin not allowed'},403);
+   const type=req.headers.get('Content-Type')||'';if(!type.startsWith('multipart/form-data;'))return reply({error:'Photo form required'},415);
+   if(Number(req.headers.get('Content-Length'))>2300000)return reply({error:'Prepared photos are too large'},413);
+   const reader=req.body?.getReader(),chunks=[];let total=0;if(!reader)return reply({error:'Photo required'},400);
+   for(;;){const {done,value}=await reader.read();if(done)break;total+=value.byteLength;if(total>2300000){await reader.cancel();return reply({error:'Prepared photos are too large'},413);}chunks.push(value);}
+   const bytes=new Uint8Array(total);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}
+   const form=await new Response(bytes,{headers:{'Content-Type':type}}).formData(),variants=[];
+   for(const [name,width,height]of [['small',480,360],['large',1200,900]]){const file=form.get(name);if(!file||typeof file.arrayBuffer!=='function'||file.type!=='image/jpeg'||file.size>1100000)throw Error('Two optimised JPEG variants are required');const data=new Uint8Array(await file.arrayBuffer()),d=jpegDimensions(data);if(d.width!==width||d.height!==height)throw Error('Photo dimensions are invalid');variants.push({name,data});}
+   await db.exec(MEDIA_SCHEMA);const id=crypto.randomUUID().replaceAll('-',''),keys=variants.map(v=>`photos/${id}/${v.name}.jpg`);
+   try{for(const [i,v]of variants.entries())await env.DOUGH_PHOTOS.put(keys[i],v.data,{httpMetadata:{contentType:'image/jpeg'}});await db.prepare('INSERT INTO recipe_media(id,created_at,published_at,small_key,large_key) VALUES (?,?,NULL,?,?)').bind(id,Date.now(),...keys).run();}
+   catch(error){for(const key of keys)try{await env.DOUGH_PHOTOS.delete(key);}catch{}throw error;}
+   return reply({photo:{id,alt:'Finished bread',caption:'',kind:'actual'}},201);
+  }
+  if(!['GET','HEAD'].includes(req.method))return reply({error:'Method not allowed'},405);
+  const match=url.pathname.match(/^\/(?:owner\/)?media\/([a-f0-9]{32})\/(small|large)\.jpg$/);if(!match)return reply({error:'Not found'},404);
+  // Schema is created on upload, never as a side-effect of anonymous image reads.
+  let media;try{media=await db.prepare('SELECT * FROM recipe_media WHERE id=?').bind(match[1]).first();}catch{return reply({error:'Not found'},404);}
+  if(!media||(!privateImage&&!media.published_at))return reply({error:'Not found'},404);
+  const object=await env.DOUGH_PHOTOS.get(media[match[2]+'_key']);if(!object)return reply({error:'Not found'},404);
+  return new Response(req.method==='HEAD'?null:object.body,{headers:{'Content-Type':'image/jpeg','X-Content-Type-Options':'nosniff','Cache-Control':privateImage?'private, no-store':'public, max-age=31536000, immutable','ETag':object.httpEtag||'"'+match[1]+'-'+match[2]+'"','Content-Security-Policy':"default-src 'none'"}});
+ }catch(error){return reply({error:/JPEG|metadata|dimensions|variants/.test(error.message)?error.message:'Photo storage is temporarily unavailable'},/JPEG|metadata|dimensions|variants/.test(error.message)?422:503);}
+ }};
+}
+
+const recipeMedia=createRecipeMedia();
 // Versioned recipe content lives in DOUGH_RECIPES_DB, never the auth/training DB.
 const RECIPE_SCHEMA=`CREATE TABLE IF NOT EXISTS recipe_publications(id TEXT PRIMARY KEY,revision INTEGER NOT NULL,document TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS recipe_revisions(id TEXT NOT NULL,revision INTEGER NOT NULL,document TEXT NOT NULL,created_at INTEGER NOT NULL,kind TEXT NOT NULL,PRIMARY KEY(id,revision));
@@ -179,10 +237,11 @@ function createRecipeStore(){
    for(const stage of source.stages.filter(s=>s.role==='reference'))if(JSON.stringify(stage)!==JSON.stringify(b.record.stages.find(v=>v.id===stage.id)))return reply({error:'Original reference tables cannot be edited'},422);
    const newId='personal-'+b.requestId,record={...b.record,id:newId,title,source:{kind:'personal',referenceId:newId,sha256:current.record.source.sha256},derivedFrom:{id,originalId:current.record.derivedFrom?.originalId||id,title:current.record.title,revision:current.revision}};
    delete record.revision;
+   const photoError=await validateRecipePhotos(db,record);if(photoError)return reply({error:photoError},422);if(record.photos)record.photos=record.photos.map(p=>({...p,kind:'reference'}));
    const validation=validateRecipe(record,{publication:true});if(validation.errors.length)return reply({error:'Resolve formula errors before saving a new recipe',...validation},422);
    const document=JSON.stringify(record),existing=await details(db,newId);
    if(existing)return JSON.stringify(existing.record)===document?reply({...existing,created:true}):reply({error:'This save request was already used for a different recipe'},409);
-   await db.batch([db.prepare('INSERT INTO recipe_publications(id,revision,document) VALUES (?,1,?)').bind(newId,document),db.prepare('INSERT INTO recipe_revisions(id,revision,document,created_at,kind) VALUES (?,1,?,?,?)').bind(newId,document,Date.now(),'copy')]);
+   await db.batch([db.prepare('INSERT INTO recipe_publications(id,revision,document) VALUES (?,1,?)').bind(newId,document),db.prepare('INSERT INTO recipe_revisions(id,revision,document,created_at,kind) VALUES (?,1,?,?,?)').bind(newId,document,Date.now(),'copy'),...publishPhotoStatement(db,record,newId,1)]);
    return reply({...await details(db,newId),created:true},201);
   }
   if(b.action==='discard'){
@@ -191,7 +250,7 @@ function createRecipeStore(){
   }
   if(b.action==='draft'){
    if(!b.record||b.record.id!==id||JSON.stringify(b.record.source)!==JSON.stringify(current.record.source)||JSON.stringify(b.record.derivedFrom)!==JSON.stringify(current.record.derivedFrom))return reply({error:'Recipe identity and source provenance cannot be changed'},400);
-   const validation=validateRecipe(b.record);if(validation.errors.length)return reply({error:'Recipe validation failed',...validation},422);
+   const validation=validateRecipe(b.record);if(validation.errors.length)return reply({error:'Recipe validation failed',...validation},422);const photoError=await validateRecipePhotos(db,b.record);if(photoError)return reply({error:photoError},422);
    const source=JSON.parse((await db.prepare('SELECT document FROM recipe_revisions WHERE id=? AND revision=1').bind(id).first()).document);
    // Original reference tables remain immutable. Current build/final rows and
    // procedures are editable; the source revision is always recoverable.
@@ -205,12 +264,13 @@ function createRecipeStore(){
   let document;
   if(b.action==='publish'){if(!current.draft||current.draft.version!==b.draftVersion||current.draft.baseRevision!==b.baseRevision)return reply({error:'Save the current draft first'},409);document=JSON.stringify(current.draft.record);}
   else{if(!Number.isInteger(b.targetRevision))return reply({error:'Choose a revision'},400);const old=await db.prepare('SELECT document FROM recipe_revisions WHERE id=? AND revision=?').bind(id,b.targetRevision).first();if(!old)return reply({error:'Revision not found'},404);document=old.document;}
-  const record=JSON.parse(document),validation=validateRecipe(record,{publication:true});
+  const record=JSON.parse(document),photoError=await validateRecipePhotos(db,record);if(photoError)return reply({error:photoError},422);const validation=validateRecipe(record,{publication:true});
   // Source conflicts may be restored, but must never be presented as fixed.
   if(validation.errors.length&&!(b.action==='rollback'&&b.targetRevision===1))return reply({error:'Resolve formula errors before publishing',...validation},422);
   const revision=b.baseRevision+1;
   const statements=[db.prepare('INSERT INTO recipe_revisions(id,revision,document,created_at,kind) SELECT id,?,?,?,? FROM recipe_publications WHERE id=? AND revision=?').bind(revision,document,Date.now(),b.action,id,b.baseRevision),db.prepare('UPDATE recipe_publications SET revision=?,document=? WHERE id=? AND revision=?').bind(revision,document,id,b.baseRevision)];
   if(b.action==='publish')statements.push(db.prepare('DELETE FROM recipe_drafts WHERE id=? AND version=? AND base_revision=?').bind(id,b.draftVersion,b.baseRevision));
+  statements.push(...publishPhotoStatement(db,record,id,revision));
   const results=await db.batch(statements);if(!results[1].meta.changes)return reply({error:'Recipe changed. Reload first.'},409);return reply({...await details(db,id),validation});
  }catch(error){return reply({error:/unique|constraint/i.test(error.message)?'Recipe changed. Reload first.':'Recipe storage is temporarily unavailable'},/unique|constraint/i.test(error.message)?409:503);}}};
 }
@@ -247,10 +307,12 @@ const privateHeaders={'Content-Type':'text/html; charset=utf-8','Cache-Control':
 export default {async fetch(request,env){
  const url=new URL(request.url),p=url.pathname;
  if(p==='/_worker.js'||p==='/owner-auth.js'||p.startsWith('/tests/')||p.startsWith('/scripts/')||p==='/owner-login.html')return new Response('Not found',{status:404});
+ if(p.startsWith('/media/'))return recipeMedia.fetch(request,env,async()=>false);
  if(p==='/api/recipes')return recipeStore.fetch(request,env,async()=>false);
  if(p==='/api/recipe-archive')return recipeArchive.fetch(request,env,async()=>false);
  if(p==='/owner'||p.startsWith('/owner/')){
   if(!['dc.rodiucov.com','dough-calculator-2nr.pages.dev','dc.test'].includes(url.hostname))return new Response('Not found',{status:404});
+  if(p==='/owner/api/media'||p.startsWith('/owner/media/'))return recipeMedia.fetch(request,env,r=>auth.session(r,env.DOUGH_AUTH_DB));
   if(p==='/owner/api/recipes')return recipeStore.fetch(request,env,r=>auth.session(r,env.DOUGH_AUTH_DB));
   if(p==='/owner/api/recipe-archive')return recipeArchive.fetch(request,env,r=>auth.session(r,env.DOUGH_AUTH_DB));
   if(p.startsWith('/owner/api/'))return auth.api(request,env.DOUGH_AUTH_DB);

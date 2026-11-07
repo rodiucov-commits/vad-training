@@ -71,3 +71,8 @@
 
 /recipe-allocation.js
   Cache-Control: no-cache
+
+/recipe-photos.js
+  Cache-Control: no-cache
+/recipe-photos.css
+  Cache-Control: no-cache

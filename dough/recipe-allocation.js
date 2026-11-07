@@ -1,4 +1,4 @@
-import {recipeFlourWater,recipeMass,sumGrams,knownMass,ingredientKind} from './recipe-model.js?v=live-adjustments-2';
+import {recipeFlourWater,recipeMass,sumGrams,knownMass,ingredientKind} from './recipe-model.js?v=recipe-photos-1';
 const final=r=>r.stages.find(s=>s.id===r.finalStageId);
 const requireBasis=r=>{const b=recipeFlourWater(r);if(!b.available)throw Error('Weighed flour/water and complete build transfers are required');return b;};
 const key=name=>String(name).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\([^)]*\)/g,'').replace(/[^a-z0-9]+/g,' ').trim();

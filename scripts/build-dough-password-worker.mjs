@@ -9,6 +9,7 @@ const suas=JSON.parse(fs.readFileSync(new URL('../dough/sources/suas-breads.json
 const croissants=JSON.parse(fs.readFileSync(new URL('../dough/sources/suas-croissants.json',import.meta.url),'utf8'));
 const allowed=[...new Set([...recipes.filter(r=>r.tag!=='Calculator'&&!r.temperature),...pizzaLoversRecipes,...book.recipes,...dimuzio.recipes,...suas.recipes,...croissants.recipes].map(r=>r.id))];
 const model=fs.readFileSync(new URL('../dough/recipe-model.js',import.meta.url),'utf8').replaceAll('export ','');
-const store=fs.readFileSync(new URL('./dough-recipe-store.mjs',import.meta.url),'utf8').replaceAll('export ','');
+const store=fs.readFileSync(new URL('./dough-recipe-store.mjs',import.meta.url),'utf8').replace(/^import .*;\n/gm,'').replaceAll('export ','');
+const media=fs.readFileSync(new URL('./dough-recipe-media.mjs',import.meta.url),'utf8').replaceAll('export ','');
 const handler=fs.readFileSync(new URL('./dough-password-handler.mjs',import.meta.url),'utf8');
-fs.writeFileSync(new URL('../dough/_worker.js',import.meta.url),auth+'\n'+model+'\n'+store+'\nconst recipeStore=createRecipeStore();\n'+archive+'\nconst recipeArchive=createRecipeArchive('+JSON.stringify(allowed)+');\n'+handler);
+fs.writeFileSync(new URL('../dough/_worker.js',import.meta.url),auth+'\n'+model+'\n'+media+'\nconst recipeMedia=createRecipeMedia();\n'+store+'\nconst recipeStore=createRecipeStore();\n'+archive+'\nconst recipeArchive=createRecipeArchive('+JSON.stringify(allowed)+');\n'+handler);

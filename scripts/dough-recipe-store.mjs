@@ -1,3 +1,5 @@
+import {validateRecipe} from '../dough/recipe-model.js';
+import {validateRecipePhotos,publishPhotoStatement} from './dough-recipe-media.mjs';
 // Versioned recipe content lives in DOUGH_RECIPES_DB, never the auth/training DB.
 export const RECIPE_SCHEMA=`CREATE TABLE IF NOT EXISTS recipe_publications(id TEXT PRIMARY KEY,revision INTEGER NOT NULL,document TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS recipe_revisions(id TEXT NOT NULL,revision INTEGER NOT NULL,document TEXT NOT NULL,created_at INTEGER NOT NULL,kind TEXT NOT NULL,PRIMARY KEY(id,revision));
@@ -41,10 +43,11 @@ export function createRecipeStore(){
    for(const stage of source.stages.filter(s=>s.role==='reference'))if(JSON.stringify(stage)!==JSON.stringify(b.record.stages.find(v=>v.id===stage.id)))return reply({error:'Original reference tables cannot be edited'},422);
    const newId='personal-'+b.requestId,record={...b.record,id:newId,title,source:{kind:'personal',referenceId:newId,sha256:current.record.source.sha256},derivedFrom:{id,originalId:current.record.derivedFrom?.originalId||id,title:current.record.title,revision:current.revision}};
    delete record.revision;
+   const photoError=await validateRecipePhotos(db,record);if(photoError)return reply({error:photoError},422);if(record.photos)record.photos=record.photos.map(p=>({...p,kind:'reference'}));
    const validation=validateRecipe(record,{publication:true});if(validation.errors.length)return reply({error:'Resolve formula errors before saving a new recipe',...validation},422);
    const document=JSON.stringify(record),existing=await details(db,newId);
    if(existing)return JSON.stringify(existing.record)===document?reply({...existing,created:true}):reply({error:'This save request was already used for a different recipe'},409);
-   await db.batch([db.prepare('INSERT INTO recipe_publications(id,revision,document) VALUES (?,1,?)').bind(newId,document),db.prepare('INSERT INTO recipe_revisions(id,revision,document,created_at,kind) VALUES (?,1,?,?,?)').bind(newId,document,Date.now(),'copy')]);
+   await db.batch([db.prepare('INSERT INTO recipe_publications(id,revision,document) VALUES (?,1,?)').bind(newId,document),db.prepare('INSERT INTO recipe_revisions(id,revision,document,created_at,kind) VALUES (?,1,?,?,?)').bind(newId,document,Date.now(),'copy'),...publishPhotoStatement(db,record,newId,1)]);
    return reply({...await details(db,newId),created:true},201);
   }
   if(b.action==='discard'){
@@ -53,7 +56,7 @@ export function createRecipeStore(){
   }
   if(b.action==='draft'){
    if(!b.record||b.record.id!==id||JSON.stringify(b.record.source)!==JSON.stringify(current.record.source)||JSON.stringify(b.record.derivedFrom)!==JSON.stringify(current.record.derivedFrom))return reply({error:'Recipe identity and source provenance cannot be changed'},400);
-   const validation=validateRecipe(b.record);if(validation.errors.length)return reply({error:'Recipe validation failed',...validation},422);
+   const validation=validateRecipe(b.record);if(validation.errors.length)return reply({error:'Recipe validation failed',...validation},422);const photoError=await validateRecipePhotos(db,b.record);if(photoError)return reply({error:photoError},422);
    const source=JSON.parse((await db.prepare('SELECT document FROM recipe_revisions WHERE id=? AND revision=1').bind(id).first()).document);
    // Original reference tables remain immutable. Current build/final rows and
    // procedures are editable; the source revision is always recoverable.
@@ -67,12 +70,13 @@ export function createRecipeStore(){
   let document;
   if(b.action==='publish'){if(!current.draft||current.draft.version!==b.draftVersion||current.draft.baseRevision!==b.baseRevision)return reply({error:'Save the current draft first'},409);document=JSON.stringify(current.draft.record);}
   else{if(!Number.isInteger(b.targetRevision))return reply({error:'Choose a revision'},400);const old=await db.prepare('SELECT document FROM recipe_revisions WHERE id=? AND revision=?').bind(id,b.targetRevision).first();if(!old)return reply({error:'Revision not found'},404);document=old.document;}
-  const record=JSON.parse(document),validation=validateRecipe(record,{publication:true});
+  const record=JSON.parse(document),photoError=await validateRecipePhotos(db,record);if(photoError)return reply({error:photoError},422);const validation=validateRecipe(record,{publication:true});
   // Source conflicts may be restored, but must never be presented as fixed.
   if(validation.errors.length&&!(b.action==='rollback'&&b.targetRevision===1))return reply({error:'Resolve formula errors before publishing',...validation},422);
   const revision=b.baseRevision+1;
   const statements=[db.prepare('INSERT INTO recipe_revisions(id,revision,document,created_at,kind) SELECT id,?,?,?,? FROM recipe_publications WHERE id=? AND revision=?').bind(revision,document,Date.now(),b.action,id,b.baseRevision),db.prepare('UPDATE recipe_publications SET revision=?,document=? WHERE id=? AND revision=?').bind(revision,document,id,b.baseRevision)];
   if(b.action==='publish')statements.push(db.prepare('DELETE FROM recipe_drafts WHERE id=? AND version=? AND base_revision=?').bind(id,b.draftVersion,b.baseRevision));
+  statements.push(...publishPhotoStatement(db,record,id,revision));
   const results=await db.batch(statements);if(!results[1].meta.changes)return reply({error:'Recipe changed. Reload first.'},409);return reply({...await details(db,id),validation});
  }catch(error){return reply({error:/unique|constraint/i.test(error.message)?'Recipe changed. Reload first.':'Recipe storage is temporarily unavailable'},/unique|constraint/i.test(error.message)?409:503);}}};
 }
