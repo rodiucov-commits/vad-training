@@ -1,0 +1,9 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';
+import {linkedAllocationEdit,linkedFinalFlourEdit,resizeEditorDough} from '../recipe-allocation.js';import {recipeMass,recipeFlourWater,validateRecipe} from '../recipe-model.js';
+const data=JSON.parse(fs.readFileSync(new URL('../recipe-catalog.json',import.meta.url))).recipes,close=(a,b)=>assert(Math.abs(a-b)<1e-6,`${a} != ${b}`);
+for(const source of data.filter(r=>/biga/i.test(r.title)))for(const target of [recipeMass(source),3000]){
+ const r=resizeEditorDough(source,target),snapshot=structuredClone(r),build=r.stages.find(s=>s.role==='build'),flour=build.rows.find(v=>v.kind==='flour'),oldF=build.rows.filter(v=>v.kind==='flour').reduce((n,v)=>n+v.quantity,0),water=build.rows.find(v=>v.kind==='water'),basis=recipeFlourWater(r);
+ const n=linkedAllocationEdit(r,{stageId:build.id,rowId:flour.id,field:'quantity',value:flour.quantity*1.2}),nb=n.stages.find(s=>s.id===build.id);close(nb.rows.find(v=>v.id===water.id).quantity,water.quantity*(oldF+.2*flour.quantity)/oldF);close(recipeMass(n),target);close(recipeFlourWater(n).water,basis.water);close(recipeFlourWater(n).flour,basis.flour);assert.deepEqual(validateRecipe(n,{publication:true}).errors,validateRecipe(r,{publication:true}).errors);assert.deepEqual(r,snapshot);
+ const final=r.stages.find(s=>s.id===r.finalStageId),ff=final.rows.find(v=>v.kind==='flour'),nf=linkedFinalFlourEdit(r,final.id,ff.id,ff.quantity+100),fb=recipeFlourWater(nf);close(fb.water/fb.flour,basis.water/basis.flour);close(recipeMass(nf),target+100+100*basis.water/basis.flour);assert.deepEqual(nf.stages.filter(s=>s.role==='build'),r.stages.filter(s=>s.role==='build'));assert.deepEqual(n.stages.filter(s=>s.role==='reference'),r.stages.filter(s=>s.role==='reference'));
+ console.log('PASS',r.id,target,'build water feed ratio, overall allocation and final-flour hydration link');
+}

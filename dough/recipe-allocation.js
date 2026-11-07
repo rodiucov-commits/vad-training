@@ -49,6 +49,12 @@ export function linkedAllocationEdit(original,edit){
  }else{
   if(!['quantity','feedPercent','seedHydration'].includes(edit.field))throw Error('Unsupported linked edit');
   if(cultureUnknown(row)&&edit.field!=='seedHydration')throw Error('Enter this starter’s actual hydration before changing its inoculum amount');
+  // Flour is the feed-ratio basis: preserve this build's water percentage.
+  if(edit.field==='quantity'&&ingredientKind(row)==='flour'&&stage.role==='build'){
+   const oldFlour=stage.rows.filter(v=>ingredientKind(v)==='flour'&&v.unit==='g').reduce((n,v)=>n+v.quantity,0),newFlour=oldFlour-row.quantity+edit.value;
+   if(!(oldFlour>0))throw Error('A positive build flour basis is required to preserve water percentage');
+   for(const v of stage.rows)if(ingredientKind(v)==='water'&&v.unit==='g'&&v.quantity!==null)v.quantity*=newFlour/oldFlour;
+  }
   if(edit.field==='feedPercent'){const flour=stage.rows.filter(v=>ingredientKind(v)==='flour'&&v.unit==='g').reduce((n,v)=>n+v.quantity,0);row.quantity=flour*edit.value/100;}else row[edit.field]=edit.value;
   for(const s of r.stages)for(const v of s.rows)if(v.kind==='transfer'){
    const b=r.stages.find(b=>b.id===v.fromStage),previous=baseline.stages.find(b=>b.id===v.fromStage);
@@ -80,5 +86,18 @@ export function resizeEditorDough(original,target){
   if((row.quantity!==null&&(!Number.isFinite(row.quantity)||Math.abs(row.quantity)>1e8))||(row.retained!==undefined&&!Number.isFinite(row.retained)))throw Error('Requested batch is too large');
  }}
  if(r.component)r.component.grams*=factor;
+ return r;
+}
+
+// Final fresh flour changes preserve the current overall water percentage.
+export function linkedFinalFlourEdit(original,stageId,rowId,value){
+ if(!Number.isFinite(value)||value<0)throw Error('Enter a nonnegative flour amount');
+ const before=requireBasis(original),r=structuredClone(original),stage=final(r),row=stage.rows.find(v=>v.id===rowId);
+ if(stage.id!==stageId||ingredientKind(row||{})!=='flour'||row.unit!=='g')throw Error('A weighed final flour row is required');
+ row.quantity=value;
+ const after=requireBasis(r),waters=stage.rows.filter(v=>ingredientKind(v)==='water'&&v.unit==='g'&&v.quantity!==null),oldWater=waters.reduce((n,v)=>n+v.quantity,0),desired=oldWater+after.flour*before.water/before.flour-after.water;
+ if(!waters.length||desired< -1e-6)throw Error('Builds already contain more water than the requested overall percentage');
+ for(const v of waters)v.quantity=oldWater?v.quantity*Math.max(0,desired)/oldWater:0;
+ if(!oldWater)waters[0].quantity=Math.max(0,desired);
  return r;
 }

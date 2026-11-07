@@ -291,3 +291,24 @@ The additional prior-release HTTP/SW fixture stalled and was stopped; that upgra
 scenario is inconclusive, not claimed as passing. Changed module URLs, cache v43
 and release manifest are aligned; unchanged imported dependencies retain their
 existing cached URLs. No storage or database migration is performed.
+
+## Flour-to-water links and same-weight preview (linked-flour-water-1 / SWv44)
+
+A build-flour gram edit now preserves that build's current water/fresh-flour ratio
+and changes its water quantity, instead of changing the displayed water percentage.
+The existing allocation ledger still preserves overall flour/water/mass by adjusting
+final additions. Explicit water grams or feed-percent edits deliberately change the
+ratio. Final fresh-flour gram edits preserve current overall water/flour, subtracting
+carried build water; final batch mass therefore updates rather than falsely remaining
+fixed. Unknown culture composition is not guessed. Impossible allocations are atomic.
+
+Editor preview now explicitly shows the current final batch weight and division,
+and displays preserved source reference tables at the current/source-mass factor
+for comparison. That display-only copy never alters saved immutable reference rows.
+Every current build/final quantity is rendered directly from the working record.
+
+Checks: all7Biga recipes at original and3000g weights;390px/1440px browser coverage
+for pizza-biga, pizzalovers-biga and hamelman-ciabatta-with-stiff-biga, including
+water feed %, direct flour changes, every working preview quantity, batch totals,
+Apply and saved draft reload. Existing weight lifecycle, allocation and live-preview
+browser suites and content-store/overall-percent tests remain independent regressions.
