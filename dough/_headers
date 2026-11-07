@@ -68,3 +68,6 @@
   Cache-Control: no-cache
 /recipe-timeline.js
   Cache-Control: no-cache
+
+/recipe-allocation.js
+  Cache-Control: no-cache

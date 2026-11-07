@@ -262,3 +262,32 @@ and independent Decimal audit:193 matched bases,124 partial-composition bases,
 The additional previous-release HTTP-cache fixture timed out before initial load;
 that extra returning-browser fixture is inconclusive, not a passing upgrade check.
 All changed dependency URLs, entry, release manifest and SWv42 are versioned together.
+
+## Editable editor batch weight (editor-dough-weight-1 / SWv43)
+
+Owner editor now has **Final dough weight · g** above the overall formula. This
+rescales the current working recipe, not a browser-only preview: build/final and
+separate component quantities, transferred amounts and retained reserves all scale
+by target/current final-stage mass. Piece count, percentages, starter hydration,
+methods, provenance and immutable reference tables stay unchanged. Unknown culture
+composition is never inferred. Final-stage mixed-unit/unquantified recipes cannot
+claim an exact gram total; the control is disabled with an explanation.
+
+After resizing, enter the available ripe preferment quantity or share; the existing
+linked-allocation ledger adjusts final flour/water at the newly selected batch
+weight. Live preview, Apply, saved drafts, update-existing and named copies use the
+same amended record. Nothing is published merely by changing batch weight.
+
+`tests/recipe-editor-weight.mjs` checks197 fully weighed records at three scales,
+roundtrips, reference preservation, retained transfers and a3000g Semolina batch
+with700g ripe preferment, plus invalid/mixed-unit rejection.
+`tests/recipe-editor-weight-browser.mjs` exercises390px/1440px, live focus,
+preferment edits after scaling, preview, apply, saved draft reload, isolated
+publication/rollback and invalid input. Production checks use read-only records;
+no real recipe is saved/published as a verification action. Rollback restores the
+prior static tree with a new cache version; databases and private notes stay intact.
+
+The additional prior-release HTTP/SW fixture stalled and was stopped; that upgrade
+scenario is inconclusive, not claimed as passing. Changed module URLs, cache v43
+and release manifest are aligned; unchanged imported dependencies retain their
+existing cached URLs. No storage or database migration is performed.

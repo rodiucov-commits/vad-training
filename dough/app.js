@@ -3,7 +3,7 @@ import {cultureDefectsRecipe,mountCultureDefects} from './suas-culture-defects.j
 import {retardingRecipe,mountSuasRetarding} from './suas-retarding.js?v=retarding-2';
 import {suasMixingRecipes,mountSuasMixing} from './suas-mixing.js?v=suas-mixing-1';
 import {loadRecipeContent,mountRecipeContent,refreshRecipeContent} from './recipe-content.js?v=live-adjustments-2';
-import {mountRecipeEditor} from './recipe-editor.js?v=live-adjustments-2';
+import {mountRecipeEditor} from './recipe-editor.js?v=editor-dough-weight-1';
 let recipeContent,sourceView=false;
 import {isOwner,publicView,initAccess} from './access.js?v=collection-nav-1';
 import {Workbook,column,letters} from './engine.js';
@@ -16,7 +16,7 @@ let recipeManager,navigationGeneration=0;
 import {createPizzaSheets,seedBuild} from './pizza.js';
 import {workbookBuilds} from './recipe-stages.js?v=overall-percent-2';
 import {mountDDT} from './ddt.js?v=overall-percent-2';
-const APP_RELEASE='live-adjustments-2';
+const APP_RELEASE='editor-dough-weight-1';
 const libraryState={family:'all',source:'All',method:'Any',query:'',sort:'source'};
 const $=s=>document.querySelector(s), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let sheets,book,current,filter='All',query='',scales={},notes={},storageOK=true;

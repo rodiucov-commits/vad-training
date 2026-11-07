@@ -68,3 +68,17 @@ export function linkedAllocationEdit(original,edit){
  const after=requireBasis(r);if(Math.abs(after.flour-before.flour)>1e-5||Math.abs(after.water-before.water)>1e-5||Math.abs(recipeMass(r)-mass)>1e-5)throw Error('This edit changes other ingredients; their allocation must be specified explicitly');
  return r;
 }
+
+// Rescale the working formula, never its immutable original/reference tables.
+export function resizeEditorDough(original,target){
+ const mass=recipeMass(original);
+ if(!knownMass(original)||!(mass>0)||!Number.isFinite(target)||target<=0)throw Error('A positive final dough weight and fully weighed final additions are required');
+ const factor=target/mass,r=structuredClone(original);
+ for(const stage of r.stages){if(stage.role==='reference')continue;for(const row of stage.rows){
+  if(row.quantity!==null)row.quantity*=factor;
+  if(row.retained!==undefined)row.retained*=factor;
+  if((row.quantity!==null&&(!Number.isFinite(row.quantity)||Math.abs(row.quantity)>1e8))||(row.retained!==undefined&&!Number.isFinite(row.retained)))throw Error('Requested batch is too large');
+ }}
+ if(r.component)r.component.grams*=factor;
+ return r;
+}
