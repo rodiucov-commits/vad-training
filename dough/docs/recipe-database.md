@@ -312,3 +312,33 @@ for pizza-biga, pizzalovers-biga and hamelman-ciabatta-with-stiff-biga, includin
 water feed %, direct flour changes, every working preview quantity, batch totals,
 Apply and saved draft reload. Existing weight lifecycle, allocation and live-preview
 browser suites and content-store/overall-percent tests remain independent regressions.
+
+## Complete weighed-build linking and actionable errors (editor-transfers-1 / SWv45)
+
+Exact reported route: `/owner#edit/dimuzio-focaccia-biga`. Build additions classified
+as `other` (including yeast) and retained gram edits now enter the allocation path,
+not raw quantity setters. Carried matching additions deduct from their final rows;
+when no matching final addition exists, the actual dough mass changes explicitly.
+Old unknown-culture cancellation uses the previous reserve, not the newly edited
+reserve. Flour/water/known-culture accounting remains guarded transactionally.
+
+A shared reconciliation pass updates single-use, fully weighed, non-drained build
+transfers after raw/structural edits and before validation. Already-inconsistent
+working drafts are repaired locally on opening with an unsaved-change notice.
+Original references, saved drafts and publications are not silently rewritten.
+Missing/unweighed/drained/shared-build allocations and impossible reserves are not
+guessed. Apply, Save draft, Publish and Save as new preflight validation; invalid
+inputs are scrolled into view/focused, and schema errors have Go to field buttons.
+
+Gram inputs and shared recipe/preview weights display at most one decimal place.
+Internal arithmetic and exported/saved records retain full precision; presentation
+rounding cannot cause transfer mismatches. Non-gram units and percentage precision
+remain separate. Existing allocation browser assertions now inspect full-precision
+exports, not sums reconstructed from rounded weighing inputs. Content-view tests
+compare exact intended one-decimal gram display rather than the former two decimals.
+
+`recipe-transfer-links.mjs` and `recipe-transfer-links-browser.mjs` cover the exact
+Focaccia route, yeast grams/feed%, retained changes, impossible reserve focus,
+structural missing-build focus/link, repeated Apply, resize, draft save/reload,
+prior broken-draft repair and one-decimal inputs at390px/1440px. Production uses a
+read-only synthetic Owner-record GET fixture; no real recipe writes are test actions.

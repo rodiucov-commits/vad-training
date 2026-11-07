@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';
+import {linkedAllocationEdit,reconcileEditorTransfers,resizeEditorDough} from '../recipe-allocation.js';import {validateRecipe,recipeMass,sumGrams} from '../recipe-model.js';
+const rs=JSON.parse(fs.readFileSync(new URL('../recipe-catalog.json',import.meta.url))).recipes,r=rs.find(r=>r.id==='dimuzio-focaccia-biga'),close=(a,b)=>assert(Math.abs(a-b)<1e-6,`${a} != ${b}`);
+for(const target of [recipeMass(r),3000])for(const edit of [{stageId:'build1',rowId:'r2',field:'quantity',value:2},{stageId:'build1',rowId:'r2',field:'feedPercent',value:1},{stageId:'final',rowId:'r5',field:'retained',value:20}]){
+ const base=resizeEditorDough(r,target),n=linkedAllocationEdit(base,edit);assert.deepEqual(validateRecipe(n,{publication:true}).errors,[]);const transfer=n.stages.find(s=>s.id===n.finalStageId).rows.find(v=>v.kind==='transfer');close(transfer.quantity+transfer.retained,sumGrams(n.stages.find(s=>s.id===transfer.fromStage)));close(recipeMass(n),target);
+}
+const broken=structuredClone(r);broken.stages[0].rows[2].quantity=4;assert.match(validateRecipe(broken,{publication:true}).errors.join(),/mass mismatch/);const fixed=reconcileEditorTransfers(broken);assert.deepEqual(validateRecipe(fixed.record,{publication:true}).errors,[]);assert.equal(fixed.changes.length,1);assert.equal(broken.stages[1].rows[5].quantity,r.stages[1].rows[5].quantity);
+const bad=structuredClone(r);bad.stages[1].rows[5].retained=10000;assert.deepEqual(reconcileEditorTransfers(bad).changes,[]);assert.throws(()=>linkedAllocationEdit(r,{stageId:'final',rowId:'r5',field:'retained',value:10000}));
+let repairs=0;for(const source of rs){const n=reconcileEditorTransfers(source);assert.deepEqual(n.record.stages.filter(s=>s.role==='reference'),source.stages.filter(s=>s.role==='reference'));repairs+=n.changes.length;}
+console.log('PASS Focaccia yeast grams/feed%, retained edits at2weights, exact transfers, impossible reserve rejection, mismatched-draft repair, immutable source across203 recipes; existing repairs',repairs);

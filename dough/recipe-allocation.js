@@ -47,7 +47,7 @@ export function linkedAllocationEdit(original,edit){
    row.quantity=target;
   }
  }else{
-  if(!['quantity','feedPercent','seedHydration'].includes(edit.field))throw Error('Unsupported linked edit');
+  if(!['quantity','feedPercent','seedHydration','retained'].includes(edit.field))throw Error('Unsupported linked edit');
   if(cultureUnknown(row)&&edit.field!=='seedHydration')throw Error('Enter this starter’s actual hydration before changing its inoculum amount');
   // Flour is the feed-ratio basis: preserve this build's water percentage.
   if(edit.field==='quantity'&&ingredientKind(row)==='flour'&&stage.role==='build'){
@@ -61,7 +61,7 @@ export function linkedAllocationEdit(original,edit){
    if(!b||b.rows.some(v=>v.unit!=='g'||v.quantity===null)||v.drained)throw Error('Build transfer composition is incomplete');
    const uses=r.stages.flatMap(s=>s.rows.filter(x=>x.kind==='transfer'&&x.fromStage===b.id));if(uses.length!==1)throw Error('A shared build requires explicit transfer quantities');
    const unknown=b.rows.filter(cultureUnknown),oldUnknown=previous.rows.filter(cultureUnknown).reduce((n,v)=>n+v.quantity,0),oldMass=sumGrams(previous),reserve=v.retained||0;
-   if(unknown.length&&oldMass>0){const carried=oldUnknown*(oldMass-reserve)/oldMass,rest=sumGrams(b)-unknown.reduce((n,v)=>n+v.quantity,0),newUnknown=(reserve+carried-rest+Math.sqrt((rest-reserve-carried)**2+4*carried*rest))/2;for(const seed of unknown){const old=previous.rows.find(v=>v.id===seed.id).quantity;seed.quantity=oldUnknown?old*newUnknown/oldUnknown:0;}}
+   if(unknown.length&&oldMass>0){const carried=oldUnknown*(oldMass-(baseline.stages.flatMap(s=>s.rows).find(x=>x.id===v.id&&x.fromStage===v.fromStage)?.retained||0))/oldMass,rest=sumGrams(b)-unknown.reduce((n,v)=>n+v.quantity,0),newUnknown=(reserve+carried-rest+Math.sqrt((rest-reserve-carried)**2+4*carried*rest))/2;for(const seed of unknown){const old=previous.rows.find(v=>v.id===seed.id).quantity;seed.quantity=oldUnknown?old*newUnknown/oldUnknown:0;}}
    v.quantity=sumGrams(b)-reserve;if(v.quantity<0)throw Error('Retained amount exceeds prepared build');
   }
  }
@@ -71,7 +71,13 @@ export function linkedAllocationEdit(original,edit){
  const flourRows=f.rows.filter(v=>ingredientKind(v)==='flour'&&v.unit==='g'&&v.quantity!==null&&v.quantity>=0);
  for(const k of new Set([...beforeLedger.flour.keys(),...afterLedger.flour.keys()])){const matching=flourRows.filter(v=>key(v.name)===k);compensate(matching.length?matching:flourRows,(afterLedger.flour.get(k)||0)-(beforeLedger.flour.get(k)||0),k==='@culture flour'?'flour':k);}
  compensate(f.rows.filter(v=>ingredientKind(v)==='water'&&v.unit==='g'&&v.quantity!==null&&v.quantity>=0),afterLedger.water-beforeLedger.water,'water');
- const after=requireBasis(r);if(Math.abs(after.flour-before.flour)>1e-5||Math.abs(after.water-before.water)>1e-5||Math.abs(recipeMass(r)-mass)>1e-5)throw Error('This edit changes other ingredients; their allocation must be specified explicitly');
+ let extraMass=0;
+ for(const k of new Set([...beforeLedger.other.keys(),...afterLedger.other.keys()])){
+  const delta=(afterLedger.other.get(k)||0)-(beforeLedger.other.get(k)||0);if(Math.abs(delta)<1e-9)continue;
+  const matching=f.rows.filter(v=>ingredientKind(v)==='other'&&v.unit==='g'&&v.quantity!==null&&key(v.name)===k);
+  if(matching.length)compensate(matching,delta,k);else extraMass+=delta;
+ }
+ const after=requireBasis(r);if(Math.abs(after.flour-before.flour)>1e-5||Math.abs(after.water-before.water)>1e-5||Math.abs(recipeMass(r)-mass-extraMass)>1e-5)throw Error('This edit changes other ingredients; their allocation must be specified explicitly');
  return r;
 }
 
@@ -100,4 +106,17 @@ export function linkedFinalFlourEdit(original,stageId,rowId,value){
  for(const v of waters)v.quantity=oldWater?v.quantity*Math.max(0,desired)/oldWater:0;
  if(!oldWater)waters[0].quantity=Math.max(0,desired);
  return r;
+}
+
+// Repair only unambiguous, fully weighed transfers. Never guess a drained yield,
+// unknown amount or shared-build allocation. Original records remain untouched.
+export function reconcileEditorTransfers(original){
+ const r=structuredClone(original),changes=[];
+ for(const stage of r.stages)for(const row of stage.rows)if(row.kind==='transfer'){
+  const build=r.stages.find(s=>s.id===row.fromStage),uses=r.stages.flatMap(s=>s.rows.filter(v=>v.kind==='transfer'&&v.fromStage===row.fromStage));
+  if(!build||build.role!=='build'||r.stages.indexOf(build)>=r.stages.indexOf(stage)||row.drained||uses.length!==1||row.unit!=='g'||!Number.isFinite(row.retained)||row.retained<0||build.rows.some(v=>v.unit!=='g'||!Number.isFinite(v.quantity)||v.quantity<0))continue;
+  const quantity=sumGrams(build)-row.retained;if(quantity<0)continue;
+  if(!Number.isFinite(row.quantity)||Math.abs(quantity-row.quantity)>1e-8){changes.push(row.name);row.quantity=quantity;}
+ }
+ return {record:r,changes};
 }
